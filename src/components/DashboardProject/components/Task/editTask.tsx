@@ -2,6 +2,7 @@ import {useMutation, useQueryClient} from '@tanstack/react-query';
 import {Button, DatePicker, Form, Input, Select, notification} from 'antd';
 import dayjs from 'dayjs';
 import {useEffect} from 'react';
+import useUser from '../../../../hooks/useUser';
 import {createTask} from '../../../../services/tasks';
 
 interface Props {
@@ -14,11 +15,15 @@ const EditTask = (props: Props) => {
     const {visible, onCancel, initalValues} = props;
     const [form] = Form.useForm();
     const queryClient = useQueryClient();
+    const {listUser} = useUser();
 
     useEffect(() => {
-        if (initalValues) {
-            form.setFieldsValue(initalValues);
-        }
+        initalValues
+            ? form.setFieldsValue(initalValues)
+            : form.setFieldsValue({
+                  startDate: dayjs().format('YYYY/MM/DD'),
+                  endDate: dayjs().format('YYYY/MM/DD'),
+              });
     }, [initalValues]);
 
     const {mutate: createTaskMutate, isLoading} = useMutation({
@@ -99,46 +104,48 @@ const EditTask = (props: Props) => {
                     <Form.Item
                         name="startDate"
                         label="Ngày bắt đầu"
-                        rules={[{required: true}]}
                         className="w-1/2"
+                        valuePropName="startDate"
                     >
                         <DatePicker
                             onChange={() => {}}
                             format={'YYYY/MM/DD'}
-                            defaultValue={dayjs()}
                             style={{
                                 backgroundColor: '#f5f5f5',
+                                width: '100%',
                             }}
+                            defaultValue={dayjs()}
                         />
                     </Form.Item>
                     <Form.Item
                         name="endDate"
                         label="Ngày kết thúc"
-                        rules={[{required: true}]}
                         className="w-1/2"
+                        valuePropName="endDate"
                     >
                         <DatePicker
                             onChange={() => {}}
                             format={'YYYY/MM/DD'}
-                            defaultValue={dayjs()}
                             style={{
                                 backgroundColor: '#f5f5f5',
+                                width: '100%',
                             }}
+                            defaultValue={dayjs()}
                         />
                     </Form.Item>
                 </div>
 
                 <Form.Item
                     name="user"
-                    label="Chọn người thực hiện"
+                    label="Người thực hiện"
                     rules={[{required: true}]}
                 >
                     <Select
-                        mode="tags"
+                        mode="multiple"
                         style={{width: '100%'}}
                         placeholder="Chọn người thực hiện"
                         onChange={() => {}}
-                        options={[]}
+                        options={listUser}
                     />
                 </Form.Item>
 

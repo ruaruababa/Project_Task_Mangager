@@ -1,4 +1,4 @@
-import {CopyOutlined, DeleteOutlined, EyeOutlined} from '@ant-design/icons';
+import {CopyOutlined, DeleteOutlined, EditOutlined} from '@ant-design/icons';
 import {useNavigate, useParams} from 'react-router-dom';
 
 interface IProps {
@@ -16,7 +16,7 @@ const Action = (props: IProps) => {
                 className="cursor-pointer"
                 onClick={() => navigate(`/project/${id}/tasks/${item.id}`)}
             >
-                <EyeOutlined />
+                <EditOutlined />
             </div>
             <div className="cursor-pointer">
                 <DeleteOutlined />
