@@ -19,7 +19,9 @@ const DetailProject = () => {
                 {' '}
                 <div className="text-lg bg-white rounded-xl">
                     <div className="flex flex-col gap-10 p-10">
-                        <div className="text-lg">{detailProject?.name}</div>
+                        <div className="text-xl font-semibold">
+                            {detailProject?.name}
+                        </div>
                         <div className="grid grid-cols-12 gap-3 text-lg">
                             <div
                                 className="flex flex-col col-span-2 py-3 text-center"

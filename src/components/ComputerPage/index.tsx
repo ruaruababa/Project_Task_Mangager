@@ -114,7 +114,7 @@ const ComputerPage = () => {
                                     size="small"/>
                                 </div>
                                 <Divider/>
-                                <div className="actions flex items-center gap-3">
+                                <div className="flex items-center gap-3 actions">
                                     <Button icon={<InfoCircleOutlined/>} onClick={() => setSelectedComputer(computer)}>
                                         Details
                                     </Button>

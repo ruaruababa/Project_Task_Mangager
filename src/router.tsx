@@ -3,6 +3,8 @@ import DefaultLayout from './Layout/DefaultLayout';
 import DetailProject from './components/DashboardProject/components/Detail';
 import ProjectManager from './components/DashboardProject/components/List';
 import TaskInProject from './components/DashboardProject/components/Task';
+import EditTask from './components/DashboardProject/components/Task/editTask';
+import AllListTask from './components/ListTask/components';
 import TaskManagerPage from './components/TaskManager';
 const router = createBrowserRouter([
     {
@@ -24,6 +26,14 @@ const router = createBrowserRouter([
             {
                 path: '/project/:id/tasks',
                 element: <TaskInProject />,
+            },
+            {
+                path: '/project/:id/list-task',
+                element: <AllListTask />,
+            },
+            {
+                path: '/project/:id/tasks/:taskId',
+                element: <EditTask />,
             },
         ],
     },

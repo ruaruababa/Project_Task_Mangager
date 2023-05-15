@@ -8,19 +8,25 @@ export const getDetailProject = (id: any) => {
     return baseAPIRequest.get(`api/projects/${id}`);
 };
 
-export const createComputer = (input: {
-    name?: string;
-    customer_name?: string;
-    code?: string;
-    starts_at?: any;
-    ends_at?: string;
-    duration?: string;
-    status_id?: string;
-    assigned_user_ids?: any;
-}) => {
-    return baseAPIRequest.post('api/projects/1/tasks/1', input);
+export const updateTask = (
+    input: {
+        name?: string;
+        description?: string;
+        duration?: string;
+        status_id?: any;
+        pending_reason?: any;
+        user_ids?: any;
+    },
+    id: any,
+    isTask: any,
+) => {
+    return baseAPIRequest.patch(`api/projects/${id}/tasks/${isTask}`, input);
 };
 
 export const getTaskinProject = (id: any) => {
     return baseAPIRequest.get(`api/projects/${id}/tasks`);
+};
+
+export const getListDragDrop = (id: any) => {
+    return baseAPIRequest.get(`api/projects/${id}/tasks/kanban`);
 };

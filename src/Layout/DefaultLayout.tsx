@@ -1,7 +1,7 @@
 import {
-    DesktopOutlined,
     FileOutlined,
     FundProjectionScreenOutlined,
+    OrderedListOutlined,
 } from '@ant-design/icons';
 import type {MenuProps} from 'antd';
 import {Button, Layout, Menu, theme} from 'antd';
@@ -29,7 +29,7 @@ function getItem(
 
 const items: MenuItem[] = [
     getItem('Quản lý dự án', '/project', <FundProjectionScreenOutlined />),
-    getItem('Computer manager', '/computer', <DesktopOutlined />),
+    getItem('Danh sách task', '/project/:id/all-task', <OrderedListOutlined />),
     getItem('Resource manger', '/resource', <FileOutlined />),
     getItem('Tasks manger', '/tasks', <FundProjectionScreenOutlined />),
     getItem('Proxy', '/proxy', <FundProjectionScreenOutlined />),
@@ -112,7 +112,7 @@ const DefaultLayout = () => {
                     </div>
                 </Header>
                 <Content style={{margin: '0 16px', marginTop: 20}}>
-                    <div style={{minHeight: 360}} className="px-20 py-10">
+                    <div style={{minHeight: 1000}} className="px-20 py-10">
                         <Outlet />
                     </div>
                 </Content>
