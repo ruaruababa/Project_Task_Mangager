@@ -1,4 +1,5 @@
 import {DragOutlined} from '@ant-design/icons';
+// @ts-ignore
 import {get} from 'lodash';
 // @ts-ignore
 import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
