@@ -30,3 +30,7 @@ export const getTaskinProject = (id: any) => {
 export const getListDragDrop = (id: any) => {
     return baseAPIRequest.get(`api/projects/${id}/tasks/kanban`);
 };
+
+export const createProject = (values: any) => {
+    return baseAPIRequest.post(`api/projects`, values);
+};

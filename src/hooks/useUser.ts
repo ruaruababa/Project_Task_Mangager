@@ -11,8 +11,8 @@ const useUser = () => {
     });
 
     const {data: userResponse} = useQuery({
-        queryKey: ['getUsers', page],
-        queryFn: () => getUsers(page),
+        queryKey: ['getUsers'],
+        queryFn: () => getUsers(),
     });
 
     const users = useMemo(() => {
