@@ -1,8 +1,9 @@
-import {useMutation, useQueryClient} from '@tanstack/react-query';
+import {useMutation} from '@tanstack/react-query';
 import {Button, DatePicker, Form, Input, Select, notification} from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 import dayjs from 'dayjs';
 import {useEffect} from 'react';
+import {useNavigate} from 'react-router-dom';
 import useUser from '../../../../hooks/useUser';
 import {createProject} from '../../../../services/project';
 
@@ -15,13 +16,14 @@ interface Props {
 const CreateUpdateProject = (props: Props) => {
     const {visible, onCancel, initalValues} = props;
     const [form] = Form.useForm();
-    const queryClient = useQueryClient();
     const {users} = useUser();
     const startDate = Form.useWatch('starts_at', form);
     const options: any = users?.map((user: any) => ({
         label: user.name,
         value: user.id,
     }));
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         initalValues
@@ -64,6 +66,30 @@ const CreateUpdateProject = (props: Props) => {
     };
     return (
         <div className="p-10 bg-white rounded-xl">
+            <div className="mb-10">
+                <div className="mb-2 text-lg font-semibold">
+                    Danh sách dự án
+                </div>
+                <div className="">
+                    <span
+                        onClick={() => {
+                            navigate('/');
+                        }}
+                        className="font-semibold text-gray-400 cursor-pointer"
+                    >
+                        Trang chủ /
+                    </span>{' '}
+                    <span
+                        className="font-semibold text-gray-400 cursor-pointer"
+                        onClick={() => {
+                            navigate('/project');
+                        }}
+                    >
+                        Danh sách dự án /
+                    </span>{' '}
+                    <span className="font-semibold">Tạo dự án</span>
+                </div>
+            </div>
             <Form form={form} onFinish={handleFinish} layout="vertical">
                 <Form.Item
                     name="customer_name"
@@ -228,9 +254,9 @@ const CreateUpdateProject = (props: Props) => {
                     <div className="w-1/2"></div>
                 </div>
 
-                <Form.Item name="description" label="Mô tả">
+                <Form.Item name="summary" label="Tóm tắt">
                     <TextArea
-                        placeholder="Enter number of views"
+                        placeholder="Nhập tóm tắt"
                         style={{
                             backgroundColor: '#f5f5f5',
                         }}
