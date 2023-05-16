@@ -14,6 +14,15 @@ const ProjectManager = () => {
     return (
         <>
             <div className="mb-10">
+                <div className="flex justify-end gap-3 mb-10">
+                    <Button
+                        className="text-white bg-blue-600"
+                        onClick={() => router(`/project/create`)}
+                        size="large"
+                    >
+                        Tạo dự án
+                    </Button>
+                </div>
                 <div className="mb-2 text-lg font-semibold">
                     Danh sách dự án
                 </div>

@@ -1,20 +1,29 @@
 import {useQuery} from '@tanstack/react-query';
-import {useMemo} from 'react';
+import {useMemo, useState} from 'react';
 import {useParams} from 'react-router-dom';
-import {getListUser} from '../services/user';
+import {getListUserInProject, getUsers} from '../services/user';
 const useUser = () => {
     const {id} = useParams();
+    const [page, setPage] = useState(1);
     const {data: listUserResponse} = useQuery({
-        queryKey: ['getListUser', id],
-        queryFn: () => getListUser(id),
+        queryKey: ['getListUserInProject', id],
+        queryFn: () => getListUserInProject(id),
     });
+
+    const {data: userResponse} = useQuery({
+        queryKey: ['getUsers', page],
+        queryFn: () => getUsers(page),
+    });
+
+    const users = useMemo(() => {
+        return userResponse?.data?.data || [];
+    }, [userResponse]);
 
     const listUser = useMemo(() => {
         return listUserResponse?.data?.data || [];
     }, [listUserResponse]);
 
-
-    return {listUser};
+    return {listUser, users};
 };
 
 export default useUser;

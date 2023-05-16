@@ -1,5 +1,6 @@
 import {createBrowserRouter} from 'react-router-dom';
 import DefaultLayout from './Layout/DefaultLayout';
+import CreateUpdateProject from './components/DashboardProject/components/CreateProject/createUpdateProject';
 import DetailProject from './components/DashboardProject/components/Detail';
 import ProjectManager from './components/DashboardProject/components/List';
 import TaskInProject from './components/DashboardProject/components/Task';
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
             {
                 path: '/project/:id/tasks/:taskId',
                 element: <EditTask />,
+            },
+            {
+                path: '/project/create',
+                element: <CreateUpdateProject />,
             },
         ],
     },
