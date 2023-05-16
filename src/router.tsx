@@ -4,7 +4,7 @@ import CreateUpdateProject from './components/DashboardProject/components/Create
 import DetailProject from './components/DashboardProject/components/Detail';
 import ProjectManager from './components/DashboardProject/components/List';
 import TaskInProject from './components/DashboardProject/components/Task';
-import EditTask from './components/DashboardProject/components/Task/editTask';
+import DetailTask from './components/DashboardProject/components/Task/detailTask';
 import AllListTask from './components/ListTask/components';
 import TaskManagerPage from './components/TaskManager';
 const router = createBrowserRouter([
@@ -34,10 +34,14 @@ const router = createBrowserRouter([
             },
             {
                 path: '/project/:id/tasks/:taskId',
-                element: <EditTask />,
+                element: <DetailTask />,
             },
             {
                 path: '/project/create',
+                element: <CreateUpdateProject />,
+            },
+            {
+                path: '/project/edit/:id',
                 element: <CreateUpdateProject />,
             },
         ],

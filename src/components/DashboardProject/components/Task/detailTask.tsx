@@ -1,17 +1,21 @@
+import {useQuery} from '@tanstack/react-query';
 import {Button} from 'antd';
-import {useNavigate, useParams} from 'react-router-dom';
+import {useParams} from 'react-router-dom';
+import {getDetailTaskInProject} from '../../../../services/tasks';
 import {convertDate} from '../../../../utils/format';
 import PiChart from '../../../Chart/PieChart';
-import useDetailProject from '../../hooks/useDetailProject';
 import UserAvatar from '../Item/avatar';
-const DetailProject = () => {
-    const {detailProject} = useDetailProject();
-    const {id} = useParams();
-    const navigate = useNavigate();
 
-    const handleViewTask = () => {
-        navigate(`/project/${id}/tasks`);
-    };
+const DetailTask = () => {
+    const {id, taskId} = useParams();
+
+    const {data: detailTaskResponse} = useQuery({
+        queryKey: ['getDetailTaskInProject', id, taskId],
+        queryFn: () => getDetailTaskInProject(id, taskId),
+    });
+
+    const detailProject: any = [];
+    console.log('detailTaskResponse', detailTaskResponse);
 
     return (
         <>
@@ -118,11 +122,7 @@ const DetailProject = () => {
                             </div>
                             <div className="">
                                 {' '}
-                                <Button
-                                    size={'large'}
-                                    type="primary"
-                                    onClick={() => handleViewTask()}
-                                >
+                                <Button size={'large'} type="primary">
                                     Danh sách task
                                 </Button>
                             </div>
@@ -141,4 +141,4 @@ const DetailProject = () => {
     );
 };
 
-export default DetailProject;
+export default DetailTask;

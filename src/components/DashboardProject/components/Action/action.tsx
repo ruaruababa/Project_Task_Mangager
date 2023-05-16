@@ -8,8 +8,13 @@ import {useNavigate} from 'react-router-dom';
 const Action = (props: any) => {
     const {item} = props;
     const navigate = useNavigate();
+
     const handleViewDetail = () => {
         navigate(`/project/${item.id}`);
+    };
+
+    const handleEditProject = () => {
+        navigate(`/project/edit/${item.id}`);
     };
 
     return (
@@ -22,7 +27,7 @@ const Action = (props: any) => {
             <div className="cursor-pointer" onClick={handleViewDetail}>
                 <EyeOutlined />
             </div>
-            <div className="cursor-pointer">
+            <div className="cursor-pointer" onClick={handleEditProject}>
                 <EditOutlined />
             </div>
             <div className="cursor-pointer">

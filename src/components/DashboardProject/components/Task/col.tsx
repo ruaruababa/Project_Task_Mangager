@@ -1,9 +1,12 @@
 // @ts-ignore
 import {Droppable} from 'react-beautiful-dnd';
 import Task from './item';
+import { useParams } from 'react-router-dom';
 
 function Column(props: any) {
     const {droppableId, list, type, status_id} = props;
+
+    const {id} = useParams();
 
     let style = {
         width: '90%',
@@ -90,6 +93,7 @@ function Column(props: any) {
                                         index={index}
                                         title={val.name}
                                         data={val}
+                                        idProject={id}
                                     />
                                 );
                             })}

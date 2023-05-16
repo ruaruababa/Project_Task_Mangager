@@ -23,7 +23,7 @@ export const updateTask = (
     return baseAPIRequest.patch(`api/projects/${id}/tasks/${isTask}`, input);
 };
 
-export const getTaskinProject = (id: any) => {
+export const getListTaskInProject = (id: any) => {
     return baseAPIRequest.get(`api/projects/${id}/tasks`);
 };
 
@@ -33,4 +33,8 @@ export const getListDragDrop = (id: any) => {
 
 export const createProject = (values: any) => {
     return baseAPIRequest.post(`api/projects`, values);
+};
+
+export const updateProject = (values: any, id: any) => {
+    return baseAPIRequest.patch(`api/projects/${id}`, values);
 };

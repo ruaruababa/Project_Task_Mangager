@@ -23,8 +23,25 @@ const useDetailProject = () => {
 
     console.log('detailProject', detailProject);
 
+    const detailToUpdate = useMemo(() => {
+        return {
+            ...detailProject,
+            status_id: {
+                label: detailProject?.status?.name,
+                value: detailProject?.status?.id,
+            },
+            user_ids: detailProject?.users?.map((item: any) => {
+                return {
+                    label: item?.name,
+                    value: item?.id,
+                };
+            }),
+        };
+    }, [detailProject]);
+
     return {
         detailProject,
+        detailToUpdate,
     };
 };
 

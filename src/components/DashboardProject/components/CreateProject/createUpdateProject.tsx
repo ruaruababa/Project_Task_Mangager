@@ -1,11 +1,13 @@
-import {useMutation} from '@tanstack/react-query';
+import {useMutation, useQueryClient} from '@tanstack/react-query';
 import {Button, DatePicker, Form, Input, Select, notification} from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 import dayjs from 'dayjs';
 import {useEffect} from 'react';
-import {useNavigate} from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
+import useStatus from '../../../../hooks/useStatus';
 import useUser from '../../../../hooks/useUser';
-import {createProject} from '../../../../services/project';
+import {createProject, updateProject} from '../../../../services/project';
+import useDetailProject from '../../hooks/useDetailProject';
 
 interface Props {
     visible?: boolean;
@@ -13,26 +15,32 @@ interface Props {
     initalValues?: any;
 }
 
-const CreateUpdateProject = (props: Props) => {
-    const {visible, onCancel, initalValues} = props;
+const CreateUpdateProject = () => {
     const [form] = Form.useForm();
     const {users} = useUser();
+    const {id} = useParams();
+    const {statusOptions} = useStatus();
+    const {detailToUpdate, detailProject} = useDetailProject();
     const startDate = Form.useWatch('starts_at', form);
+    const endDate = Form.useWatch('ends_at', form);
+
     const options: any = users?.map((user: any) => ({
         label: user.name,
         value: user.id,
     }));
 
     const navigate = useNavigate();
+    const queryClient = useQueryClient();
+
+    console.log('detailToUpdate', detailToUpdate);
 
     useEffect(() => {
-        initalValues
-            ? form.setFieldsValue(initalValues)
+        id
+            ? form.setFieldsValue(detailToUpdate)
             : form.setFieldsValue({
-                  starts_at: dayjs().format('YYYY/MM/DD'),
-                  ends_at: dayjs().format('YYYY/MM/DD'),
+                  status_id: 'Not Started',
               });
-    }, [initalValues]);
+    }, [statusOptions, detailProject, form, id, detailToUpdate]);
 
     const {mutate: createProjectMutate, isLoading} = useMutation({
         mutationFn: createProject,
@@ -43,26 +51,52 @@ const CreateUpdateProject = (props: Props) => {
                 description: 'Create successfully',
             });
             form.resetFields();
+            form.setFieldsValue({
+                status_id: 'Not Started',
+            });
         },
-        onError: () => {
+        onError: (error: any) => {
             notification.error({
                 message: 'Error',
-                description: 'Create failed',
+                description: error?.response?.data?.message,
+            });
+        },
+    });
+
+    const {mutate: updateProjectMutate} = useMutation({
+        mutationFn: (data: any) => updateProject(data, id),
+        mutationKey: ['updateProject', id],
+        onSuccess: () => {
+            notification.success({
+                message: 'Success ',
+                description: 'Update successfully',
+            });
+            queryClient.invalidateQueries(['detailProject', id]);
+        },
+        onError: (error: any) => {
+            notification.error({
+                message: 'Error',
+                description: error?.response?.data?.message,
             });
         },
     });
 
     const handleFinish = (values: any) => {
-        if (initalValues) {
-            return;
-        }
-        console.log('values: ', values);
-        createProjectMutate({
-            ...values,
-            starts_at: dayjs(values.starts_at).format('YYYY/MM/DD'),
-            ends_at: dayjs(values.starts_at).format('YYYY/MM/DD'),
-            status_id: '1',
-        });
+        console.log('values', values);
+
+        id
+            ? updateProjectMutate({
+                  ...values,
+                  starts_at: dayjs(startDate).format('YYYY/MM/DD'),
+                  ends_at: dayjs(endDate).format('YYYY/MM/DD'),
+                  status_id: values?.value,
+              })
+            : createProjectMutate({
+                  ...values,
+                  starts_at: dayjs(startDate).format('YYYY/MM/DD'),
+                  ends_at: dayjs(endDate).format('YYYY/MM/DD'),
+                  status_id: 1,
+              });
     };
     return (
         <div className="p-10 bg-white rounded-xl">
@@ -87,10 +121,17 @@ const CreateUpdateProject = (props: Props) => {
                     >
                         Danh sách dự án /
                     </span>{' '}
-                    <span className="font-semibold">Tạo dự án</span>
+                    <span className="font-semibold">
+                        {id ? ' Chỉnh sửa ' : 'Tạo '} dự án
+                    </span>
                 </div>
             </div>
-            <Form form={form} onFinish={handleFinish} layout="vertical">
+            <Form
+                form={form}
+                onFinish={handleFinish}
+                layout="vertical"
+                initialValues={detailToUpdate}
+            >
                 <Form.Item
                     name="customer_name"
                     label="Tên khách hàng"
@@ -130,53 +171,116 @@ const CreateUpdateProject = (props: Props) => {
                         />
                     </Form.Item>{' '}
                 </div>
-
-                <div className="flex gap-10">
-                    {' '}
-                    <Form.Item
-                        name="starts_at"
-                        label="Ngày bắt đầu"
-                        className="w-1/2"
-                        valuePropName="startDate"
-                        rules={[{required: true}]}
-                    >
-                        <DatePicker
-                            onChange={() => {}}
-                            format={'YYYY/MM/DD'}
-                            style={{
-                                backgroundColor: '#f5f5f5',
-                                width: '100%',
-                            }}
-                            defaultValue={dayjs()}
-                        />
-                    </Form.Item>
-                    <Form.Item
-                        name="ends_at"
-                        label="Ngày kết thúc"
-                        className="w-1/2"
-                        valuePropName="endDate"
-                        rules={[{required: true}]}
-                    >
-                        <DatePicker
-                            disabledDate={(d) =>
-                                !d ||
-                                d.isBefore(
-                                    dayjs(startDate).format('YYYY/MM/DD'),
-                                )
-                            }
-                            onChange={() => {}}
-                            format={'YYYY/MM/DD'}
-                            style={{
-                                backgroundColor: '#f5f5f5',
-                                width: '100%',
-                            }}
-                            defaultValue={dayjs().add(1, 'day')}
-                        />
-                    </Form.Item>
-                </div>
+                {id ? (
+                    <div className="flex gap-10">
+                        {' '}
+                        <Form.Item
+                            name="starts_at"
+                            label="Ngày bắt đầu"
+                            className="w-1/2"
+                            valuePropName="startDate"
+                            rules={[{required: true}]}
+                        >
+                            <DatePicker
+                                disabledDate={(d) =>
+                                    !d ||
+                                    d.isBefore(
+                                        dayjs(detailToUpdate.starts_at).format(
+                                            'YYYY/MM/DD',
+                                        ),
+                                    )
+                                }
+                                onChange={() => {}}
+                                format={'YYYY/MM/DD'}
+                                style={{
+                                    backgroundColor: '#f5f5f5',
+                                    width: '100%',
+                                }}
+                                value={
+                                    startDate
+                                        ? dayjs(startDate)
+                                        : dayjs(detailToUpdate.starts_at)
+                                }
+                            />
+                        </Form.Item>
+                        <Form.Item
+                            name="ends_at"
+                            label="Ngày kết thúc"
+                            className="w-1/2"
+                            valuePropName="endDate"
+                            rules={[{required: true}]}
+                        >
+                            <DatePicker
+                                disabledDate={(d) =>
+                                    !d ||
+                                    d.isBefore(
+                                        dayjs(startDate).format('YYYY/MM/DD'),
+                                    )
+                                }
+                                onChange={() => {}}
+                                format={'YYYY/MM/DD'}
+                                style={{
+                                    backgroundColor: '#f5f5f5',
+                                    width: '100%',
+                                }}
+                                value={
+                                    endDate
+                                        ? dayjs(endDate)
+                                        : dayjs(detailToUpdate.ends_at)
+                                }
+                            />
+                        </Form.Item>
+                    </div>
+                ) : (
+                    <div className="flex gap-10">
+                        {' '}
+                        <Form.Item
+                            name="starts_at"
+                            label="Ngày bắt đầu"
+                            className="w-1/2"
+                            valuePropName="startDate"
+                            rules={[{required: true}]}
+                        >
+                            <DatePicker
+                                disabledDate={(d) =>
+                                    !d ||
+                                    d.isBefore(dayjs().format('YYYY/MM/DD'))
+                                }
+                                onChange={() => {}}
+                                format={'YYYY/MM/DD'}
+                                style={{
+                                    backgroundColor: '#f5f5f5',
+                                    width: '100%',
+                                }}
+                            />
+                        </Form.Item>
+                        <Form.Item
+                            name="ends_at"
+                            label="Ngày kết thúc"
+                            className="w-1/2"
+                            valuePropName="endDate"
+                            rules={[{required: true}]}
+                        >
+                            <DatePicker
+                                disabledDate={(d) =>
+                                    !d ||
+                                    d.isBefore(
+                                        dayjs(startDate).format('YYYY/MM/DD'),
+                                    )
+                                }
+                                onChange={() => {}}
+                                format={'YYYY/MM/DD'}
+                                style={{
+                                    backgroundColor: '#f5f5f5',
+                                    width: '100%',
+                                }}
+                            />
+                        </Form.Item>
+                    </div>
+                )}
 
                 <Form.Item
-                    name="assigned_user_ids"
+                    name="user_ids"
                     label="Người thực hiện"
                     rules={[
                         {
@@ -190,7 +294,7 @@ const CreateUpdateProject = (props: Props) => {
                         style={{width: '100%'}}
                         placeholder="Chọn người thực hiện"
                         onChange={() => {}}
-                        options={options}
+                        options={options || []}
                     />
                 </Form.Item>
                 <div className="flex gap-10">
@@ -238,18 +342,35 @@ const CreateUpdateProject = (props: Props) => {
                         label="Trạng thái"
                         className="w-1/2"
                     >
-                        <Select
-                            disabled
-                            mode="multiple"
-                            style={{width: '100%'}}
-                            placeholder="Chọn người thực hiện"
-                            onChange={() => {}}
-                            options={[{label: 'Not Started', value: '1'}]}
-                            value={{
-                                label: 'Not Started',
-                                value: '1',
-                            }}
-                        />
+                        {id ? (
+                            <Select
+                                style={{width: '100%'}}
+                                options={statusOptions}
+                                defaultValue={
+                                    id
+                                        ? detailToUpdate?.status_id
+                                        : {
+                                              label: 'Not Started',
+                                              value: '1',
+                                          }
+                                }
+                            />
+                        ) : (
+                            <Select
+                                disabled
+                                mode="multiple"
+                                style={{width: '100%'}}
+                                options={statusOptions}
+                                defaultValue={
+                                    id
+                                        ? detailToUpdate?.status_id
+                                        : {
+                                              label: 'Not Started',
+                                              value: 1,
+                                          }
+                                }
+                            />
+                        )}
                     </Form.Item>
                     <div className="w-1/2"></div>
                 </div>

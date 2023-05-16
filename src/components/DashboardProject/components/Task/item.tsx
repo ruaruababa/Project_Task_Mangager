@@ -1,14 +1,14 @@
 // @ts-ignore
 
 import {Draggable} from 'react-beautiful-dnd';
+import {useNavigate} from 'react-router-dom';
 import UserAvatar from '../Item/avatar';
 import Action from './action';
 
 function Task(props: any) {
-    const {index, data} = props;
-    let style = {
-        backgroundColor: 'red',
-    };
+    const {index, data, id} = props;
+
+    const navigate = useNavigate();
 
     return (
         <Draggable draggableId={data?.id?.toString()} index={index} type="TASK">
@@ -20,7 +20,12 @@ function Task(props: any) {
                     {...provided.dragHandleProps}
                 >
                     <div className="flex flex-col gap-5 p-3">
-                        <div className="text-blue-500 line-clamp-1">
+                        <div
+                            className="text-blue-500 cursor-pointer line-clamp-1"
+                            onClick={() =>
+                                navigate(`/project/${id}/tasks/${data?.id}`)
+                            }
+                        >
                             {data?.name}
                         </div>
                         <div className="flex flex-col gap-2">
