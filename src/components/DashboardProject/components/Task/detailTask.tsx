@@ -1,21 +1,33 @@
 import {useQuery} from '@tanstack/react-query';
-import {Button} from 'antd';
-import {useParams} from 'react-router-dom';
+import {useMemo} from 'react';
+import {useNavigate, useParams} from 'react-router-dom';
 import {getDetailTaskInProject} from '../../../../services/tasks';
 import {convertDate} from '../../../../utils/format';
-import PiChart from '../../../Chart/PieChart';
 import UserAvatar from '../Item/avatar';
 
 const DetailTask = () => {
     const {id, taskId} = useParams();
+    const navigate = useNavigate();
 
     const {data: detailTaskResponse} = useQuery({
         queryKey: ['getDetailTaskInProject', id, taskId],
         queryFn: () => getDetailTaskInProject(id, taskId),
     });
 
-    const detailProject: any = [];
-    console.log('detailTaskResponse', detailTaskResponse);
+    const detailTaskInProject = useMemo(() => {
+        return detailTaskResponse?.data?.data;
+    }, [detailTaskResponse]);
+
+    const userReportList = useMemo(() => {
+        const listUserReport = detailTaskInProject?.reports?.map(
+            (item: any) => item?.user?.name,
+        );
+        return listUserReport?.join(', ');
+    }, [detailTaskInProject]);
+
+    const getDetailSubTask = (subTaskId: any) => {
+        navigate(`/project/${id}/subtask/${subTaskId}`);
+    };
 
     return (
         <>
@@ -24,13 +36,13 @@ const DetailTask = () => {
                 <div className="text-lg bg-white rounded-xl">
                     <div className="flex flex-col gap-10 p-10">
                         <div className="text-xl font-semibold">
-                            {detailProject?.name} -{' '}
+                            {detailTaskInProject?.name} -{' '}
                             <span
                                 style={{
-                                    color: detailProject?.status?.color,
+                                    color: detailTaskInProject?.status?.color,
                                 }}
                             >
-                                {detailProject?.status?.name}
+                                {detailTaskInProject?.status?.name}
                             </span>
                         </div>
                         <div className="grid grid-cols-12 gap-3 text-lg">
@@ -41,11 +53,13 @@ const DetailTask = () => {
                                 }}
                             >
                                 <div className="text-lg font-semibold">
-                                    {convertDate(detailProject?.starts_at)}
+                                    {convertDate(
+                                        detailTaskInProject?.starts_at,
+                                    )}
                                 </div>
 
                                 <div className="text-gray-400">
-                                    Ngày bắt đầu hợp đồng
+                                    Ngày bắt đầu
                                 </div>
                             </div>
                             <div
@@ -55,10 +69,12 @@ const DetailTask = () => {
                                 }}
                             >
                                 <div className="text-lg font-semibold">
-                                    {convertDate(detailProject?.starts_at)}
+                                    {convertDate(
+                                        detailTaskInProject?.starts_at,
+                                    )}
                                 </div>
                                 <div className="text-gray-400">
-                                    Ngày bắt đầu hợp đồng
+                                    Ngày hoàn thành
                                 </div>
                             </div>
                             <div
@@ -68,7 +84,7 @@ const DetailTask = () => {
                                 }}
                             >
                                 <div className="text-lg font-semibold">
-                                    {detailProject?.progress || 0} %
+                                    {detailTaskInProject?.progress || 0} %
                                 </div>
                                 <div className="text-gray-400">
                                     Phần trăm hoàn thành
@@ -76,66 +92,162 @@ const DetailTask = () => {
                             </div>
                             <div className="flex col-span-2 py-3 text-center">
                                 <UserAvatar
-                                    users={detailProject?.users || []}
+                                    users={detailTaskInProject?.users || []}
                                 />
                             </div>
                         </div>
                         <div className="grid grid-cols-12">
                             <div className="col-span-2 text-lg font-semibold text-gray-400">
-                                Code:
+                                Project name:
                             </div>
                             <div className="col-span-10 font-semibold">
-                                {detailProject?.code}
+                                {detailTaskInProject?.project?.name}
                             </div>
                         </div>
                         <div className="grid grid-cols-12">
                             <div className="col-span-2 text-lg font-semibold text-gray-400">
-                                Duration:
+                                Pending reason:
                             </div>
                             <div className="col-span-10 font-semibold">
-                                {detailProject?.duration}
+                                {detailTaskInProject?.pending_reason}
                             </div>
                         </div>
                         <div className="grid grid-cols-12">
                             <div className="col-span-2 text-lg font-semibold text-gray-400">
-                                Summary:
+                                File name:{' '}
                             </div>
                             <div className="col-span-10 font-semibold">
-                                {detailProject?.summary || 'Không xác định'}
+                                {detailTaskInProject?.files?.map(
+                                    (file: any) => (
+                                        <a
+                                            href={file.url}
+                                            target="_blank"
+                                            rel="noreferrer"
+                                            className="text-blue-500"
+                                            style={{
+                                                textDecoration: 'underline',
+                                            }}
+                                            key={file.id}
+                                        >
+                                            {file.name}
+                                        </a>
+                                    ),
+                                )}
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-12">
+                            <div className="col-span-2 text-lg font-semibold text-gray-400">
+                                Report files:{' '}
+                            </div>
+                            <div className="col-span-10 font-semibold">
+                                {detailTaskInProject?.reports?.map(
+                                    (item: any) => (
+                                        <a
+                                            href={item?.file?.url}
+                                            target="_blank"
+                                            rel="noreferrer"
+                                            className="text-blue-500"
+                                            style={{
+                                                textDecoration: 'underline',
+                                            }}
+                                            key={item?.name}
+                                        >
+                                            {item?.file?.name}
+                                        </a>
+                                    ),
+                                )}
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-12">
+                            <div className="col-span-2 text-lg font-semibold text-gray-400">
+                                Report users:
+                            </div>
+                            <div className="col-span-10 font-semibold">
+                                {userReportList}
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-12">
+                            <div className="col-span-2 text-lg font-semibold text-gray-400">
+                                Description:
+                            </div>
+                            <div className="col-span-10 font-semibold">
+                                {detailTaskInProject?.description ||
+                                    'Không xác định'}
                             </div>
                         </div>
                     </div>
                 </div>
-                {/* ------------------------------------- CHART ------------------------------- */}
-                <div className="flex flex-col text-lg bg-white rounded-xl">
-                    <div className="flex flex-col p-10">
-                        {' '}
-                        <div
-                            className="flex justify-between pb-10"
-                            style={{
-                                borderBottom: '1px solid #dddddd',
-                            }}
-                        >
-                            <div className="font-semibold">
-                                Tổng task:{' '}
-                                <span>{detailProject?.tasks_count}</span>
+                {/* ------------------------------------- SubTask ------------------------------- */}
+                {detailTaskInProject?.children?.map((item: any) => (
+                    <div className="text-lg bg-white rounded-xl">
+                        <div className="flex flex-col gap-10 p-10">
+                            <div
+                                className="text-xl font-semibold cursor-pointer hover:underline"
+                                onClick={() => getDetailSubTask(item?.id)}
+                            >
+                                {item?.name} -{' '}
+                                <span
+                                    style={{
+                                        color: item?.status?.color,
+                                    }}
+                                >
+                                    {item?.status?.name}
+                                </span>
                             </div>
-                            <div className="">
-                                {' '}
-                                <Button size={'large'} type="primary">
-                                    Danh sách task
-                                </Button>
+                            <div className="grid grid-cols-12 gap-3 text-lg">
+                                <div
+                                    className="flex flex-col col-span-2 py-3 text-center"
+                                    style={{
+                                        border: '1px dashed  #cccccc',
+                                    }}
+                                >
+                                    <div className="text-lg font-semibold">
+                                        {convertDate(item?.starts_at)}
+                                    </div>
+
+                                    <div className="text-gray-400">
+                                        Ngày bắt đầu
+                                    </div>
+                                </div>
+                                <div
+                                    className="flex flex-col col-span-2 py-3 text-center"
+                                    style={{
+                                        border: '1px dashed  #cccccc',
+                                    }}
+                                >
+                                    <div className="text-lg font-semibold">
+                                        {convertDate(item?.starts_at)}
+                                    </div>
+                                    <div className="text-gray-400">
+                                        Ngày hoàn thành
+                                    </div>
+                                </div>
+
+                                <div className="flex col-span-2 py-3 text-center">
+                                    <UserAvatar users={item?.users || []} />
+                                </div>
                             </div>
-                        </div>
-                        <div className="py-10">
-                            <PiChart
-                                dataChart={
-                                    detailProject?.tasks_count_by_status || []
-                                }
-                            />
+
+                            {/* <div className="grid grid-cols-12">
+                                <div className="col-span-2 text-lg font-semibold text-gray-400">
+                                    Pending reason:
+                                </div>
+                                <div className="col-span-10 font-semibold">
+                                    {item?.pending_reason}
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-12">
+                                <div className="col-span-2 text-lg font-semibold text-gray-400">
+                                    Description:
+                                </div>
+                                <div className="col-span-10 font-semibold">
+                                    {item?.description || 'Không xác định'}
+                                </div>
+                            </div> */}
                         </div>
                     </div>
-                </div>
+                ))}
             </div>
         </>
     );

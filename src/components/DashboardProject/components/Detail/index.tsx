@@ -17,6 +17,15 @@ const DetailProject = () => {
         <>
             <div className="flex flex-col gap-10">
                 {' '}
+                <div className="flex justify-end gap-3 mb-10">
+                    <Button
+                        className="text-white bg-blue-600"
+                        onClick={() => navigate(`/project/${id}/create-task`)}
+                        size="large"
+                    >
+                        Tạo tạo task mới
+                    </Button>
+                </div>
                 <div className="text-lg bg-white rounded-xl">
                     <div className="flex flex-col gap-10 p-10">
                         <div className="text-xl font-semibold">

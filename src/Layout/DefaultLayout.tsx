@@ -29,7 +29,7 @@ function getItem(
 
 const items: MenuItem[] = [
     getItem('Quản lý dự án', '/project', <FundProjectionScreenOutlined />),
-    getItem('Danh sách task', '/project/:id/all-task', <OrderedListOutlined />),
+    getItem('Danh sách task', '/task', <OrderedListOutlined />),
     getItem('Resource manger', '/resource', <FileOutlined />),
     getItem('Tasks manger', '/tasks', <FundProjectionScreenOutlined />),
     getItem('Proxy', '/proxy', <FundProjectionScreenOutlined />),
