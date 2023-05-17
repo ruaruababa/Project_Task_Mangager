@@ -5,6 +5,7 @@
 // export default CreateUpdateTask;
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import {Button, DatePicker, Form, Input, Select, notification} from 'antd';
+import TextArea from 'antd/es/input/TextArea';
 import dayjs from 'dayjs';
 import {useEffect, useMemo} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
@@ -99,8 +100,8 @@ const CreateUpdateTask = () => {
             //   })
             createTaskInProjectMutate({
                 ...values,
-                starts_at: dayjs(startDate).format('YYYY/MM/DD'),
-                ends_at: dayjs(endDate).format('YYYY/MM/DD'),
+                starts_at: dayjs(startDate).format('YYYY/MM/DD HH:mm'),
+                ends_at: dayjs(endDate).format('YYYY/MM/DD HH:mm'),
                 status_id: 1,
             });
     };
@@ -154,7 +155,7 @@ const CreateUpdateTask = () => {
                     />
                 </Form.Item>
 
-                {id ? (
+                {taskId ? (
                     <div className="flex gap-10">
                         {' '}
                         <Form.Item
@@ -165,23 +166,24 @@ const CreateUpdateTask = () => {
                             rules={[{required: true}]}
                         >
                             <DatePicker
+                                showTime={{format: 'HH:mm'}}
                                 disabledDate={(d) =>
                                     !d ||
                                     d.isBefore(
                                         dayjs(
                                             detailTaskInProject?.starts_at,
-                                        ).format('YYYY/MM/DD'),
+                                        ).format('YYYY/MM/DD HH:mm'),
                                     )
                                 }
                                 onChange={() => {}}
-                                format={'YYYY/MM/DD'}
+                                format={'YYYY/MM/DD HH:mm'}
                                 style={{
                                     backgroundColor: '#f5f5f5',
                                     width: '100%',
                                 }}
                                 value={
                                     startDate
-                                        ? dayjs(startDate)
+                                        ? dayjs()
                                         : dayjs(detailTaskInProject?.starts_at)
                                 }
                             />
@@ -194,21 +196,24 @@ const CreateUpdateTask = () => {
                             rules={[{required: true}]}
                         >
                             <DatePicker
+                                showTime={{format: 'HH:mm'}}
                                 disabledDate={(d) =>
                                     !d ||
                                     d.isBefore(
-                                        dayjs(startDate).format('YYYY/MM/DD'),
+                                        dayjs(startDate).format(
+                                            'YYYY/MM/DD HH:mm',
+                                        ),
                                     )
                                 }
                                 onChange={() => {}}
-                                format={'YYYY/MM/DD'}
+                                format={'YYYY/MM/DD HH:mm'}
                                 style={{
                                     backgroundColor: '#f5f5f5',
                                     width: '100%',
                                 }}
                                 value={
                                     endDate
-                                        ? dayjs(endDate)
+                                        ? dayjs()
                                         : dayjs(detailTaskInProject?.ends_at)
                                 }
                             />
@@ -225,12 +230,15 @@ const CreateUpdateTask = () => {
                             rules={[{required: true}]}
                         >
                             <DatePicker
+                                showTime={{format: 'HH:mm'}}
                                 disabledDate={(d) =>
                                     !d ||
-                                    d.isBefore(dayjs().format('YYYY/MM/DD'))
+                                    d.isBefore(
+                                        dayjs().format('YYYY/MM/DD HH:mm'),
+                                    )
                                 }
                                 onChange={() => {}}
-                                format={'YYYY/MM/DD'}
+                                format="YYYY-MM-DD HH:mm"
                                 style={{
                                     backgroundColor: '#f5f5f5',
                                     width: '100%',
@@ -245,14 +253,17 @@ const CreateUpdateTask = () => {
                             rules={[{required: true}]}
                         >
                             <DatePicker
+                                showTime={{format: 'HH:mm'}}
                                 disabledDate={(d) =>
                                     !d ||
                                     d.isBefore(
-                                        dayjs(startDate).format('YYYY/MM/DD'),
+                                        dayjs(startDate).format(
+                                            'YYYY/MM/DD HH:mm',
+                                        ),
                                     )
                                 }
                                 onChange={() => {}}
-                                format={'YYYY/MM/DD'}
+                                format="YYYY-MM-DD HH:mm"
                                 style={{
                                     backgroundColor: '#f5f5f5',
                                     width: '100%',
@@ -287,7 +298,7 @@ const CreateUpdateTask = () => {
                         label="Trạng thái"
                         className="w-1/2"
                     >
-                        {id ? (
+                        {taskId ? (
                             <Select
                                 style={{width: '100%'}}
                                 options={statusOptions}
@@ -339,6 +350,26 @@ const CreateUpdateTask = () => {
                         </Form.Item>
                     </div>
                 </div>
+
+                <Form.Item
+                    name="description"
+                    label="Mô tả"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Vui lòng nhập mô tả!',
+                        },
+                    ]}
+                >
+                    <TextArea
+                        placeholder="Nhập mô tả"
+                        style={{
+                            backgroundColor: '#f5f5f5',
+                        }}
+                        cols={30}
+                        rows={10}
+                    />
+                </Form.Item>
 
                 <Form.Item className="flex justify-center w-full">
                     <Button
