@@ -6,7 +6,11 @@ export const getMyTasks = (page: any) => {
 };
 
 export const getDetailTaskInProject = (id: any, taskId: any) => {
-    return baseAPIRequest.get(`project/${id}/tasks/${taskId}`);
+    return baseAPIRequest.get(`api/projects/${id}/tasks/${taskId}`);
+};
+
+export const createTaskInProject = (input: any, id: any) => {
+    return baseAPIRequest.post(`api/projects/${id}/tasks`, input);
 };
 
 export const createTask = (input: TaskDto) => {

@@ -5,6 +5,9 @@ import DetailProject from './components/DashboardProject/components/Detail';
 import ProjectManager from './components/DashboardProject/components/List';
 import TaskInProject from './components/DashboardProject/components/Task';
 import DetailTask from './components/DashboardProject/components/Task/detailTask';
+import SubTask from './components/DashboardProject/components/Task/subTask';
+import CreateUpdateTask from './components/DashboardTask/components/Create/createUpdateTask';
+import ListTask from './components/DashboardTask/components/List';
 import AllListTask from './components/ListTask/components';
 import TaskManagerPage from './components/TaskManager';
 const router = createBrowserRouter([
@@ -37,12 +40,24 @@ const router = createBrowserRouter([
                 element: <DetailTask />,
             },
             {
+                path: '/project/:id/subtask/:subTaskId',
+                element: <SubTask />,
+            },
+            {
                 path: '/project/create',
                 element: <CreateUpdateProject />,
             },
             {
                 path: '/project/edit/:id',
                 element: <CreateUpdateProject />,
+            },
+            {
+                path: '/task',
+                element: <ListTask />,
+            },
+            {
+                path: '/project/:id/create-task',
+                element: <CreateUpdateTask />,
             },
         ],
     },
