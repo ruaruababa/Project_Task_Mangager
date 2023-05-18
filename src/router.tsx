@@ -40,6 +40,10 @@ const router = createBrowserRouter([
                 element: <DetailTask />,
             },
             {
+                path: '/project/:id/tasks/:taskId/edit',
+                element: <CreateUpdateTask />,
+            },
+            {
                 path: '/project/:id/subtask/:subTaskId',
                 element: <SubTask />,
             },

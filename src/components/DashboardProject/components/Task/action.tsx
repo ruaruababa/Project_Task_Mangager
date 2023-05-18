@@ -14,7 +14,7 @@ const Action = (props: IProps) => {
         <div className="flex gap-1">
             <div
                 className="cursor-pointer"
-                onClick={() => navigate(`/project/${id}/tasks/${item.id}`)}
+                onClick={() => navigate(`/project/${id}/tasks/${item.id}/edit`)}
             >
                 <EditOutlined />
             </div>

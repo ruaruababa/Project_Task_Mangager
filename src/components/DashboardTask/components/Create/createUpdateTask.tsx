@@ -14,6 +14,7 @@ import useUser from '../../../../hooks/useUser';
 import {
     createTaskInProject,
     getDetailTaskInProject,
+    updateTaskInproject,
 } from '../../../../services/tasks';
 
 const CreateUpdateTask = () => {
@@ -38,16 +39,32 @@ const CreateUpdateTask = () => {
         return detailTaskResponse?.data?.data;
     }, [detailTaskResponse]);
 
+    const detailToUpdate = useMemo(() => {
+        return {
+            ...detailTaskInProject,
+            status_id: {
+                label: detailTaskInProject?.status?.name,
+                value: detailTaskInProject?.status?.id,
+            },
+            user_ids: detailTaskInProject?.users?.map((item: any) => {
+                return {
+                    label: item?.name,
+                    value: item?.id,
+                };
+            }),
+        };
+    }, [detailTaskInProject]);
+
     const navigate = useNavigate();
     const queryClient = useQueryClient();
 
     useEffect(() => {
         taskId
-            ? form.setFieldsValue(detailTaskInProject)
+            ? form.setFieldsValue(detailToUpdate)
             : form.setFieldsValue({
                   status_id: 'Not Started',
               });
-    }, [statusOptions, detailTaskInProject, form, id, taskId]);
+    }, [statusOptions, detailToUpdate, form, id, taskId]);
 
     const {mutate: createTaskInProjectMutate, isLoading} = useMutation({
         mutationFn: (data: any) => createTaskInProject(data, id),
@@ -70,40 +87,40 @@ const CreateUpdateTask = () => {
         },
     });
 
-    // const {mutate: updateProjectMutate} = useMutation({
-    //     mutationFn: (data: any) => updateProject(data, id),
-    //     mutationKey: ['updateProject', id],
-    //     onSuccess: () => {
-    //         notification.success({
-    //             message: 'Success ',
-    //             description: 'Update successfully',
-    //         });
-    //         queryClient.invalidateQueries(['detailProject', id]);
-    //     },
-    //     onError: (error: any) => {
-    //         notification.error({
-    //             message: 'Error',
-    //             description: error?.response?.data?.message,
-    //         });
-    //     },
-    // });
+    const {mutate: updateTaskMutate} = useMutation({
+        mutationFn: (data: any) => updateTaskInproject(data, id),
+        mutationKey: ['updateTaskInproject', id],
+        onSuccess: () => {
+            notification.success({
+                message: 'Success ',
+                description: 'Update successfully',
+            });
+            queryClient.invalidateQueries(['detailProject', id]);
+        },
+        onError: (error: any) => {
+            notification.error({
+                message: 'Error',
+                description: error?.response?.data?.message,
+            });
+        },
+    });
 
     const handleFinish = (values: any) => {
         console.log('values', values);
 
-        id &&
-            // ? updateProjectMutate({
-            //       ...values,
-            //       starts_at: dayjs(startDate).format('YYYY/MM/DD'),
-            //       ends_at: dayjs(endDate).format('YYYY/MM/DD'),
-            //       status_id: values?.value,
-            //   })
-            createTaskInProjectMutate({
-                ...values,
-                starts_at: dayjs(startDate).format('YYYY/MM/DD HH:mm'),
-                ends_at: dayjs(endDate).format('YYYY/MM/DD HH:mm'),
-                status_id: 1,
-            });
+        taskId
+            ? updateTaskMutate({
+                  ...values,
+                  starts_at: dayjs(startDate).format('YYYY/MM/DD'),
+                  ends_at: dayjs(endDate).format('YYYY/MM/DD'),
+                  status_id: values?.value,
+              })
+            : createTaskInProjectMutate({
+                  ...values,
+                  starts_at: dayjs(startDate).format('YYYY/MM/DD HH:mm'),
+                  ends_at: dayjs(endDate).format('YYYY/MM/DD HH:mm'),
+                  status_id: 1,
+              });
     };
     return (
         <div className="p-10 bg-white rounded-xl">

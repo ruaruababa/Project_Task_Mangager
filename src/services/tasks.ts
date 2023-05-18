@@ -12,6 +12,9 @@ export const getDetailTaskInProject = (id: any, taskId: any) => {
 export const createTaskInProject = (input: any, id: any) => {
     return baseAPIRequest.post(`api/projects/${id}/tasks`, input);
 };
+export const updateTaskInproject = (input: any, id: any) => {
+    return baseAPIRequest.patch(`api/projects/${id}/tasks`, input);
+};
 
 export const createTask = (input: TaskDto) => {
     return baseAPIRequest.post('tasks', input);
