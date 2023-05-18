@@ -42,12 +42,12 @@ const CreateUpdateTask = () => {
     const queryClient = useQueryClient();
 
     useEffect(() => {
-        id
+        taskId
             ? form.setFieldsValue(detailTaskInProject)
             : form.setFieldsValue({
                   status_id: 'Not Started',
               });
-    }, [statusOptions, detailTaskInProject, form, id]);
+    }, [statusOptions, detailTaskInProject, form, id, taskId]);
 
     const {mutate: createTaskInProjectMutate, isLoading} = useMutation({
         mutationFn: (data: any) => createTaskInProject(data, id),
@@ -124,7 +124,7 @@ const CreateUpdateTask = () => {
                             navigate('/task');
                         }}
                     >
-                        Task
+                        Task /
                     </span>{' '}
                     <span className="font-semibold">
                         {id ? ' Chỉnh sửa ' : 'Tạo '} task
@@ -303,7 +303,7 @@ const CreateUpdateTask = () => {
                                 style={{width: '100%'}}
                                 options={statusOptions}
                                 defaultValue={
-                                    id
+                                    taskId
                                         ? detailTaskInProject?.status_id
                                         : {
                                               label: 'Not Started',
@@ -318,7 +318,7 @@ const CreateUpdateTask = () => {
                                 style={{width: '100%'}}
                                 options={statusOptions}
                                 defaultValue={
-                                    id
+                                    taskId
                                         ? detailTaskInProject?.status_id
                                         : {
                                               label: 'Not Started',
