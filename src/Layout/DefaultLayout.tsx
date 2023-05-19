@@ -113,7 +113,7 @@ const DefaultLayout = () => {
                     </div>
                 </Content>
                 <Footer style={{textAlign: 'center'}}>
-                    Task Manager ©2021 Created by Pham Hai
+                    Task Manager ©2023 Created by Pham Hai
                 </Footer>
             </Layout>
         </Layout>

@@ -120,7 +120,7 @@ const CreateUpdateUserModal = (props: Props) => {
         <Modal
             visible={visible}
             onCancel={onCancel}
-            title="Create new task"
+            title="Create new User"
             footer={[]}
         >
             <Form
@@ -129,9 +129,9 @@ const CreateUpdateUserModal = (props: Props) => {
                 initialValues={detailConvert}
                 layout="vertical"
             >
-                <Form.Item name="avatar">
+                {/* <Form.Item name="avatar">
                     <Input type="file" placeholder="Upload ảnh" />
-                </Form.Item>{' '}
+                </Form.Item>{' '} */}
                 <Form.Item
                     name="name"
                     label="Họ và tên"
