@@ -1,14 +1,18 @@
 # Getting Started with Create React App
 
-http://188.166.251.46:8200/login
+<!-- http://188.166.251.46:8200/login
 levan031020@gmail.com
-Lehang030698@
+Lehang030698@ -->
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
 
 In the project directory, you can run:
+
+### `yarn install`
+
+Install all dependencies for a project.
 
 ### `yarn start`
 
