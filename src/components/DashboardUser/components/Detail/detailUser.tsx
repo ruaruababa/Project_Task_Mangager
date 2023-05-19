@@ -94,14 +94,17 @@ const DetailUser = () => {
                         </div>
                     </div>
                     <div className="flex flex-col col-span-8 gap-9">
-                        <div className="grid grid-cols-7">
+                        <div className="grid grid-cols-7 gap-2">
                             <div className="col-span-1 font-semibold">
                                 Email:
                             </div>
                             {isEditMode ? (
-                                <div className="">{detailUser?.email}</div>
+                                <div className="col-span-2">
+                                    {detailUser?.email}
+                                </div>
                             ) : (
                                 <Form.Item
+                                    className="col-span-2"
                                     name="email"
                                     rules={[
                                         {
@@ -132,17 +135,18 @@ const DetailUser = () => {
                                 )}
                             </div>
                         </div>
-                        <div className="grid grid-cols-7">
+                        <div className="grid grid-cols-7 gap-2">
                             <div className="col-span-1 font-semibold ">
                                 Số điện thoại:
                             </div>
                             {isEditMode ? (
-                                <div className="">
+                                <div className="col-span-2">
                                     {detailUser?.phone || 'Chưa cập nhật'}
                                 </div>
                             ) : (
                                 <Form.Item
                                     name="phone"
+                                    className="col-span-2"
                                     initialValue={detailUser?.phone || ''}
                                     rules={[
                                         {
@@ -174,14 +178,17 @@ const DetailUser = () => {
                                 )}
                             </div>
                         </div>
-                        <div className="grid grid-cols-7">
+                        <div className="grid grid-cols-7 gap-2">
                             <div className="col-span-1 font-semibold">
                                 Địa chỉ:
                             </div>
                             {isEditMode ? (
-                                <div className="">{detailUser?.name}</div>
+                                <div className="col-span-2">
+                                    {detailUser?.name}
+                                </div>
                             ) : (
                                 <Form.Item
+                                    className="col-span-2"
                                     name="name"
                                     rules={[
                                         {
