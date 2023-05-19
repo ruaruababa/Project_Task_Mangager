@@ -8,6 +8,8 @@ import DetailTask from './components/DashboardProject/components/Task/detailTask
 import SubTask from './components/DashboardProject/components/Task/subTask';
 import CreateUpdateTask from './components/DashboardTask/components/Create/createUpdateTask';
 import ListTask from './components/DashboardTask/components/List';
+import DetailUser from './components/DashboardUser/components/Detail/detailUser';
+import ListUser from './components/DashboardUser/components/List';
 import AllListTask from './components/ListTask/components';
 import TaskManagerPage from './components/TaskManager';
 const router = createBrowserRouter([
@@ -62,6 +64,22 @@ const router = createBrowserRouter([
             {
                 path: '/project/:id/create-task',
                 element: <CreateUpdateTask />,
+            },
+            {
+                path: '/user',
+                element: <ListUser />,
+            },
+            {
+                path: '/user/create',
+                element: <ListUser />,
+            },
+            {
+                path: '/user/:id/edit',
+                element: <ListUser />,
+            },
+            {
+                path: '/user/:id/detail',
+                element: <DetailUser />,
             },
         ],
     },

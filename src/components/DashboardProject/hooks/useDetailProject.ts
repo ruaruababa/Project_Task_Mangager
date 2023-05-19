@@ -21,7 +21,6 @@ const useDetailProject = () => {
         return detailProjectResponse?.data?.data || [];
     }, [detailProjectResponse]);
 
-    console.log('detailProject', detailProject);
 
     const detailToUpdate = useMemo(() => {
         return {

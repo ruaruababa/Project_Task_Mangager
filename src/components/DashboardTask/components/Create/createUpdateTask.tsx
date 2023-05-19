@@ -64,7 +64,7 @@ const CreateUpdateTask = () => {
             : form.setFieldsValue({
                   status_id: 'Not Started',
               });
-    }, [statusOptions, detailToUpdate, form, id, taskId]);
+    }, [statusOptions, detailToUpdate, id, taskId]);
 
     const {mutate: createTaskInProjectMutate, isLoading} = useMutation({
         mutationFn: (data: any) => createTaskInProject(data, id),
@@ -106,7 +106,6 @@ const CreateUpdateTask = () => {
     });
 
     const handleFinish = (values: any) => {
-        console.log('values', values);
 
         taskId
             ? updateTaskMutate({
@@ -192,7 +191,6 @@ const CreateUpdateTask = () => {
                                         ).format('YYYY/MM/DD HH:mm'),
                                     )
                                 }
-                                onChange={() => {}}
                                 format={'YYYY/MM/DD HH:mm'}
                                 style={{
                                     backgroundColor: '#f5f5f5',
@@ -222,7 +220,6 @@ const CreateUpdateTask = () => {
                                         ),
                                     )
                                 }
-                                onChange={() => {}}
                                 format={'YYYY/MM/DD HH:mm'}
                                 style={{
                                     backgroundColor: '#f5f5f5',
@@ -230,7 +227,7 @@ const CreateUpdateTask = () => {
                                 }}
                                 value={
                                     endDate
-                                        ? dayjs()
+                                        ? dayjs(endDate)
                                         : dayjs(detailTaskInProject?.ends_at)
                                 }
                             />
