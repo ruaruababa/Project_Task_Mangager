@@ -1,4 +1,4 @@
-import {DeleteOutlined, EditOutlined, EyeOutlined} from '@ant-design/icons';
+import {DeleteOutlined, EyeOutlined} from '@ant-design/icons';
 
 interface Props {
     handleView?: () => void;
@@ -14,9 +14,9 @@ const Action = (props: Props) => {
             <div className="cursor-pointer" onClick={handleView}>
                 <EyeOutlined />
             </div>
-            <div className="cursor-pointer" onClick={handleEdit}>
+            {/* <div className="cursor-pointer" onClick={handleEdit}>
                 <EditOutlined />
-            </div>
+            </div> */}
 
             <div className="cursor-pointer" onClick={handleDelete}>
                 <DeleteOutlined />

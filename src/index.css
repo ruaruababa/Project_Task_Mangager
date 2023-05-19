@@ -247,3 +247,11 @@ table {
 ::-webkit-scrollbar-thumb:hover {
     background-color: #828282;
 }
+
+#role > label {
+    margin-left: 0 !important;
+}
+
+label.ant-checkbox-wrapper {
+    margin: 0 !important;
+}

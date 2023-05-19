@@ -12,6 +12,14 @@ export const getListUserInSystem = (id: any) => {
     return baseAPIRequest.get(`api/users?page=${id}&per_page=10`);
 };
 
+export const createUser = (input: any) => {
+    return baseAPIRequest.post('api/users', input);
+};
+
 export const getDetailUser = (id: any) => {
-    return baseAPIRequest.get(`/api/users/${id}`);
+    return baseAPIRequest.get(`api/users/${id}`);
+};
+
+export const updateUser = (id: any, input: any) => {
+    return baseAPIRequest.patch(`api/users/${id}id}`, input);
 };

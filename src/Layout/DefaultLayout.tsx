@@ -31,14 +31,10 @@ const items: MenuItem[] = [
     getItem('Quản lý dự án', '/project', <FundProjectionScreenOutlined />),
     getItem('Danh sách task', '/task', <OrderedListOutlined />),
     getItem(' Quản lý người dùng', '/user', <UserOutlined />),
-    getItem('Tasks manger', '/tasks', <FundProjectionScreenOutlined />),
-    getItem('Proxy', '/proxy', <FundProjectionScreenOutlined />),
 ];
 
-const avatarUrl =
-    'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwallpapercave.com%2Fjulian-alvarez-wallpapers&psig=AOvVaw2xxDHost4gLjc1_y2kG6q5&ust=1684150937615000&source=images&cd=vfe&ved=0CBEQjRxqFwoTCJj8u6Xd9P4CFQAAAAAdAAAAABAE';
-const logoUrl =
-    'https://home-metahall.mefibay.com/_next/static/media/logo_header.5bb7bb07.png';
+const avatarUrl = 'avatar.jpg';
+const logoUrl = 'logo512.png';
 
 const DefaultLayout = () => {
     const [collapsed, setCollapsed] = useState(false);

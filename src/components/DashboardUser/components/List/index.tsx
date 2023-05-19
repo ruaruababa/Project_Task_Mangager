@@ -4,10 +4,12 @@ import {useMemo, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {getListUserInSystem} from '../../../../services/user';
 import Pagination from '../../../Pagination';
+import CreateUpdateUserModal from '../CreateUpdate/createUpdateUser';
 import UserItem from '../Item/item';
 
 const ListUser = () => {
     const [page, setPage] = useState(1);
+    const [isShowCreateModal, setIsShowCreateModal] = useState(false);
     const router = useNavigate();
 
     const {isLoading, data: listUserResponse} = useQuery({
@@ -28,21 +30,7 @@ const ListUser = () => {
         <>
             <div className="mb-10 text-lg">
                 <div className="mb-2 text-lg font-semibold">
-                    Danh sách task/Subtask của tôi
-                </div>
-                <div className="">
-                    <span
-                        onClick={() => {
-                            router('/');
-                        }}
-                        className="text-gray-400 cursor-pointer"
-                    >
-                        Trang chủ
-                    </span>
-                    {' / '}
-                    <span className="font-semibold">
-                        Danh sách task/Subtask của tôi
-                    </span>
+                    Danh sách người dùng
                 </div>
             </div>
             <div className="flex flex-col p-10 bg-white rounded-lg">
@@ -55,7 +43,7 @@ const ListUser = () => {
                         className="text-white bg-blue-500"
                         size={'large'}
                         onClick={() => {
-                            router('/user/create');
+                            setIsShowCreateModal(true);
                         }}
                     >
                         Thêm người dùng
@@ -87,6 +75,12 @@ const ListUser = () => {
                     onPageChange={(page: any) => setPage(page)}
                 />
             </div>
+            {
+                <CreateUpdateUserModal
+                    visible={isShowCreateModal}
+                    onCancel={() => setIsShowCreateModal((pre) => !pre)}
+                />
+            }
         </>
     );
 };

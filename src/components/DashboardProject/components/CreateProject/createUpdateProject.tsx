@@ -32,7 +32,6 @@ const CreateUpdateProject = () => {
     const navigate = useNavigate();
     const queryClient = useQueryClient();
 
-    console.log('detailToUpdate', detailToUpdate);
 
     useEffect(() => {
         id

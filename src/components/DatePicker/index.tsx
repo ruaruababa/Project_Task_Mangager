@@ -1,4 +1,3 @@
-import type {DatePickerProps} from 'antd';
 import {DatePicker} from 'antd';
 
 interface Props {
@@ -8,11 +7,8 @@ interface Props {
 
 const DatePickerCp = (props: Props) => {
     const {name, holder} = props;
-    const onChange: DatePickerProps['onChange'] = (date, dateString) => {
-        console.log(date, dateString);
-    };
 
-    return <DatePicker name={name} onChange={onChange} placeholder={holder}/>;
+    return <DatePicker name={name} placeholder={holder} />;
 };
 
 export default DatePickerCp;

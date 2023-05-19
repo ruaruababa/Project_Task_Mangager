@@ -1,20 +1,21 @@
+import {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import Action from '../../../Action';
+import CreateUpdateUserModal from '../CreateUpdate/createUpdateUser';
 
 const UserItem = ({user}: any) => {
+    const [isShow, setIsShow] = useState(false);
     const router = useNavigate();
     const handleViewDetail = () => {
         router(`/user/${user?.id}/detail`);
     };
-    const handleEdit = () => {
-        router(`/user/${user?.id}/edit`);
+    const handleShowModal = () => {
+        setIsShow(!isShow);
     };
     const handleRemove = () => {};
 
     return (
-        <div
-            className="grid grid-cols-8 py-4 text-base font-semibold text-black "
-        >
+        <div className="grid grid-cols-8 py-4 text-base font-semibold text-black ">
             <div className="col-span-2">{user?.name}</div>
             <div className="col-span-2">{user?.email}</div>
             <div className="">{user?.phone}</div>
@@ -25,10 +26,17 @@ const UserItem = ({user}: any) => {
             <div className="">
                 <Action
                     handleView={handleViewDetail}
-                    handleEdit={handleEdit}
+                    // handleEdit={handleShowModal}
                     handleDelete={handleRemove}
                 />
             </div>
+            {
+                <CreateUpdateUserModal
+                    onCancel={handleShowModal}
+                    visible={isShow}
+                    key={user?.email}
+                />
+            }
         </div>
     );
 };
