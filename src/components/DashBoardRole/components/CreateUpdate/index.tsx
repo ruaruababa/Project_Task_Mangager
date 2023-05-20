@@ -13,6 +13,7 @@ interface Props {
     visible: boolean;
     onCancel: () => void;
     initalValues?: any;
+    mode?: any;
 }
 
 export const AvatarWrapper = styled.div`
@@ -51,12 +52,23 @@ export const AvatarWrapper = styled.div`
 `;
 
 const CreateUpdateRoleModal = (props: Props) => {
-    const {visible, onCancel, initalValues} = props;
+    const {visible, onCancel, initalValues, mode} = props;
 
     const {id} = useParams();
     const [form] = Form.useForm();
     const {roleOptions} = useRole();
     const queryCLient = useQueryClient();
+
+    const getLableMode = () => {
+        switch (mode) {
+            case 'create':
+                return 'Tạo';
+            case 'update':
+                return 'Update';
+            default:
+                return '';
+        }
+    };
 
     const {data: detailUserResponse} = useQuery({
         queryKey: ['getDetailUser', id],
@@ -153,8 +165,9 @@ const CreateUpdateRoleModal = (props: Props) => {
         <Modal
             visible={visible}
             onCancel={onCancel}
-            title="Create new User"
+            title="Thêm danh mục phân quyền"
             footer={[]}
+            width={1000}
         >
             <Form
                 form={form}
@@ -162,18 +175,20 @@ const CreateUpdateRoleModal = (props: Props) => {
                 initialValues={detailConvert}
                 layout="vertical"
             >
-                <Form.Item>
-                    <Button
-                        disabled={isLoading}
-                        htmlType="submit"
-                        block
-                        type="primary"
-                        className="!text-center !block"
-                        size="large"
-                    >
-                        {isLoading ? 'Loading...' : 'Submit'}
-                    </Button>
-                </Form.Item>
+                {getLableMode() && (
+                    <Form.Item className="flex justify-center">
+                        <Button
+                            disabled={isLoading}
+                            htmlType="submit"
+                            block
+                            type="primary"
+                            className="!text-center !block"
+                            size="large"
+                        >
+                            {isLoading ? 'Loading...' : getLableMode()}
+                        </Button>
+                    </Form.Item>
+                )}
             </Form>
         </Modal>
     );

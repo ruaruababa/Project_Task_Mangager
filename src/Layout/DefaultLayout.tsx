@@ -66,13 +66,13 @@ const DefaultLayout = () => {
                 width={280}
             >
                 <div
-                    style={{height: 32, margin: 16}}
-                    className="flex w-full text-center align-middle"
+                    style={{height: 32, margin: '20px 0px'}}
+                    className="flex justify-center w-full"
                     onClick={() => {
                         navigate('/');
                     }}
                 >
-                    <img src={logoUrl} className="ml-14" />
+                    <img src={logoUrl} />
                 </div>
                 <Menu
                     onClick={onClickMenu}

@@ -36,7 +36,13 @@ const ListRole = () => {
                     <Item key={index} item={item} />
                 ))}
             </div>
-            {<CreateUpdateRoleModal visible={isShow} onCancel={handleCancel} />}
+            {
+                <CreateUpdateRoleModal
+                    visible={isShow}
+                    onCancel={handleCancel}
+                    mode={'create'}
+                />
+            }
         </>
     );
 };
