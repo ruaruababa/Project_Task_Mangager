@@ -1,4 +1,3 @@
-import {CameraOutlined, LoadingOutlined} from '@ant-design/icons';
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import {
     Button,
@@ -8,17 +7,10 @@ import {
     Input,
     Modal,
     Select,
-    Upload,
     notification,
 } from 'antd';
-import {
-    RcFile,
-    UploadChangeParam,
-    UploadFile,
-    UploadProps,
-} from 'antd/es/upload';
 import dayjs from 'dayjs';
-import {useMemo, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import {useParams} from 'react-router-dom';
 import {styled} from 'styled-components';
 import useRole from '../../../../hooks/useRole';
@@ -70,8 +62,6 @@ export const AvatarWrapper = styled.div`
 
 const CreateUpdateUserModal = (props: Props) => {
     const {visible, onCancel, initalValues} = props;
-    const [imageUrl, setImageUrl] = useState<string>();
-    const [loading, setLoading] = useState(false);
 
     const {id} = useParams();
     const [form] = Form.useForm();
@@ -161,50 +151,13 @@ const CreateUpdateUserModal = (props: Props) => {
         {label: 'Chưa kích hoạt', value: '0'},
     ];
 
-    const uploadButton = (
-        <div>
-            {loading ? (
-                <LoadingOutlined />
-            ) : (
-                <div className="relative">
-                    {' '}
-                    <img
-                        className="mt-2 rounded-full"
-                        src={imageUrl || 'avatar.jpg'}
-                        alt="avatar"
-                        style={{width: '100%'}}
-                    />
-                    <CameraOutlined className="absolute bottom-[10%] right-[10%]" />
-                </div>
-            )}
-        </div>
-    );
-
     const dateFormat = 'YYYY/MM/DD';
-
-    const getBase64 = (img: RcFile, callback: (url: string) => void) => {
-        const reader = new FileReader();
-        reader.addEventListener('load', () =>
-            callback(reader.result as string),
-        );
-        reader.readAsDataURL(img);
-    };
-
-    const handleChange: UploadProps['onChange'] = (
-        info: UploadChangeParam<UploadFile>,
-    ) => {
-        if (info.file.status === 'uploading') {
-            setLoading(true);
-            return;
+    const [avatar, setAvatar] = useState('avatar.jpg');
+    useEffect(() => {
+        if (detailUser) {
+            setAvatar(detailUser.avatar);
         }
-        if (info.file.status === 'done') {
-            // Get this url from response in real world.
-            getBase64(info.file.originFileObj as RcFile, (url) => {
-                setLoading(false);
-                setImageUrl(url);
-            });
-        }
-    };
+    }, [detailUser]);
 
     return (
         <Modal
@@ -219,10 +172,12 @@ const CreateUpdateUserModal = (props: Props) => {
                 initialValues={detailConvert}
                 layout="vertical"
             >
-                <div className="">
+                <div className="flex justify-center">
                     <UploadCustom
+                        isSingle={true}
+                        fieldName={'avatar'}
                         id={id}
-                        image={'avatar.jpg'}
+                        image={avatar || 'avatar.jpg'}
                         defaultImage={'avatar.jpg'}
                         wrapper={AvatarWrapper}
                         className="rounded"
@@ -233,26 +188,7 @@ const CreateUpdateUserModal = (props: Props) => {
                         // }}
                     />
                 </div>
-                <Form.Item name="avatar" className="flex justify-center">
-                    <Upload
-                        name="avatar"
-                        listType="picture-circle"
-                        className="relative avatar-uploader"
-                        showUploadList={false}
-                        onChange={handleChange}
-                    >
-                        {imageUrl ? (
-                            <img
-                                className="mt-1 rounded-full"
-                                src={imageUrl}
-                                alt="avatar"
-                                style={{width: '100%'}}
-                            />
-                        ) : (
-                            uploadButton
-                        )}
-                    </Upload>
-                </Form.Item>{' '}
+
                 <Form.Item
                     name="name"
                     label="Họ và tên"

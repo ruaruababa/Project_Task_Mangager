@@ -1,28 +1,36 @@
 import {notification} from 'antd';
 import axios from 'axios';
 import {getAccessToken} from './auth';
-const uploadURL = 'process.env.NEXT_PUBLIC_UPLOAD_API';
 
 interface CallbackResponse {
     data?: Storage | any;
     percent: any;
 }
 
-const id = 1;
-const imageUrl = `http://103.90.227.166:2100/api/users/${id}/avatar`;
-const fileUrl = `http://103.90.227.166:2100/api/tasks/1/attach-files`;
+const imageUrl = (id: any) => {
+    return `http://103.90.227.166:2100/api/users/${id}/avatar`;
+};
+const fileUrl = (id: any) => {
+    return `http://103.90.227.166:2100/api/tasks/${id}/attach-files`;
+};
 
 export const uploadChunk = (
+    isSingle: boolean,
+    fieldName: any,
     id: any,
     file: any,
     callback: (input: any, data: CallbackResponse) => void,
 ) => {
+    console.log('file', file);
+    console.log('fieldName', fieldName);
+    console.log('length', typeof file);
+    console.log('id', id);
     return new Promise((resolve) => {
         axios
             .post(
-                fileUrl,
+                isSingle ? imageUrl(id) : fileUrl(id),
                 {
-                    attachments: [...file],
+                    [fieldName]: file,
                 },
                 {
                     headers: {

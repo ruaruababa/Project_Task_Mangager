@@ -1,3 +1,4 @@
+import {useQueryClient} from '@tanstack/react-query';
 import {useCallback, useState} from 'react';
 import {uploadChunk} from '../../../../utils/upload';
 import {SubTitle, Wrapper} from './styled';
@@ -12,50 +13,61 @@ interface IProps {
     disabled?: boolean;
     className?: string;
     id: any;
+    fieldName: any;
+    isSingle?: boolean;
 }
 
 const Upload = (props: IProps) => {
     const {
+        isSingle,
         title,
         isRequire,
         disabled,
         image,
         onUploadSuccess,
-        defaultImage = '/images/account/plus-background.png',
+        defaultImage,
         id,
+        fieldName,
     } = props;
     const UploadWrapper = props?.wrapper || Wrapper;
     const [percent, setPercent] = useState(0);
     const [isLoading, setIsLoading] = useState<boolean>(false);
-
+    const queryClient = useQueryClient();
     const handleUpload = useCallback((event: any) => {
         event.stopPropagation();
         event.preventDefault();
         // console.log('event', ...event?.target?.files);
         const file_: any = event?.target?.files;
         console.log('file_', file_);
-        const file: any = [];
+        const files: any = [];
         for (let i = 0; i < file_.length; i++) {
-            file.push(file_[i]);
+            files.push(file_[i]);
         }
-        console.log('file123123', typeof file[0]);
+
+        const file = file_.length === 1 ? file_[0] : files;
 
         if (!file) return;
 
         setIsLoading(true);
-        uploadChunk(id, file, (err, {data, percent}) => {
-            if (err) {
-                setIsLoading(false);
-                setPercent(0);
-            }
-            if (data) {
-                console.log('data', data);
-                setIsLoading(false);
-                setPercent(0);
-            } else {
-                setPercent(percent);
-            }
-        });
+        uploadChunk(
+            isSingle || true,
+            fieldName,
+            id,
+            file,
+            (err, {data, percent}) => {
+                if (err) {
+                    setIsLoading(false);
+                    setPercent(0);
+                }
+                if (data) {
+                    setIsLoading(false);
+                    setPercent(0);
+                    queryClient.invalidateQueries(['getDetailUser'], id);
+                } else {
+                    setPercent(percent);
+                }
+            },
+        );
     }, []);
     return (
         <>
