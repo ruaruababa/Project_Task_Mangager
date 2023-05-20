@@ -1,12 +1,29 @@
 import {Badge, Card} from 'antd';
+import {useState} from 'react';
+import Action from '../../../Action';
+import CreateUpdateRoleModal from '../CreateUpdate';
 
 const Item = ({item}: any) => {
+    const [isShow, setIsShow] = useState(false);
+    const handleCancel = () => {
+        setIsShow(false);
+    };
+
+    const handleToggleModal = () => {
+        setIsShow(!isShow);
+    };
+
     console.log('item', item?.permissions?.Role);
     return (
         <>
             {' '}
             <div>
-                <Card title={item?.name} bordered={false} className="h-full">
+                <Card
+                    title={item?.name}
+                    bordered={false}
+                    className="h-full"
+                    extra={<Action handleView={handleToggleModal} />}
+                >
                     <div className="">
                         <div className="flex flex-col gap-2">
                             {' '}
@@ -36,7 +53,7 @@ const Item = ({item}: any) => {
                     </div>
                 </Card>
             </div>
-            {}
+            {<CreateUpdateRoleModal visible={isShow} onCancel={handleCancel} />}
         </>
     );
 };
