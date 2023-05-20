@@ -1,3 +1,4 @@
+import {CameraOutlined, LoadingOutlined} from '@ant-design/icons';
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import {
     Button,
@@ -7,13 +8,22 @@ import {
     Input,
     Modal,
     Select,
+    Upload,
     notification,
 } from 'antd';
+import {
+    RcFile,
+    UploadChangeParam,
+    UploadFile,
+    UploadProps,
+} from 'antd/es/upload';
 import dayjs from 'dayjs';
-import {useMemo} from 'react';
+import {useMemo, useState} from 'react';
 import {useParams} from 'react-router-dom';
+import {styled} from 'styled-components';
 import useRole from '../../../../hooks/useRole';
 import {createUser, getDetailUser, updateUser} from '../../../../services/user';
+import UploadCustom from './upload';
 
 const {Option} = Select;
 
@@ -23,8 +33,46 @@ interface Props {
     initalValues?: any;
 }
 
+export const AvatarWrapper = styled.div`
+    width: 200px;
+    height: 200px;
+    position: relative;
+
+    img {
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .loading-percent {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background: #999999;
+        opacity: 0.5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        color: white;
+    }
+
+    input {
+        opacity: 0;
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+    }
+`;
+
 const CreateUpdateUserModal = (props: Props) => {
     const {visible, onCancel, initalValues} = props;
+    const [imageUrl, setImageUrl] = useState<string>();
+    const [loading, setLoading] = useState(false);
+
     const {id} = useParams();
     const [form] = Form.useForm();
     const {roleOptions} = useRole();
@@ -58,7 +106,6 @@ const CreateUpdateUserModal = (props: Props) => {
         mutationFn: createUser,
         mutationKey: ['createUser'],
         onSuccess: () => {
-            onCancel();
             notification.success({
                 message: 'Success ',
                 description: 'Create successfully',
@@ -114,7 +161,50 @@ const CreateUpdateUserModal = (props: Props) => {
         {label: 'Chưa kích hoạt', value: '0'},
     ];
 
+    const uploadButton = (
+        <div>
+            {loading ? (
+                <LoadingOutlined />
+            ) : (
+                <div className="relative">
+                    {' '}
+                    <img
+                        className="mt-2 rounded-full"
+                        src={imageUrl || 'avatar.jpg'}
+                        alt="avatar"
+                        style={{width: '100%'}}
+                    />
+                    <CameraOutlined className="absolute bottom-[10%] right-[10%]" />
+                </div>
+            )}
+        </div>
+    );
+
     const dateFormat = 'YYYY/MM/DD';
+
+    const getBase64 = (img: RcFile, callback: (url: string) => void) => {
+        const reader = new FileReader();
+        reader.addEventListener('load', () =>
+            callback(reader.result as string),
+        );
+        reader.readAsDataURL(img);
+    };
+
+    const handleChange: UploadProps['onChange'] = (
+        info: UploadChangeParam<UploadFile>,
+    ) => {
+        if (info.file.status === 'uploading') {
+            setLoading(true);
+            return;
+        }
+        if (info.file.status === 'done') {
+            // Get this url from response in real world.
+            getBase64(info.file.originFileObj as RcFile, (url) => {
+                setLoading(false);
+                setImageUrl(url);
+            });
+        }
+    };
 
     return (
         <Modal
@@ -129,9 +219,40 @@ const CreateUpdateUserModal = (props: Props) => {
                 initialValues={detailConvert}
                 layout="vertical"
             >
-                {/* <Form.Item name="avatar">
-                    <Input type="file" placeholder="Upload ảnh" />
-                </Form.Item>{' '} */}
+                <div className="">
+                    <UploadCustom
+                        id={id}
+                        image={'avatar.jpg'}
+                        defaultImage={'avatar.jpg'}
+                        wrapper={AvatarWrapper}
+                        className="rounded"
+                        // onUploadSuccess={(media) => {
+                        //     updateAvatarMutate({
+                        //         media_id: media.id,
+                        //     });
+                        // }}
+                    />
+                </div>
+                <Form.Item name="avatar" className="flex justify-center">
+                    <Upload
+                        name="avatar"
+                        listType="picture-circle"
+                        className="relative avatar-uploader"
+                        showUploadList={false}
+                        onChange={handleChange}
+                    >
+                        {imageUrl ? (
+                            <img
+                                className="mt-1 rounded-full"
+                                src={imageUrl}
+                                alt="avatar"
+                                style={{width: '100%'}}
+                            />
+                        ) : (
+                            uploadButton
+                        )}
+                    </Upload>
+                </Form.Item>{' '}
                 <Form.Item
                     name="name"
                     label="Họ và tên"
@@ -154,7 +275,10 @@ const CreateUpdateUserModal = (props: Props) => {
                         name="password"
                         label="Mật khẩu"
                         rules={[
-                            {required: true, message: 'Vui lòng nhập mật khẩu'},
+                            {
+                                required: id ? true : false,
+                                message: 'Vui lòng nhập mật khẩu',
+                            },
                         ]}
                     >
                         <Input type="text" placeholder="Nhập mật khẩu" />
