@@ -1,4 +1,5 @@
 import {
+    ApartmentOutlined,
     FundProjectionScreenOutlined,
     OrderedListOutlined,
     UserOutlined,
@@ -31,6 +32,7 @@ const items: MenuItem[] = [
     getItem('Quản lý dự án', '/project', <FundProjectionScreenOutlined />),
     getItem('Danh sách task', '/task', <OrderedListOutlined />),
     getItem(' Quản lý người dùng', '/user', <UserOutlined />),
+    getItem(' Phân quyền', '/role', <ApartmentOutlined />),
 ];
 
 const avatarUrl = 'avatar.jpg';

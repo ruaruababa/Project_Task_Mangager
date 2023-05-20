@@ -1,5 +1,6 @@
 import {createBrowserRouter} from 'react-router-dom';
 import DefaultLayout from './Layout/DefaultLayout';
+import ListRole from './components/DashBoardRole/components/List';
 import CreateUpdateProject from './components/DashboardProject/components/CreateProject/createUpdateProject';
 import DetailProject from './components/DashboardProject/components/Detail';
 import ProjectManager from './components/DashboardProject/components/List';
@@ -76,6 +77,10 @@ const router = createBrowserRouter([
             {
                 path: '/user/:id/detail',
                 element: <DetailUser />,
+            },
+            {
+                path: '/role',
+                element: <ListRole />,
             },
         ],
     },
