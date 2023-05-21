@@ -1,5 +1,6 @@
 import {
     ApartmentOutlined,
+    BellOutlined,
     FundProjectionScreenOutlined,
     OrderedListOutlined,
     UserOutlined,
@@ -8,6 +9,7 @@ import type {MenuProps} from 'antd';
 import {Button, Layout, Menu, theme} from 'antd';
 import React, {useState} from 'react';
 import {Outlet, useNavigate} from 'react-router-dom';
+import Notification from '../components/Notification';
 import {removeAccessToken} from '../utils/auth';
 
 const {Header, Content, Footer, Sider} = Layout;
@@ -56,6 +58,10 @@ const DefaultLayout = () => {
         // @ts-ignore
         navigate(item?.key);
     };
+    const [isShow, setIsShow] = useState(false);
+    const handleShowNotification = () => {
+        setIsShow(!isShow);
+    };
 
     return (
         <Layout style={{minHeight: '100vh'}}>
@@ -92,7 +98,20 @@ const DefaultLayout = () => {
                     <div className="left">
                         <h3>Dashboard</h3>
                     </div>
-                    <div className="flex items-center gap-3 align-middle profile">
+                    <div className="flex items-center gap-5 align-middle profile">
+                        <div className="relative">
+                            <BellOutlined
+                                style={{
+                                    fontSize: 20,
+                                }}
+                                onClick={handleShowNotification}
+                            />
+                            {isShow && (
+                                <div className="absolute z-30 bg-white shadow-lg rounded-md left-[-200px]">
+                                    <Notification />
+                                </div>
+                            )}
+                        </div>
                         <img
                             src={avatarUrl}
                             alt={'User'}

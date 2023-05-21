@@ -23,3 +23,9 @@ export const getDetailUser = (id: any) => {
 export const updateUser = (id: any, input: any) => {
     return baseAPIRequest.patch(`api/users/${id}id}`, input);
 };
+
+export const getListNoti = (cursor?: any) => {
+    return baseAPIRequest.get(
+        `api/notifications?per_page=5${cursor ? `&cursor=${cursor}` : ''}`,
+    );
+};

@@ -1,10 +1,12 @@
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
-import {Button, Form, Modal, Select, notification} from 'antd';
+import {Button, Checkbox, Form, Input, Modal, Select, notification} from 'antd';
+import {CheckboxChangeEvent} from 'antd/es/checkbox';
+import {CheckboxValueType} from 'antd/es/checkbox/Group';
 import dayjs from 'dayjs';
 import {useEffect, useMemo, useState} from 'react';
 import {useParams} from 'react-router-dom';
 import {styled} from 'styled-components';
-import useRole from '../../../../hooks/useRole';
+import usePermission from '../../../../hooks/usePermission';
 import {createUser, getDetailUser, updateUser} from '../../../../services/user';
 
 const {Option} = Select;
@@ -51,13 +53,56 @@ export const AvatarWrapper = styled.div`
     }
 `;
 
+const CheckboxGroup = Checkbox.Group;
+
+const plainOptions = ['Apple', 'Pear', 'Orange'];
+const defaultCheckedList = ['Apple', 'Orange'];
+
 const CreateUpdateRoleModal = (props: Props) => {
     const {visible, onCancel, initalValues, mode} = props;
-
     const {id} = useParams();
     const [form] = Form.useForm();
-    const {roleOptions} = useRole();
+    const role = Form.useWatch('role', form);
+    console.log('role', role);
+    const {permissions} = usePermission();
+    const [listPermission, setListPermission] = useState<any>(permissions);
+    // const [groupRole, setGroupId] = useState<any>();
+    // const [groupUser, setGroupId] = useState<any>();
+    // const [groupTask, setGroupId] = useState<any>();
+    // const [groupId, setGroupId] = useState<any>();
     const queryCLient = useQueryClient();
+
+    const [checkedList, setCheckedList] = useState<CheckboxValueType[]>();
+    const [indeterminate, setIndeterminate] = useState(true);
+    const [checkAll, setCheckAll] = useState(false);
+
+    const onChange = (list: CheckboxValueType[]) => {
+        console.log('list', list);
+        setCheckedList(list);
+        // setIndeterminate(!!list.length && list.length < plainOptions.length);
+        setCheckAll(list.length === permissions.length);
+    };
+
+    const listGroupName = useMemo(() => {
+        return permissions?.map((item: any) => item?.groupName);
+    }, [permissions]);
+
+    const onCheckAllChange = (e: CheckboxChangeEvent) => {
+        const isTrue = listGroupName?.find((item: any) => item === e.target.id);
+        const dataPermission = listPermission?.map((item: any) => {
+            return {
+                ...item,
+                checkall: item?.groupName === isTrue && e?.target?.checked,
+            };
+        });
+
+        console.log('dataPermission', dataPermission);
+
+        setListPermission([...dataPermission]);
+        setCheckedList(e.target.checked ? permissions : []);
+        setIndeterminate(false);
+        setCheckAll(e.target.checked);
+    };
 
     const getLableMode = () => {
         switch (mode) {
@@ -131,20 +176,8 @@ const CreateUpdateRoleModal = (props: Props) => {
     });
 
     const handleFinish = (values: any) => {
-        if (id) {
-            console.log({...values});
-            updateUserMutate({
-                ...values,
-                date_of_birth: dayjs(values.date_of_birth).format('YYYY-MM-DD'),
-                status: values.status?.value === '1' ? true : false,
-            });
-        } else {
-            createUserMutate({
-                ...values,
-                date_of_birth: dayjs(values.date_of_birth).format('YYYY-MM-DD'),
-                role_ids: values.roles_id,
-            });
-        }
+        console.log('values', values);
+
         onCancel();
     };
 
@@ -175,6 +208,51 @@ const CreateUpdateRoleModal = (props: Props) => {
                 initialValues={detailConvert}
                 layout="vertical"
             >
+                <Form.Item
+                    name={'name'}
+                    label="Tên nhóm vai trò"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Vui lòng nhập tên nhóm vai trò',
+                        },
+                    ]}
+                >
+                    <Input
+                        type="text"
+                        placeholder="Vui lòng nhập tên nhóm vai trò"
+                    />
+                </Form.Item>
+                {listPermission?.map((item: any) => {
+                    return (
+                        <>
+                            <Form.Item name={item?.groupName.toLowerCase()}>
+                                <div className="grid grid-cols-12">
+                                    <Checkbox
+                                        indeterminate={indeterminate}
+                                        onChange={onCheckAllChange}
+                                        checked={item?.checkall}
+                                        className="col-span-3"
+                                        key={item?.groupName}
+                                        id={item?.groupName}
+                                        name={item?.groupName}
+                                    >
+                                        {item?.groupName}
+                                    </Checkbox>
+
+                                    <CheckboxGroup
+                                        className="grid grid-cols-5 col-span-9 gap-y-6"
+                                        options={item?.permissions}
+                                        value={checkedList}
+                                        onChange={onChange}
+                                        key={item?.groupName}
+                                    />
+                                </div>
+                            </Form.Item>
+                        </>
+                    );
+                })}
+
                 {getLableMode() && (
                     <Form.Item className="flex justify-center">
                         <Button
