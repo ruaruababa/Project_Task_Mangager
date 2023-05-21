@@ -20,7 +20,7 @@ const MarkAllAsRead = () => {
     });
 
     const handleMarkNoti = () => {
-        markReadAllNoti();
+        markAllMutate();
     };
 
     return (
