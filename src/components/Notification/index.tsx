@@ -1,18 +1,35 @@
 import {CheckOutlined} from '@ant-design/icons';
-import {useInfiniteQuery} from '@tanstack/react-query';
+import {
+    useInfiniteQuery,
+    useMutation,
+    useQueryClient,
+} from '@tanstack/react-query';
 import {useEffect, useMemo, useState} from 'react';
 import {useInView} from 'react-intersection-observer';
-import {getListNoti} from '../../services/user';
+import {getListNoti, markReadAllNoti} from '../../services/user';
 import HorizontalThreeDotsIcon from '../icons/hozizontaldot';
 import Item from './item';
 const MarkAllAsRead = () => {
+    const queryClient = useQueryClient();
+    const {mutate: markAllMutate, isLoading} = useMutation({
+        mutationFn: markReadAllNoti,
+        mutationKey: ['markReadAllNoti'],
+        onSuccess: () => {
+            queryClient.invalidateQueries(['getListNoti']);
+        },
+    });
+
+    const handleMarkNoti = () => {
+        markReadAllNoti();
+    };
+
     return (
         <>
-            <div className="absolute w-[150px] right-[25px] top-0 bg-white shadow-lg z-0">
-                <div className="flex gap-2 px-2">
+            <div className="absolute w-[150px] right-[25px] top-0 bg-white shadow-xl z-100">
+                <div className="flex gap-2 px-2" onClick={handleMarkNoti}>
                     {' '}
                     <CheckOutlined />
-                    <span> Mark all as read</span>
+                    <span className="font-semibold"> Mark all as read</span>
                 </div>
             </div>
         </>
@@ -78,7 +95,10 @@ const Notification = () => {
                 </div>
             </div>
 
-            <div className="max-h-[400px] overflow-y-auto " ref={ref}>
+            <div
+                className="max-h-[400px] overflow-y-auto flex flex-col gap-3 py-3"
+                ref={ref}
+            >
                 {listPage?.map((item: any, index: any) => (
                     <Item data={item} />
                 ))}
@@ -86,7 +106,7 @@ const Notification = () => {
             {hasNextPage && (
                 <div
                     ref={ref}
-                    className="text-center cursor-pointer"
+                    className="font-bold text-center cursor-pointer"
                     onClick={() => fetchNextPage()}
                 >
                     Xem thêm

@@ -29,3 +29,11 @@ export const getListNoti = (cursor?: any) => {
         `api/notifications?per_page=5${cursor ? `&cursor=${cursor}` : ''}`,
     );
 };
+
+export const markReadNoti = (id: any) => {
+    return baseAPIRequest.post(`api/notifications/${id}/marks-as-read`);
+};
+
+export const markReadAllNoti = () => {
+    return baseAPIRequest.post(`api/notifications/marks-all-as-read`);
+};
