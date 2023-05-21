@@ -10,6 +10,7 @@ import {Button, Layout, Menu, theme} from 'antd';
 import React, {useState} from 'react';
 import {Outlet, useNavigate} from 'react-router-dom';
 import Notification from '../components/Notification';
+import useProfile from '../hooks/useProfile';
 import {removeAccessToken} from '../utils/auth';
 
 const {Header, Content, Footer, Sider} = Layout;
@@ -46,6 +47,7 @@ const DefaultLayout = () => {
         token: {colorBgContainer},
     } = theme.useToken();
     const navigate = useNavigate();
+    const {userProfile} = useProfile();
 
     const onClickMenu = (e: any) => {
         navigate(e.key);
@@ -113,9 +115,12 @@ const DefaultLayout = () => {
                             )}
                         </div>
                         <img
-                            src={avatarUrl}
+                            onClick={() => {
+                                navigate('/profile');
+                            }}
+                            src={userProfile?.avatar || avatarUrl}
                             alt={'User'}
-                            className="w-10 h-10 rounded-full"
+                            className="w-10 h-10 rounded-full cursor-pointer"
                         />
                         <Button
                             size="small"
