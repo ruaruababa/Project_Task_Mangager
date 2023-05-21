@@ -223,7 +223,7 @@ const CreateUpdateRoleModal = (props: Props) => {
                         placeholder="Vui lòng nhập tên nhóm vai trò"
                     />
                 </Form.Item>
-                {listPermission?.map((item: any) => {
+                {permissions?.map((item: any) => {
                     return (
                         <>
                             <Form.Item name={item?.groupName.toLowerCase()}>

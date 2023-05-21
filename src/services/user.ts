@@ -37,3 +37,11 @@ export const markReadNoti = (id: any) => {
 export const markReadAllNoti = () => {
     return baseAPIRequest.post(`api/notifications/marks-all-as-read`);
 };
+
+export const getMe = () => {
+    return baseAPIRequest.get(`api/profile`);
+};
+
+export const updateProfile = (input: any) => {
+    return baseAPIRequest.patch(`api/profile`, input);
+};

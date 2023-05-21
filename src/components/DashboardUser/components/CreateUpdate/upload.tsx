@@ -82,6 +82,7 @@ const Upload = (props: IProps) => {
                         width: '150px',
                         height: '150px',
                     }}
+                    className="rounded-full"
                 />
                 {defaultImage && title && (
                     <SubTitle className="sub">{title}</SubTitle>
