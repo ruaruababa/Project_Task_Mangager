@@ -15,7 +15,9 @@ const UpdateProfile = () => {
         return {
             ...userProfile,
             avatar: userProfile.avatar || 'avatar.jpg',
-            date_of_birth: dayjs(userProfile.date_of_birth),
+            date_of_birth: userProfile.date_of_birth
+                ? dayjs(userProfile.date_of_birth)
+                : null,
         };
     }, [userProfile]);
 
@@ -44,7 +46,10 @@ const UpdateProfile = () => {
     });
 
     const handleUpdate = (values: any) => {
-        updateProfileMutate(values);
+        updateProfileMutate({
+            ...values,
+            date_of_birth: dayjs(values.date_of_birth).format('YYYY-MM-DD'),
+        });
     };
 
     return (
@@ -126,7 +131,7 @@ const UpdateProfile = () => {
                                 placeholder="Nhập số điện thoại"
                             />
                         </Form.Item>{' '}
-                        <Form.Item name="job_title" label="Chức vụ"   >
+                        <Form.Item name="job_title" label="Chức vụ">
                             <Input
                                 disabled
                                 type="text"

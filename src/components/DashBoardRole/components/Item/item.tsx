@@ -38,31 +38,17 @@ const Item = ({item}: any) => {
                 >
                     <div className="">
                         <div className="flex flex-col gap-2">
-                            {' '}
-                            {item?.permissions?.Role && (
-                                <p className="flex gap-2">
-                                    <Badge color="#f50" />
-                                    <span>{'Phân quyền'}</span>
-                                </p>
-                            )}
-                            {item?.permissions?.User && (
-                                <p className="flex gap-2">
-                                    <Badge color="#f50" />{' '}
-                                    <span>{'Quản lý người dùng'}</span>
-                                </p>
-                            )}
-                            {item?.permissions?.Project && (
-                                <p className="flex gap-2">
-                                    <Badge color="#f50" />{' '}
-                                    <span>{'Quản lý dự án'}</span>
-                                </p>
-                            )}
-                            {item?.permissions?.Task && (
-                                <p className="flex gap-2">
-                                    <Badge color="#f50" />{' '}
-                                    <span>{'Quản lý task'}</span>
-                                </p>
-                            )}
+                            {item?.permissions?.map((item: any, index: any) => {
+                                return (
+                                    <p
+                                        className="flex gap-2"
+                                        key={item?.groupName}
+                                    >
+                                        <Badge color="#f50" />
+                                        <span>{'Phân quyền'}</span>
+                                    </p>
+                                );
+                            })}
                         </div>
                     </div>
                 </Card>
