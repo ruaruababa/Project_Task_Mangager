@@ -126,16 +126,7 @@ const UpdateProfile = () => {
                                 placeholder="Nhập số điện thoại"
                             />
                         </Form.Item>{' '}
-                        <Form.Item
-                            name="job_title"
-                            label="Chức vụ"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Vui lòng nhập tên chức vụ',
-                                },
-                            ]}
-                        >
+                        <Form.Item name="job_title" label="Chức vụ"   >
                             <Input
                                 disabled
                                 type="text"
@@ -143,43 +134,6 @@ const UpdateProfile = () => {
                             />
                         </Form.Item>{' '}
                     </div>
-                    {/* <div className="grid grid-cols-2 gap-10">
-                        {' '}
-                        <Form.Item
-                            className=""
-                            name="status"
-                            label="Trạng thái"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Chọn trạng thái',
-                                },
-                            ]}
-                        >
-                            <Select
-                                fieldNames={{
-                                    label: 'label',
-                                    value: 'value',
-                                }}
-                                placeholder="Chọn trạng thái"
-                                options={statusOptions}
-                            ></Select>
-                        </Form.Item>
-                    </div> */}
-                    {/* <div className="flex flex-col">
-                <Form.Item
-                    name="roles_id"
-                    label="Phân quyền"
-                    rules={[
-                        {required: true, message: 'Vui lòng phân quyền'},
-                    ]}
-                >
-                    <Checkbox.Group
-                        options={roleOptions}
-                        className="flex flex-col"
-                    />
-                </Form.Item>
-            </div> */}
 
                     <Form.Item className="flex justify-center">
                         <Button
