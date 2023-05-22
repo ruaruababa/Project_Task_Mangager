@@ -65,7 +65,7 @@ const CreateUpdateRoleModal = (props: Props) => {
     const role = Form.useWatch('role', form);
     console.log('role', role);
     const {permissions} = usePermission();
-    const [listPermission, setListPermission] = useState<any>(permissions);
+    const [listPermission, setListPermission] = useState<any>();
     // const [groupRole, setGroupId] = useState<any>();
     // const [groupUser, setGroupId] = useState<any>();
     // const [groupTask, setGroupId] = useState<any>();
@@ -75,13 +75,6 @@ const CreateUpdateRoleModal = (props: Props) => {
     const [checkedList, setCheckedList] = useState<CheckboxValueType[]>();
     const [indeterminate, setIndeterminate] = useState(true);
     const [checkAll, setCheckAll] = useState(false);
-
-    const onChange = (list: CheckboxValueType[]) => {
-        console.log('list', list);
-        setCheckedList(list);
-        // setIndeterminate(!!list.length && list.length < plainOptions.length);
-        setCheckAll(list.length === permissions.length);
-    };
 
     const listGroupName = useMemo(() => {
         return permissions?.map((item: any) => item?.groupName);
@@ -193,7 +186,9 @@ const CreateUpdateRoleModal = (props: Props) => {
             setAvatar(detailUser.avatar);
         }
     }, [detailUser]);
-
+    const [checked, setChecked] = useState(false);
+    const checked1 = Form.useWatch('checked1', form);
+    console.log('checked1', checked1);
     return (
         <Modal
             visible={visible}
@@ -205,8 +200,27 @@ const CreateUpdateRoleModal = (props: Props) => {
             <Form
                 form={form}
                 onFinish={handleFinish}
-                initialValues={detailConvert}
                 layout="vertical"
+                onValuesChange={(changedValues, allValues) => {
+                    console.log('changedValues', changedValues);
+                    console.log('allValues', allValues);
+                    form.setFieldsValue({
+                        rules101: allValues?.rules1,
+                        rules102: allValues?.rules1,
+                        rules103: allValues?.rules1,
+                        rules104: allValues?.rules1,
+                        rules105: allValues?.rules1,
+                    });
+                    // const data = allValues?.rules?.map((item: any) => {
+                    //     return {
+                    //         ...item,
+                    //         checkall:
+                    //             item?.groupName === isTrue &&
+                    //             e?.target?.checked,
+                    //     };
+                    // });
+                    // setListPermission([...data]);
+                }}
             >
                 <Form.Item
                     name={'name'}
@@ -223,32 +237,43 @@ const CreateUpdateRoleModal = (props: Props) => {
                         placeholder="Vui lòng nhập tên nhóm vai trò"
                     />
                 </Form.Item>
-                {permissions?.map((item: any) => {
+
+                {permissions?.map((item: any, index: any) => {
                     return (
                         <>
-                            <Form.Item name={item?.groupName.toLowerCase()}>
-                                <div className="grid grid-cols-12">
-                                    <Checkbox
-                                        indeterminate={indeterminate}
-                                        onChange={onCheckAllChange}
-                                        checked={item?.checkall}
-                                        className="col-span-3"
-                                        key={item?.groupName}
-                                        id={item?.groupName}
-                                        name={item?.groupName}
-                                    >
-                                        {item?.groupName}
-                                    </Checkbox>
-
-                                    <CheckboxGroup
-                                        className="grid grid-cols-5 col-span-9 gap-y-6"
-                                        options={item?.permissions}
-                                        value={checkedList}
-                                        onChange={onChange}
-                                        key={item?.groupName}
-                                    />
-                                </div>
+                            {/* <Form.Item
+                                name={`role${index}`}
+                                className="col-span-3"
+                                valuePropName="checked"
+                            >
+                                <Checkbox>{item?.groupName}</Checkbox>
+                            </Form.Item> */}
+                            <Form.Item
+                                name={`rules${index + 1}`}
+                                valuePropName="checked"
+                            >
+                                <Checkbox>{item?.groupName}</Checkbox>
                             </Form.Item>
+                            <div className="grid grid-cols-4 col-span-9">
+                                {' '}
+                                {item?.permissions?.map((item: any) => {
+                                    return (
+                                        // <Form.Item
+                                        //     name={`checked${item?.value}`}
+                                        //     valuePropName="checked"
+                                        // >
+                                        //     {' '}
+                                        //     <Checkbox>{item?.label}</Checkbox>
+                                        // </Form.Item>
+                                        <Form.Item
+                                            name={`rules${item?.value + 100}`}
+                                            valuePropName="checked"
+                                        >
+                                            <Checkbox>{item?.label}</Checkbox>
+                                        </Form.Item>
+                                    );
+                                })}
+                            </div>
                         </>
                     );
                 })}
