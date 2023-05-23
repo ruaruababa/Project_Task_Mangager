@@ -17,14 +17,48 @@ const DetailProject = () => {
         <>
             <div className="flex flex-col gap-10">
                 {' '}
-                <div className="flex justify-end gap-3 mb-10">
-                    <Button
-                        className="text-white bg-blue-600"
-                        onClick={() => navigate(`/project/${id}/create-task`)}
-                        size="large"
-                    >
-                        Tạo tạo task mới
-                    </Button>
+                <div className="flex flex-row-reverse justify-between gap-3 mb-10">
+                    <div className="flex gap-2">
+                        {' '}
+                        <Button
+                            type="primary"
+                            className="text-white"
+                            onClick={() => navigate(`/project/edit/${id}`)}
+                            size="large"
+                        >
+                            Chỉnh sửa dự án
+                        </Button>
+                    </div>
+
+                    <div className="">
+                        {' '}
+                        <div className="mb-2 text-lg font-semibold">
+                            Chi tiết dự án
+                        </div>
+                        <div className="">
+                            <span
+                                onClick={() => {
+                                    navigate('/');
+                                }}
+                                className="font-semibold text-gray-400 cursor-pointer"
+                            >
+                                Trang chủ
+                            </span>
+                            {' / '}
+                            <span
+                                className="font-semibold text-gray-400 cursor-pointer"
+                                onClick={() => {
+                                    navigate('/project');
+                                }}
+                            >
+                                Danh sách dự án
+                            </span>{' '}
+                            {' / '}
+                            <span className="font-semibold">
+                                Chi tiết dự án
+                            </span>
+                        </div>
+                    </div>
                 </div>
                 <div className="text-lg bg-white rounded-xl">
                     <div className="flex flex-col gap-10 p-10">
@@ -50,7 +84,7 @@ const DetailProject = () => {
                                 </div>
 
                                 <div className="text-gray-400">
-                                    Ngày bắt đầu hợp đồng
+                                    Ngày bắt đầu
                                 </div>
                             </div>
                             <div
@@ -60,10 +94,10 @@ const DetailProject = () => {
                                 }}
                             >
                                 <div className="text-lg font-semibold">
-                                    {convertDate(detailProject?.starts_at)}
+                                    {convertDate(detailProject?.ends_at)}
                                 </div>
                                 <div className="text-gray-400">
-                                    Ngày bắt đầu hợp đồng
+                                    Ngày hoàn thành
                                 </div>
                             </div>
                             <div
@@ -83,6 +117,14 @@ const DetailProject = () => {
                                 <UserAvatar
                                     users={detailProject?.users || []}
                                 />
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-12">
+                            <div className="col-span-2 text-lg font-semibold text-gray-400">
+                                Khách hàng:
+                            </div>
+                            <div className="col-span-10 font-semibold">
+                                {detailProject?.customer_name}
                             </div>
                         </div>
                         <div className="grid grid-cols-12">

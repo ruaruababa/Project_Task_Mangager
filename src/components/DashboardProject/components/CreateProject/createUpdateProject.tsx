@@ -32,7 +32,6 @@ const CreateUpdateProject = () => {
     const navigate = useNavigate();
     const queryClient = useQueryClient();
 
-
     useEffect(() => {
         id
             ? form.setFieldsValue(detailToUpdate)
@@ -44,15 +43,12 @@ const CreateUpdateProject = () => {
     const {mutate: createProjectMutate, isLoading} = useMutation({
         mutationFn: createProject,
         mutationKey: ['createProject'],
-        onSuccess: () => {
+        onSuccess: (data) => {
             notification.success({
                 message: 'Success ',
                 description: 'Create successfully',
             });
-            form.resetFields();
-            form.setFieldsValue({
-                status_id: 'Not Started',
-            });
+            navigate(`/project/${data?.data?.data?.id}`);
         },
         onError: (error: any) => {
             notification.error({
@@ -385,18 +381,37 @@ const CreateUpdateProject = () => {
                     />
                 </Form.Item>
 
-                <Form.Item className="flex justify-center w-full">
-                    <Button
-                        disabled={isLoading}
-                        htmlType="submit"
-                        block
-                        type="primary"
-                        className="!text-center !block !min-w-[200px]"
-                        size="large"
-                    >
-                        {isLoading ? 'Loading...' : 'Submit'}
-                    </Button>
-                </Form.Item>
+                <div className="flex justify-center">
+                    {' '}
+                    <div className="flex gap-3">
+                        {' '}
+                        <Form.Item className="flex justify-center w-full">
+                            <Button
+                                disabled={isLoading}
+                                htmlType="submit"
+                                block
+                                type="primary"
+                                className="!text-center !block !min-w-[200px] bg-blue-600"
+                                size="large"
+                            >
+                                {id ? 'Chỉnh sửa' : 'Tạo'}
+                            </Button>
+                        </Form.Item>
+                        <Form.Item className="flex justify-center w-full">
+                            <Button
+                                block
+                                type="primary"
+                                className="!text-center !block !min-w-[200px]"
+                                size="large"
+                                onClick={() => {
+                                    navigate('/project');
+                                }}
+                            >
+                                {'Hủy'}
+                            </Button>
+                        </Form.Item>
+                    </div>
+                </div>
             </Form>
         </div>
     );

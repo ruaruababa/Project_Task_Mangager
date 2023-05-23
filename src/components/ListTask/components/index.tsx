@@ -15,12 +15,12 @@ const AllListTask = () => {
         <>
             <div className="mb-10">
                 <div className="flex justify-end gap-3 mb-10">
-                    <Button type="primary">Gantt chart</Button>
+                    <Button type="primary">Biểu đồ Gantt</Button>
                     <Button
                         className="text-white bg-blue-600"
                         onClick={() => navigate(`/project/${id}/tasks`)}
                     >
-                        Manager task
+                        List task
                     </Button>
                 </div>
                 <div className="mb-2 text-lg font-semibold">

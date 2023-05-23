@@ -1,5 +1,4 @@
-import {CheckCircleOutlined} from '@ant-design/icons';
-import {Button, Tag} from 'antd';
+import {Button} from 'antd';
 import {useNavigate} from 'react-router-dom';
 import useProfile from '../../hooks/useProfile';
 import {convertDate} from '../../utils/format';
@@ -16,7 +15,7 @@ const UserProfile = () => {
             {' '}
             <div className="bg-white shadow-lg rounded-xl">
                 <div className="grid grid-cols-12 p-10">
-                    <div className="col-span-3 flex flex-col gap-3 items-center">
+                    <div className="flex flex-col items-center col-span-3 gap-3">
                         <img
                             src={userProfile?.avatar}
                             alt=""
@@ -30,13 +29,20 @@ const UserProfile = () => {
                         <div className="text-xs">
                             Tham gia vào: {convertDate(userProfile?.created_at)}
                         </div>
-                        <div className="">
+                        <div className="flex flex-col gap-3">
                             <Button type="primary" onClick={getUpdatePage}>
                                 Chỉnh sửa thông tin
                             </Button>
+                            <Button
+                                type="primary"
+                                onClick={getUpdatePage}
+                                className="bg-blue-600"
+                            >
+                                Đổi mật khẩu
+                            </Button>
                         </div>
                     </div>
-                    <div className="col-span-9 flex flex-col gap-5">
+                    <div className="flex flex-col col-span-9 gap-5">
                         <div className="flex gap-3">
                             <div className="font-semibold">Email:</div>
                             <div className="">
@@ -69,7 +75,7 @@ const UserProfile = () => {
                                     : 'Đã kích hoạt'}
                             </div>
                         </div>
-                        <div className="flex gap-3">
+                        {/* <div className="flex gap-3">
                             <div className="font-semibold">Permisstion:</div>
                             <div className="grid grid-cols-6 gap-5">
                                 {' '}
@@ -84,7 +90,7 @@ const UserProfile = () => {
                                     );
                                 })}
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </div>

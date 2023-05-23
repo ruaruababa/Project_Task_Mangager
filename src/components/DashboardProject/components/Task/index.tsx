@@ -1,4 +1,4 @@
-import {useMemo} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 // @ts-ignore
 import {DragDropContext} from 'react-beautiful-dnd';
 
@@ -12,46 +12,63 @@ import Column from './col';
 function TaskInProject() {
     const navigate = useNavigate();
     const {id} = useParams();
-    let initialState = [
+    const initListTask = [
         {
-            groupName: 'NotStarted',
-            tasks: [
-                {id: '1', title: 'Test-1'},
-                {id: '2', title: 'Test-2'},
-            ],
+            status_id: 1,
         },
         {
-            groupName: 'Pending',
-            tasks: [
-                {id: '3', title: 'Test-3'},
-                {id: '4', title: 'Test-4'},
-            ],
+            status_id: 2,
         },
         {
-            groupName: 'InProgress',
-            tasks: [
-                {id: '5', title: 'Test-3'},
-                {id: '6', title: 'Test-4'},
-            ],
+            status_id: 3,
         },
         {
-            groupName: 'BehindSchedule',
-            tasks: [
-                {id: '7', title: 'Test-3'},
-                {id: '8', title: 'Test-4'},
-            ],
+            status_id: 4,
         },
         {
-            groupName: 'Completed',
-            tasks: [
-                {id: '9', title: 'Test-3'},
-                {id: '10', title: 'Test-4'},
-            ],
+            status_id: 5,
         },
     ];
+    const [taskList_, setTaskList_] = useState<any>(initListTask);
+    // let initialState = [
+    //     {
+    //         groupName: 'NotStarted',
+    //         tasks: [
+    //             {id: '1', title: 'Test-1'},
+    //             {id: '2', title: 'Test-2'},
+    //         ],
+    //     },
+    //     {
+    //         groupName: 'Pending',
+    //         tasks: [
+    //             {id: '3', title: 'Test-3'},
+    //             {id: '4', title: 'Test-4'},
+    //         ],
+    //     },
+    //     {
+    //         groupName: 'InProgress',
+    //         tasks: [
+    //             {id: '5', title: 'Test-3'},
+    //             {id: '6', title: 'Test-4'},
+    //         ],
+    //     },
+    //     {
+    //         groupName: 'BehindSchedule',
+    //         tasks: [
+    //             {id: '7', title: 'Test-3'},
+    //             {id: '8', title: 'Test-4'},
+    //         ],
+    //     },
+    //     {
+    //         groupName: 'Completed',
+    //         tasks: [
+    //             {id: '9', title: 'Test-3'},
+    //             {id: '10', title: 'Test-4'},
+    //         ],
+    //     },
+    // ];
     // const [taskList, setTasks] = useState(initialState);
 
-    console.log('id', id);
     const {isLoading: listTaskLoading, data: listTaskDragDropResponse} =
         useQuery({
             queryKey: ['getListDragDrop', id],
@@ -63,7 +80,25 @@ function TaskInProject() {
         return listTaskDragDropResponse?.data?.data;
     }, [listTaskDragDropResponse?.data?.data]);
 
-    console.log('taskList', listTaskDragDropResponse);
+    useEffect(() => {
+        if (taskList) {
+            taskList.forEach((item: any) => {
+                const index = taskList_.findIndex(
+                    (i: any) => i.status_id === item.status_id,
+                );
+                if (index !== -1) {
+                    taskList_[index] = {
+                        ...taskList_[index],
+                        ...item,
+                    };
+                }
+            });
+            setTaskList_(taskList_);
+        }
+    }, [taskList]);
+
+    console.log('taskList', taskList_);
+
     const queryClient = useQueryClient();
     const {mutate: updateTaskInProject, isLoading} = useMutation({
         mutationFn: (params: any) => updateTask(params, id, params?.idTask),
@@ -165,14 +200,48 @@ function TaskInProject() {
         <>
             <div className="h-full">
                 {' '}
-                <div className="flex justify-end gap-3 mb-10">
-                    <Button type="primary">Gantt chart</Button>
-                    <Button
-                        className="text-white bg-blue-600"
-                        onClick={() => navigate(`/project/${id}/list-task`)}
-                    >
-                        List task
-                    </Button>
+                <div className="flex justify-between gap-3 mb-10">
+                    <div className="">
+                        <span
+                            className="font-semibold text-gray-400 cursor-pointer"
+                            onClick={() => {
+                                navigate('/');
+                            }}
+                        >
+                            Trang chủ /{' '}
+                        </span>
+                        <span
+                            className="font-semibold text-gray-400 cursor-pointer"
+                            onClick={() => {
+                                navigate('/project');
+                            }}
+                        >
+                            Project /{' '}
+                        </span>
+                        <span className="" onClick={() => {}}>
+                            Danh sách task
+                        </span>
+                    </div>
+                    <div className="flex gap-2">
+                        {' '}
+                        <Button
+                            className="text-white"
+                            onClick={() =>
+                                navigate(`/project/${id}/create-task`)
+                            }
+                            type="primary"
+                        >
+                            Tạo tạo task mới
+                        </Button>
+                        <Button type="primary">Biểu đồ Gantt</Button>
+                        <Button
+                            className="text-white"
+                            onClick={() => navigate(`/project/${id}/list-task`)}
+                            type="primary"
+                        >
+                            List task
+                        </Button>
+                    </div>
                 </div>
                 <div className="">
                     <div className="grid grid-cols-9 gap-3 mb-10">
@@ -206,7 +275,7 @@ function TaskInProject() {
                 </div>
                 <DragDropContext onDragEnd={onDragEnd}>
                     <div className="grid grid-cols-5 wrapper">
-                        <Column
+                        {/* <Column
                             className="column"
                             droppableId="1"
                             list={taskList[0]?.tasks}
@@ -229,14 +298,24 @@ function TaskInProject() {
                             droppableId="4"
                             list={taskList[3]?.tasks}
                             type="TASK"
-                        />
-                        <Column
+                        /> */}
+                        {taskList_?.map((item: any, index: number) => {
+                            return (
+                                <Column
+                                    className="column"
+                                    droppableId={item?.status_id.toString()}
+                                    list={item?.tasks}
+                                    type="TASK"
+                                />
+                            );
+                        })}
+                        {/* <Column
                             className="column"
                             droppableId="5"
                             list={taskList[4]?.tasks}
                             type="TASK"
                             status_id={taskList[4]?.groupName}
-                        />
+                        /> */}
                     </div>
                 </DragDropContext>
             </div>
