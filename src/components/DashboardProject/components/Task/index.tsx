@@ -29,7 +29,6 @@ function TaskInProject() {
             status_id: 5,
         },
     ];
-    const [taskList_, setTaskList_] = useState<any>(initListTask);
     // let initialState = [
     //     {
     //         groupName: 'NotStarted',
@@ -74,11 +73,16 @@ function TaskInProject() {
             queryKey: ['getListDragDrop', id],
             queryFn: () => getListDragDrop(id),
             enabled: !!id,
+            onSuccess: (data: any) => {
+                setTaskList_(data?.data?.data);
+            },
         });
 
     const taskList = useMemo(() => {
         return listTaskDragDropResponse?.data?.data;
-    }, [listTaskDragDropResponse?.data?.data]);
+    }, []);
+
+    const [taskList_, setTaskList_] = useState<any>(initListTask);
 
     useEffect(() => {
         if (taskList) {
@@ -95,7 +99,7 @@ function TaskInProject() {
             });
             setTaskList_(taskList_);
         }
-    }, [taskList]);
+    }, [taskList, taskList_]);
 
     console.log('taskList', taskList_);
 
@@ -134,16 +138,10 @@ function TaskInProject() {
         /// A different way!
         const {draggableId, source, destination} = val;
 
-        console.log('taskList', taskList);
-        console.log('destination', destination);
-
         const [sourceGroup] = taskList?.filter(
             (column: any) =>
                 column?.status_id?.toString() === source?.droppableId,
         );
-        console.log('source', source);
-        console.log('sourceGroup', sourceGroup);
-        console.log('draggableId', draggableId);
 
         // Destination might be `null`: when a task is
         // dropped outside any drop area. In this case the
@@ -155,7 +153,6 @@ function TaskInProject() {
               )
             : {...sourceGroup};
 
-        console.log('destinationGroup', destinationGroup);
         // We save the task we are moving
         const [movingTask] = sourceGroup?.tasks?.filter(
             (t: any) => t?.id?.toString() === draggableId,
@@ -299,16 +296,19 @@ function TaskInProject() {
                             list={taskList[3]?.tasks}
                             type="TASK"
                         /> */}
-                        {taskList_?.map((item: any, index: number) => {
-                            return (
-                                <Column
-                                    className="column"
-                                    droppableId={item?.status_id.toString()}
-                                    list={item?.tasks}
-                                    type="TASK"
-                                />
-                            );
-                        })}
+                        {(taskList_ || taskList)?.map(
+                            (item: any, index: number) => {
+                                return (
+                                    <Column
+                                        className="column"
+                                        droppableId={item?.status_id.toString()}
+                                        list={item?.tasks}
+                                        type="TASK"
+                                        status_id={item?.status_id}
+                                    />
+                                );
+                            },
+                        )}
                         {/* <Column
                             className="column"
                             droppableId="5"
