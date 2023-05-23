@@ -1,4 +1,4 @@
-import {useEffect, useMemo, useState} from 'react';
+import {useMemo} from 'react';
 // @ts-ignore
 import {DragDropContext} from 'react-beautiful-dnd';
 
@@ -12,23 +12,7 @@ import Column from './col';
 function TaskInProject() {
     const navigate = useNavigate();
     const {id} = useParams();
-    const initListTask = [
-        {
-            status_id: 1,
-        },
-        {
-            status_id: 2,
-        },
-        {
-            status_id: 3,
-        },
-        {
-            status_id: 4,
-        },
-        {
-            status_id: 5,
-        },
-    ];
+
     // let initialState = [
     //     {
     //         groupName: 'NotStarted',
@@ -73,35 +57,31 @@ function TaskInProject() {
             queryKey: ['getListDragDrop', id],
             queryFn: () => getListDragDrop(id),
             enabled: !!id,
-            onSuccess: (data: any) => {
-                setTaskList_(data?.data?.data);
-            },
         });
 
     const taskList = useMemo(() => {
         return listTaskDragDropResponse?.data?.data;
     }, [listTaskDragDropResponse?.data?.data]);
 
-    const [taskList_, setTaskList_] = useState<any>(initListTask);
+    // const [taskList_, setTaskList_] = useState<any>(initListTask);
 
-    useEffect(() => {
-        if (taskList) {
-            taskList.forEach((item: any) => {
-                const index = taskList_.findIndex(
-                    (i: any) => i.status_id === item.status_id,
-                );
-                if (index !== -1) {
-                    taskList_[index] = {
-                        ...taskList_[index],
-                        ...item,
-                    };
-                }
-            });
-            setTaskList_(taskList_);
-        }
-    }, [taskList, taskList_]);
-
-    console.log('taskList', taskList_);
+    // useEffect(() => {
+    //     if (taskList) {
+    //         taskList.forEach((item: any) => {
+    //             const index = taskList_.findIndex(
+    //                 (i: any) => i.status_id === item.status_id,
+    //             );
+    //             if (index !== -1) {
+    //                 taskList_[index] = {
+    //                     ...taskList_[index],
+    //                     ...item,
+    //                 };
+    //             }
+    //         });
+    //         console.log('taskList_', taskList_);
+    //         setTaskList_(taskList_);
+    //     }
+    // }, [taskList, taskList_]);
 
     const queryClient = useQueryClient();
     const {mutate: updateTaskInProject, isLoading} = useMutation({
@@ -296,19 +276,17 @@ function TaskInProject() {
                             list={taskList[3]?.tasks}
                             type="TASK"
                         /> */}
-                        {(taskList_ || taskList)?.map(
-                            (item: any, index: number) => {
-                                return (
-                                    <Column
-                                        className="column"
-                                        droppableId={item?.status_id.toString()}
-                                        list={item?.tasks}
-                                        type="TASK"
-                                        status_id={item?.status_id}
-                                    />
-                                );
-                            },
-                        )}
+                        {taskList?.map((item: any, index: number) => {
+                            return (
+                                <Column
+                                    className="column"
+                                    droppableId={item?.status_id.toString()}
+                                    list={item?.tasks}
+                                    type="TASK"
+                                    status_id={item?.status_id}
+                                />
+                            );
+                        })}
                         {/* <Column
                             className="column"
                             droppableId="5"
