@@ -32,8 +32,8 @@ function getItem(
 }
 
 const items: MenuItem[] = [
-    getItem('Quản lý dự án', '/project', <FundProjectionScreenOutlined />),
-    getItem('Danh sách task', '/task', <OrderedListOutlined />),
+    getItem('Quản lý dự án', '/project', <OrderedListOutlined />),
+    getItem('Thống kê', '/task', <FundProjectionScreenOutlined />),
     getItem(' Quản lý người dùng', '/user', <UserOutlined />),
     getItem(' Phân quyền', '/role', <ApartmentOutlined />),
 ];
@@ -80,7 +80,10 @@ const DefaultLayout = () => {
                         navigate('/');
                     }}
                 >
-                    <img src={logoUrl} />
+                    <h3 className="text-xl text-red-500 cursor-pointer">
+                        VSEC
+                    </h3>
+                    {/* <img src={logoUrl} /> */}
                 </div>
                 <Menu
                     onClick={onClickMenu}
