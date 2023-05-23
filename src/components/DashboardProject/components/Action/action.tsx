@@ -1,9 +1,4 @@
-import {
-    CopyOutlined,
-    DeleteOutlined,
-    EditOutlined,
-    EyeOutlined,
-} from '@ant-design/icons';
+import {DeleteOutlined, EditOutlined, EyeOutlined} from '@ant-design/icons';
 import {useNavigate} from 'react-router-dom';
 const Action = (props: any) => {
     const {item} = props;
@@ -30,9 +25,9 @@ const Action = (props: any) => {
             <div className="cursor-pointer" onClick={handleEditProject}>
                 <EditOutlined />
             </div>
-            <div className="cursor-pointer">
+            {/* <div className="cursor-pointer">
                 <CopyOutlined />
-            </div>
+            </div> */}
             <div className="cursor-pointer">
                 <DeleteOutlined />
             </div>
