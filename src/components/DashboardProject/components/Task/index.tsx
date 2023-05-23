@@ -80,7 +80,7 @@ function TaskInProject() {
 
     const taskList = useMemo(() => {
         return listTaskDragDropResponse?.data?.data;
-    }, []);
+    }, [listTaskDragDropResponse?.data?.data]);
 
     const [taskList_, setTaskList_] = useState<any>(initListTask);
 
