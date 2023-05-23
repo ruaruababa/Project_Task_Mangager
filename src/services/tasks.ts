@@ -27,3 +27,7 @@ export const removeTask = (id: string) => {
 export const updateTask = (id: string, data: TaskDto) => {
     return baseAPIRequest.put('tasks/' + id, data);
 };
+
+export const removeReportFile = (taskId: any) => {
+    return baseAPIRequest.delete(`/api/tasks/${taskId}/report`);
+};

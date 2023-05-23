@@ -1,11 +1,41 @@
-import {DeleteOutlined} from '@ant-design/icons';
-import {useQuery} from '@tanstack/react-query';
-import {Button, Card, Tag} from 'antd';
-import {useMemo} from 'react';
+import {DeleteOutlined, ExclamationCircleOutlined} from '@ant-design/icons';
+import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
+import {Button, Card, Modal, Tag, notification} from 'antd';
+import {useMemo, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
-import {getDetailTaskInProject} from '../../../../services/tasks';
+import {
+    getDetailTaskInProject,
+    removeReportFile,
+} from '../../../../services/tasks';
 import {convertDate} from '../../../../utils/format';
 import UserAvatar from '../Item/avatar';
+interface Props {
+    isShow: boolean;
+    onCancel: () => void;
+    handleRemoveReportFile: () => void;
+}
+const ModalConfirm = (props: Props) => {
+    const {isShow, onCancel, handleRemoveReportFile} = props;
+    const title = (
+        <div className="flex gap-3">
+            <ExclamationCircleOutlined />{' '}
+            <h2 className="!text-2xl font-bold text-red-500">
+                Bạn có chắc chắn muốn xóa file?
+            </h2>
+        </div>
+    );
+    return (
+        <Modal
+            title={title}
+            open={isShow}
+            onOk={handleRemoveReportFile}
+            onCancel={onCancel}
+        >
+            <span>File bị xóa sẽ không thể khôi phục lại</span>
+        </Modal>
+    );
+};
+
 const DetailTask = () => {
     const {id, taskId} = useParams();
     const navigate = useNavigate();
@@ -13,6 +43,26 @@ const DetailTask = () => {
     const {data: detailTaskResponse} = useQuery({
         queryKey: ['getDetailTaskInProject', id, taskId],
         queryFn: () => getDetailTaskInProject(id, taskId),
+    });
+
+    const queryClient = useQueryClient();
+
+    const {mutate: removeReportFileMutate} = useMutation({
+        mutationFn: () => removeReportFile(taskId),
+        mutationKey: ['removeReportFile', taskId],
+        onSuccess: () => {
+            notification.success({
+                message: 'Success ',
+                description: 'Xóa file thành công',
+            });
+            queryClient.invalidateQueries(['getDetailTaskInProject']);
+        },
+        onError: (error: any) => {
+            notification.error({
+                message: 'Error',
+                description: error?.response?.data?.message,
+            });
+        },
     });
 
     const detailTaskInProject = useMemo(() => {
@@ -30,10 +80,31 @@ const DetailTask = () => {
         navigate(`/project/${id}/subtask/${subTaskId}`);
     };
 
-    const CardTitle = ({index}: any) => (
+    const [isShow, setIsShow] = useState(false);
+    const handleShowModal = () => {
+        setIsShow(true);
+    };
+    const handleCancel = () => {
+        setIsShow(false);
+    };
+
+    const handleRemoveReportFile = () => {
+        removeReportFileMutate();
+        setIsShow(false);
+    };
+
+    const CardTitle = ({item, index}: any) => (
         <div className="flex justify-between">
-            <h3>Báo cáo {index + 1}</h3>
-            <DeleteOutlined className="cursor-pointer" />
+            <h3>
+                Báo cáo {index + 1}
+                {item?.is_editable}
+            </h3>
+            {item?.is_editable && (
+                <DeleteOutlined
+                    className="cursor-pointer"
+                    onClick={handleShowModal}
+                />
+            )}
         </div>
     );
 
@@ -239,7 +310,12 @@ const DetailTask = () => {
                             {detailTaskInProject?.reports?.map(
                                 (item: any, index: any) => (
                                     <Card
-                                        title={<CardTitle index={index} />}
+                                        title={
+                                            <CardTitle
+                                                index={index}
+                                                item={item}
+                                            />
+                                        }
                                         className="m-3 shadow-lg "
                                     >
                                         <div className="flex flex-col gap-2">
@@ -362,6 +438,13 @@ const DetailTask = () => {
                     </div>
                 ))}
             </div>
+            {
+                <ModalConfirm
+                    isShow={isShow}
+                    handleRemoveReportFile={handleRemoveReportFile}
+                    onCancel={handleCancel}
+                />
+            }
         </>
     );
 };
