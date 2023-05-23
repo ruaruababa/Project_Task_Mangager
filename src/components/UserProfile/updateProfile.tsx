@@ -2,6 +2,7 @@ import {useMutation, useQueryClient} from '@tanstack/react-query';
 import {Button, DatePicker, Form, Input, notification} from 'antd';
 import dayjs from 'dayjs';
 import {useEffect, useMemo} from 'react';
+import {useNavigate} from 'react-router-dom';
 import useProfile from '../../hooks/useProfile';
 import {updateProfile} from '../../services/user';
 import Upload from '../DashboardUser/components/CreateUpdate/upload';
@@ -10,6 +11,7 @@ const UpdateProfile = () => {
     const [form] = Form.useForm();
     const {userProfile} = useProfile();
     const queryClient = useQueryClient();
+    const navagate = useNavigate();
     const userConvert = useMemo(() => {
         if (!userProfile) return;
         return {
@@ -35,6 +37,7 @@ const UpdateProfile = () => {
                 message: 'Success ',
                 description: 'Update successfully',
             });
+            navagate('/profile');
             queryClient.refetchQueries(['getMe']);
         },
         onError: (error: any) => {
@@ -101,15 +104,6 @@ const UpdateProfile = () => {
                                 placeholder="Vui lòng nhập email"
                             />
                         </Form.Item>{' '}
-                        <Form.Item name="password" label="Mật khẩu">
-                            <Input type="text" placeholder="Nhập mật khẩu" />
-                        </Form.Item>
-                    </div>
-                    <div className="grid grid-cols-2 gap-10">
-                        {' '}
-                        <Form.Item name="date_of_birth" label="Ngày sinh">
-                            <DatePicker format={'YYYY/MM/DD'} />
-                        </Form.Item>{' '}
                         <Form.Item name="address" label="Địa chỉ">
                             <Input type="text" placeholder="Nhập địa chỉ" />
                         </Form.Item>
@@ -131,6 +125,19 @@ const UpdateProfile = () => {
                                 placeholder="Nhập số điện thoại"
                             />
                         </Form.Item>{' '}
+                        <Form.Item
+                            name="date_of_birth"
+                            label="Ngày sinh"
+                            className="w-full"
+                        >
+                            <DatePicker
+                                format={'YYYY/MM/DD'}
+                                className="w-full"
+                            />
+                        </Form.Item>{' '}
+                    </div>
+                    <div className="grid grid-cols-2 gap-10">
+                        {' '}
                         <Form.Item name="job_title" label="Chức vụ">
                             <Input
                                 disabled
@@ -139,18 +146,32 @@ const UpdateProfile = () => {
                             />
                         </Form.Item>{' '}
                     </div>
-
-                    <Form.Item className="flex justify-center">
-                        <Button
-                            htmlType="submit"
-                            block
-                            type="primary"
-                            className="!text-center !block"
-                            size="large"
-                        >
-                            {'Cập nhật'}
-                        </Button>
-                    </Form.Item>
+                    <div className="flex justify-center">
+                        <div className="flex gap-3">
+                            {' '}
+                            <Form.Item className="flex justify-center">
+                                <Button
+                                    htmlType="submit"
+                                    block
+                                    type="primary"
+                                    className="!text-center !block bg-blue-600"
+                                    size="large"
+                                >
+                                    {'Cập nhật'}
+                                </Button>
+                            </Form.Item>{' '}
+                            <Form.Item className="flex justify-center">
+                                <Button
+                                    onClick={() => navagate('/profile')}
+                                    type="primary"
+                                    className="!text-center !block"
+                                    size="large"
+                                >
+                                    {'Hủy'}
+                                </Button>
+                            </Form.Item>
+                        </div>
+                    </div>
                 </Form>
             </>
         </div>

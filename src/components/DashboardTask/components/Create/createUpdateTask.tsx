@@ -69,15 +69,12 @@ const CreateUpdateTask = () => {
     const {mutate: createTaskInProjectMutate, isLoading} = useMutation({
         mutationFn: (data: any) => createTaskInProject(data, id),
         mutationKey: ['createTaskInProject', id],
-        onSuccess: () => {
+        onSuccess: (data) => {
             notification.success({
                 message: 'Success ',
                 description: 'Create successfully',
             });
-            form.resetFields();
-            form.setFieldsValue({
-                status_id: 'Not Started',
-            });
+            navigate(`/project/${id}/tasks/${data?.data?.data?.id}`);
         },
         onError: (error: any) => {
             notification.error({
@@ -88,14 +85,19 @@ const CreateUpdateTask = () => {
     });
 
     const {mutate: updateTaskMutate} = useMutation({
-        mutationFn: (data: any) => updateTaskInproject(data, id),
-        mutationKey: ['updateTaskInproject', id],
-        onSuccess: () => {
+        mutationFn: (data: any) => updateTaskInproject(data, id, taskId),
+        mutationKey: ['updateTaskInproject', id, taskId],
+        onSuccess: (data) => {
             notification.success({
                 message: 'Success ',
                 description: 'Update successfully',
             });
-            queryClient.invalidateQueries(['detailProject', id]);
+            queryClient.invalidateQueries([
+                'getDetailTaskInProject',
+                id,
+                taskId,
+            ]);
+            navigate(`/project/${id}/tasks/${taskId}`);
         },
         onError: (error: any) => {
             notification.error({
@@ -106,7 +108,6 @@ const CreateUpdateTask = () => {
     });
 
     const handleFinish = (values: any) => {
-
         taskId
             ? updateTaskMutate({
                   ...values,
@@ -137,13 +138,13 @@ const CreateUpdateTask = () => {
                     <span
                         className="font-semibold text-gray-400 cursor-pointer"
                         onClick={() => {
-                            navigate('/task');
+                            navigate(`/project/${id}/tasks`);
                         }}
                     >
-                        Task /
+                        List-task /
                     </span>{' '}
                     <span className="font-semibold">
-                        {id ? ' Chỉnh sửa ' : 'Tạo '} task
+                        {taskId ? ' Chỉnh sửa ' : 'Tạo '} task
                     </span>
                 </div>
             </div>
@@ -238,7 +239,7 @@ const CreateUpdateTask = () => {
                         {' '}
                         <Form.Item
                             name="starts_at"
-                            label="Ngày bắt đầu"
+                            label="Thời gian bắt đầu"
                             className="w-1/2"
                             valuePropName="startDate"
                             rules={[{required: true}]}
@@ -261,7 +262,7 @@ const CreateUpdateTask = () => {
                         </Form.Item>
                         <Form.Item
                             name="ends_at"
-                            label="Ngày kết thúc"
+                            label="Thời gian kết thúc"
                             className="w-1/2"
                             valuePropName="endDate"
                             rules={[{required: true}]}
@@ -342,27 +343,6 @@ const CreateUpdateTask = () => {
                             />
                         )}
                     </Form.Item>
-                    <div className="w-1/2">
-                        {' '}
-                        <Form.Item
-                            name="duration"
-                            label="Duration"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Vui lòng nhập duration!',
-                                },
-                            ]}
-                        >
-                            <Input
-                                type="number"
-                                placeholder="Nhập duration"
-                                style={{
-                                    backgroundColor: '#f5f5f5',
-                                }}
-                            />
-                        </Form.Item>
-                    </div>
                 </div>
 
                 <Form.Item
@@ -384,19 +364,36 @@ const CreateUpdateTask = () => {
                         rows={10}
                     />
                 </Form.Item>
-
-                <Form.Item className="flex justify-center w-full">
-                    <Button
-                        disabled={isLoading}
-                        htmlType="submit"
-                        block
-                        type="primary"
-                        className="!text-center !block !min-w-[200px]"
-                        size="large"
-                    >
-                        {isLoading ? 'Loading...' : 'Submit'}
-                    </Button>
-                </Form.Item>
+                <div className="flex justify-center">
+                    <div className="flex gap-3">
+                        {' '}
+                        <Form.Item className="w-full">
+                            <Button
+                                disabled={isLoading}
+                                htmlType="submit"
+                                block
+                                type="primary"
+                                className="!text-center !block !min-w-[200px]"
+                                size="large"
+                            >
+                                {taskId ? 'Cập nhật' : 'Tạo'}
+                            </Button>
+                        </Form.Item>
+                        <Form.Item className="w-full">
+                            <Button
+                                onClick={() => {
+                                    navigate(`/project/${id}/tasks`);
+                                }}
+                                block
+                                type="primary"
+                                className="!text-center !block !min-w-[200px]"
+                                size="large"
+                            >
+                                {'Hủy'}
+                            </Button>
+                        </Form.Item>
+                    </div>{' '}
+                </div>
             </Form>
         </div>
     );

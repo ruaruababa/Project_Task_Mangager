@@ -1,4 +1,5 @@
 import {useQuery} from '@tanstack/react-query';
+import {Button} from 'antd';
 import {useMemo} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import {getDetailTaskInProject} from '../../../../services/tasks';
@@ -31,6 +32,47 @@ const DetailTask = () => {
 
     return (
         <>
+            {' '}
+            <div className="flex justify-between py-5">
+                <div className="">
+                    <span
+                        className="font-semibold text-gray-400 cursor-pointer"
+                        onClick={() => {
+                            navigate('/');
+                        }}
+                    >
+                        Trang chủ
+                    </span>
+                    {' / '}
+                    <span
+                        className="font-semibold text-gray-400 cursor-pointer"
+                        onClick={() => {
+                            navigate('/project');
+                        }}
+                    >
+                        Project
+                    </span>
+                    {' / '}
+                    <span
+                        className="font-semibold text-gray-400 cursor-pointer"
+                        onClick={() => {
+                            navigate(`/project/${id}/tasks`);
+                        }}
+                    >
+                        Task
+                    </span>
+                    {' / '}
+                    <span>Chi tiết task</span>
+                </div>
+                <Button
+                    type="primary"
+                    onClick={() => {
+                        navigate(`/project/${id}/tasks/${taskId}/edit`);
+                    }}
+                >
+                    Chỉnh sửa
+                </Button>
+            </div>
             <div className="flex flex-col gap-10">
                 {' '}
                 <div className="text-lg bg-white rounded-xl">
@@ -69,9 +111,7 @@ const DetailTask = () => {
                                 }}
                             >
                                 <div className="text-lg font-semibold">
-                                    {convertDate(
-                                        detailTaskInProject?.starts_at,
-                                    )}
+                                    {convertDate(detailTaskInProject?.ends_at)}
                                 </div>
                                 <div className="text-gray-400">
                                     Ngày hoàn thành
