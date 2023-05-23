@@ -1,11 +1,11 @@
+import {DeleteOutlined} from '@ant-design/icons';
 import {useQuery} from '@tanstack/react-query';
-import {Button} from 'antd';
+import {Button, Card, Tag} from 'antd';
 import {useMemo} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import {getDetailTaskInProject} from '../../../../services/tasks';
 import {convertDate} from '../../../../utils/format';
 import UserAvatar from '../Item/avatar';
-
 const DetailTask = () => {
     const {id, taskId} = useParams();
     const navigate = useNavigate();
@@ -29,6 +29,13 @@ const DetailTask = () => {
     const getDetailSubTask = (subTaskId: any) => {
         navigate(`/project/${id}/subtask/${subTaskId}`);
     };
+
+    const CardTitle = ({index}: any) => (
+        <div className="flex justify-between">
+            <h3>Báo cáo {index + 1}</h3>
+            <DeleteOutlined className="cursor-pointer" />
+        </div>
+    );
 
     return (
         <>
@@ -75,145 +82,211 @@ const DetailTask = () => {
             </div>
             <div className="flex flex-col gap-10">
                 {' '}
-                <div className="text-lg bg-white rounded-xl">
-                    <div className="flex flex-col gap-10 p-10">
-                        <div className="text-xl font-semibold">
-                            {detailTaskInProject?.name} -{' '}
-                            <span
-                                style={{
-                                    color: detailTaskInProject?.status?.color,
-                                }}
-                            >
-                                {detailTaskInProject?.status?.name}
-                            </span>
-                        </div>
-                        <div className="grid grid-cols-12 gap-3 text-lg">
-                            <div
-                                className="flex flex-col col-span-2 py-3 text-center"
-                                style={{
-                                    border: '1px dashed  #cccccc',
-                                }}
-                            >
-                                <div className="text-lg font-semibold">
-                                    {convertDate(
-                                        detailTaskInProject?.starts_at,
+                <div className="grid grid-cols-12 gap-5">
+                    {' '}
+                    <div className="col-span-8 text-lg bg-white rounded-xl">
+                        <div className="flex flex-col gap-10 p-10">
+                            <div className="text-xl font-semibold">
+                                {detailTaskInProject?.name} -{' '}
+                                <span
+                                    style={{
+                                        color: detailTaskInProject?.status
+                                            ?.color,
+                                    }}
+                                >
+                                    {detailTaskInProject?.status?.name}
+                                </span>
+                            </div>
+                            <div className="grid grid-cols-12 gap-3 text-lg">
+                                <div
+                                    className="flex flex-col col-span-2 py-3 text-center"
+                                    style={{
+                                        border: '1px dashed  #cccccc',
+                                    }}
+                                >
+                                    <div className="text-lg font-semibold">
+                                        {convertDate(
+                                            detailTaskInProject?.starts_at,
+                                        )}
+                                    </div>
+
+                                    <div className="text-gray-400">
+                                        Ngày bắt đầu
+                                    </div>
+                                </div>
+                                <div
+                                    className="flex flex-col col-span-2 py-3 text-center"
+                                    style={{
+                                        border: '1px dashed  #cccccc',
+                                    }}
+                                >
+                                    <div className="text-lg font-semibold">
+                                        {convertDate(
+                                            detailTaskInProject?.ends_at,
+                                        )}
+                                    </div>
+                                    <div className="text-gray-400">
+                                        Ngày hoàn thành
+                                    </div>
+                                </div>
+                                <div
+                                    className="flex flex-col col-span-2 py-3 text-center"
+                                    style={{
+                                        border: '1px dashed  #cccccc',
+                                    }}
+                                >
+                                    <div className="text-lg font-semibold">
+                                        {detailTaskInProject?.progress || 0} %
+                                    </div>
+                                    <div className="text-gray-400">
+                                        Phần trăm hoàn thành
+                                    </div>
+                                </div>
+                                <div className="flex col-span-2 py-3 text-center">
+                                    <UserAvatar
+                                        users={detailTaskInProject?.users || []}
+                                    />
+                                </div>
+                            </div>
+                            <div className="grid grid-cols-12">
+                                <div className="col-span-2 text-lg font-semibold text-gray-400">
+                                    Project name:
+                                </div>
+                                <div className="col-span-10 font-semibold">
+                                    {detailTaskInProject?.project?.name}
+                                </div>
+                            </div>
+                            <div className="grid grid-cols-12">
+                                <div className="col-span-2 text-lg font-semibold text-gray-400">
+                                    Pending reason:
+                                </div>
+                                <div className="col-span-10 font-semibold">
+                                    {detailTaskInProject?.pending_reason}
+                                </div>
+                            </div>
+                            <div className="grid grid-cols-12">
+                                <div className="col-span-2 text-lg font-semibold text-gray-400">
+                                    File name:{' '}
+                                </div>
+                                <div className="col-span-10 font-semibold">
+                                    {detailTaskInProject?.files?.map(
+                                        (file: any) => (
+                                            <a
+                                                href={file.url}
+                                                target="_blank"
+                                                rel="noreferrer"
+                                                className="text-blue-500"
+                                                style={{
+                                                    textDecoration: 'underline',
+                                                }}
+                                                key={file.id}
+                                            >
+                                                {file.name}
+                                            </a>
+                                        ),
                                     )}
                                 </div>
-
-                                <div className="text-gray-400">
-                                    Ngày bắt đầu
+                            </div>
+                            <div className="grid grid-cols-12">
+                                <div className="col-span-2 text-lg font-semibold text-gray-400">
+                                    Report files:{' '}
+                                </div>
+                                <div className="flex flex-col col-span-10 font-semibold">
+                                    {detailTaskInProject?.reports?.map(
+                                        (item: any) => (
+                                            <a
+                                                href={item?.file?.url}
+                                                target="_blank"
+                                                rel="noreferrer"
+                                                className="text-blue-500"
+                                                style={{
+                                                    textDecoration: 'underline',
+                                                }}
+                                                key={item?.name}
+                                            >
+                                                {item?.file?.name}
+                                            </a>
+                                        ),
+                                    )}
                                 </div>
                             </div>
-                            <div
-                                className="flex flex-col col-span-2 py-3 text-center"
-                                style={{
-                                    border: '1px dashed  #cccccc',
-                                }}
-                            >
-                                <div className="text-lg font-semibold">
-                                    {convertDate(detailTaskInProject?.ends_at)}
+                            <div className="grid grid-cols-12">
+                                <div className="col-span-2 text-lg font-semibold text-gray-400">
+                                    Report users:
                                 </div>
-                                <div className="text-gray-400">
-                                    Ngày hoàn thành
+                                <div className="col-span-10 font-semibold">
+                                    {userReportList}
                                 </div>
                             </div>
-                            <div
-                                className="flex flex-col col-span-2 py-3 text-center"
-                                style={{
-                                    border: '1px dashed  #cccccc',
-                                }}
-                            >
-                                <div className="text-lg font-semibold">
-                                    {detailTaskInProject?.progress || 0} %
+                            <div className="grid grid-cols-12">
+                                <div className="col-span-2 text-lg font-semibold text-gray-400">
+                                    Description:
                                 </div>
-                                <div className="text-gray-400">
-                                    Phần trăm hoàn thành
+                                <div className="col-span-10 font-semibold">
+                                    {detailTaskInProject?.description ||
+                                        'Không xác định'}
                                 </div>
                             </div>
-                            <div className="flex col-span-2 py-3 text-center">
-                                <UserAvatar
-                                    users={detailTaskInProject?.users || []}
-                                />
-                            </div>
                         </div>
-                        <div className="grid grid-cols-12">
-                            <div className="col-span-2 text-lg font-semibold text-gray-400">
-                                Project name:
-                            </div>
-                            <div className="col-span-10 font-semibold">
-                                {detailTaskInProject?.project?.name}
-                            </div>
+                    </div>
+                    <div className="col-span-4 text-lg bg-white rounded-xl">
+                        <div className="flex justify-center mt-5">
+                            <Tag color="warning" className="text-2xl">
+                                Report files
+                            </Tag>
                         </div>
-                        <div className="grid grid-cols-12">
-                            <div className="col-span-2 text-lg font-semibold text-gray-400">
-                                Pending reason:
-                            </div>
-                            <div className="col-span-10 font-semibold">
-                                {detailTaskInProject?.pending_reason}
-                            </div>
-                        </div>
-                        <div className="grid grid-cols-12">
-                            <div className="col-span-2 text-lg font-semibold text-gray-400">
-                                File name:{' '}
-                            </div>
-                            <div className="col-span-10 font-semibold">
-                                {detailTaskInProject?.files?.map(
-                                    (file: any) => (
-                                        <a
-                                            href={file.url}
-                                            target="_blank"
-                                            rel="noreferrer"
-                                            className="text-blue-500"
-                                            style={{
-                                                textDecoration: 'underline',
-                                            }}
-                                            key={file.id}
-                                        >
-                                            {file.name}
-                                        </a>
-                                    ),
-                                )}
-                            </div>
-                        </div>
-                        <div className="grid grid-cols-12">
-                            <div className="col-span-2 text-lg font-semibold text-gray-400">
-                                Report files:{' '}
-                            </div>
-                            <div className="col-span-10 font-semibold">
-                                {detailTaskInProject?.reports?.map(
-                                    (item: any) => (
-                                        <a
-                                            href={item?.file?.url}
-                                            target="_blank"
-                                            rel="noreferrer"
-                                            className="text-blue-500"
-                                            style={{
-                                                textDecoration: 'underline',
-                                            }}
-                                            key={item?.name}
-                                        >
-                                            {item?.file?.name}
-                                        </a>
-                                    ),
-                                )}
-                            </div>
-                        </div>
-                        <div className="grid grid-cols-12">
-                            <div className="col-span-2 text-lg font-semibold text-gray-400">
-                                Report users:
-                            </div>
-                            <div className="col-span-10 font-semibold">
-                                {userReportList}
-                            </div>
-                        </div>
-                        <div className="grid grid-cols-12">
-                            <div className="col-span-2 text-lg font-semibold text-gray-400">
-                                Description:
-                            </div>
-                            <div className="col-span-10 font-semibold">
-                                {detailTaskInProject?.description ||
-                                    'Không xác định'}
-                            </div>
+                        <div className="flex flex-col gap-2 mt-5">
+                            {detailTaskInProject?.reports?.map(
+                                (item: any, index: any) => (
+                                    <Card
+                                        title={<CardTitle index={index} />}
+                                        className="m-3 shadow-lg "
+                                    >
+                                        <div className="flex flex-col gap-2">
+                                            {' '}
+                                            <div className="flex justify-between">
+                                                {' '}
+                                                <span className="font-bold">
+                                                    Tập tin:{' '}
+                                                </span>
+                                                <a
+                                                    href={item?.file?.url}
+                                                    target="_blank"
+                                                    rel="noreferrer"
+                                                    className="font-bold text-blue-500"
+                                                    style={{
+                                                        textDecoration:
+                                                            'underline',
+                                                    }}
+                                                    key={item?.name}
+                                                >
+                                                    {item?.file?.name}
+                                                </a>
+                                            </div>
+                                            <div className="flex justify-between">
+                                                {' '}
+                                                <span className="font-bold">
+                                                    Người báo cáo:{' '}
+                                                </span>
+                                                <span className="font-bold">
+                                                    {item?.user?.name}
+                                                </span>
+                                            </div>
+                                            <div className="flex justify-between">
+                                                {' '}
+                                                <span className="font-bold">
+                                                    Thời gian:{' '}
+                                                </span>
+                                                <span className="font-bold">
+                                                    {convertDate(
+                                                        item?.file?.created_at,
+                                                    )}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </Card>
+                                ),
+                            )}
                         </div>
                     </div>
                 </div>
