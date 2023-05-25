@@ -79,18 +79,26 @@ const CreateUpdateUserModal = (props: Props) => {
 
     const detailConvert = useMemo(() => {
         return {
-            ...detailUser,
-            date_of_birth: dayjs(detailUser?.date_of_birth),
-            roles_id: detailUser?.roles?.map((item: any) =>
+            ...initalValues,
+            date_of_birth: dayjs(initalValues?.date_of_birth),
+            roles_id: initalValues?.roles?.map((item: any) =>
                 item?.id?.toString(),
             ),
             status: {
                 label:
-                    detailUser?.status === 1 ? 'Hoạt động' : 'Không hoạt động',
-                value: detailUser?.status,
+                    initalValues?.status === 1
+                        ? 'Hoạt động'
+                        : 'Không hoạt động',
+                value: initalValues?.status,
             },
         };
-    }, [detailUser]);
+    }, [initalValues]);
+
+    useEffect(() => {
+        if (initalValues) {
+            form.setFieldsValue(detailConvert);
+        }
+    }, [detailConvert, form, initalValues]);
 
     const {mutate: createUserMutate, isLoading} = useMutation({
         mutationFn: createUser,
@@ -111,14 +119,14 @@ const CreateUpdateUserModal = (props: Props) => {
     });
 
     const {mutate: updateUserMutate} = useMutation({
-        mutationFn: (data: any) => updateUser(id, data),
-        mutationKey: ['updateUser', id],
+        mutationFn: (data: any) => updateUser(initalValues?.id, data),
+        mutationKey: ['updateUser', initalValues?.id],
         onSuccess: () => {
             notification.success({
                 message: 'Success ',
                 description: 'Update successfully',
             });
-            queryCLient.refetchQueries(['getDetailUser', id]);
+            queryCLient.refetchQueries(['getDetailUser', initalValues?.id]);
         },
         onError: (error: any) => {
             notification.error({
@@ -129,7 +137,7 @@ const CreateUpdateUserModal = (props: Props) => {
     });
 
     const handleFinish = (values: any) => {
-        if (id) {
+        if (initalValues) {
             console.log({...values});
             updateUserMutate({
                 ...values,
@@ -159,17 +167,19 @@ const CreateUpdateUserModal = (props: Props) => {
         }
     }, [detailUser]);
 
+    console.log(initalValues);
+
     return (
         <Modal
             visible={visible}
             onCancel={onCancel}
-            title="Create new User"
+            title={initalValues ? 'Cập nhật người dùng' : 'Thêm mới người dùng'}
             footer={[]}
         >
             <Form
                 form={form}
                 onFinish={handleFinish}
-                initialValues={detailConvert}
+                initialValues={initalValues}
                 layout="vertical"
             >
                 <div className="flex justify-center">
@@ -212,7 +222,7 @@ const CreateUpdateUserModal = (props: Props) => {
                         label="Mật khẩu"
                         rules={[
                             {
-                                required: id ? true : false,
+                                required: initalValues ? false : true,
                                 message: 'Vui lòng nhập mật khẩu',
                             },
                         ]}

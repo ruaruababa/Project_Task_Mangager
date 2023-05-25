@@ -26,7 +26,7 @@ const UserItem = ({user}: any) => {
             <div className="">
                 <Action
                     handleView={handleViewDetail}
-                    // handleEdit={handleShowModal}
+                    handleEdit={handleShowModal}
                     handleDelete={handleRemove}
                 />
             </div>
@@ -35,6 +35,7 @@ const UserItem = ({user}: any) => {
                     onCancel={handleShowModal}
                     visible={isShow}
                     key={user?.email}
+                    initalValues={user}
                 />
             }
         </div>
