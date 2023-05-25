@@ -203,13 +203,6 @@ const CreateUpdateRoleModal = (props: Props) => {
                         return changedValues[item?.name] === true;
                     });
 
-                    const removePer = dataPer[0]?.permissions?.map(
-                        (item: any) => {
-                            return;
-                        },
-                    );
-                    console.log('removePer', removePer);
-
                     if (dataPer.length > 0) {
                         const permission_ids: any = dataPer[0]?.permissions.map(
                             (item: any) => {
@@ -232,10 +225,9 @@ const CreateUpdateRoleModal = (props: Props) => {
                             });
                         });
                     });
-                    console.log('dataPer', dataPer);
 
                     const dataPerFalse = data?.filter((item: any) => {
-                        return changedValues[item?.value] === false;
+                        return changedValues[item?.name] === false;
                     });
                     dataPerFalse?.map((item: any) => {
                         return item?.permissions?.map((per: any) => {
