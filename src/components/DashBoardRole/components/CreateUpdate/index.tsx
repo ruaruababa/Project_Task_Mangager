@@ -1,13 +1,13 @@
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import {Button, Checkbox, Form, Input, Modal, Select, notification} from 'antd';
 import {CheckboxChangeEvent} from 'antd/es/checkbox';
-import {CheckboxValueType} from 'antd/es/checkbox/Group';
 import dayjs from 'dayjs';
-import {useEffect, useMemo, useState} from 'react';
+import {useMemo, useState} from 'react';
 import {useParams} from 'react-router-dom';
 import {styled} from 'styled-components';
 import usePermission from '../../../../hooks/usePermission';
-import {createUser, getDetailUser, updateUser} from '../../../../services/user';
+import {createRole} from '../../../../services/role';
+import {getDetailUser} from '../../../../services/user';
 
 const {Option} = Select;
 
@@ -62,8 +62,6 @@ const CreateUpdateRoleModal = (props: Props) => {
     const {visible, onCancel, initalValues, mode} = props;
     const {id} = useParams();
     const [form] = Form.useForm();
-    const role = Form.useWatch('role', form);
-    console.log('role', role);
     const {permissions} = usePermission();
     const [listPermission, setListPermission] = useState<any>();
     // const [groupRole, setGroupId] = useState<any>();
@@ -72,9 +70,21 @@ const CreateUpdateRoleModal = (props: Props) => {
     // const [groupId, setGroupId] = useState<any>();
     const queryCLient = useQueryClient();
 
-    const [checkedList, setCheckedList] = useState<CheckboxValueType[]>();
-    const [indeterminate, setIndeterminate] = useState(true);
-    const [checkAll, setCheckAll] = useState(false);
+    const data = useMemo(() => {
+        return permissions?.map((item: any, index: any) => {
+            return {
+                ...item,
+                name: `rules${index + 1}`,
+                permissions: item?.permissions?.map((item: any, idx: any) => {
+                    return {
+                        ...item,
+                        name: `rules${idx + 100}`,
+                        parent: `rules${index + 1}`,
+                    };
+                }),
+            };
+        });
+    }, [permissions]);
 
     const listGroupName = useMemo(() => {
         return permissions?.map((item: any) => item?.groupName);
@@ -88,13 +98,6 @@ const CreateUpdateRoleModal = (props: Props) => {
                 checkall: item?.groupName === isTrue && e?.target?.checked,
             };
         });
-
-        console.log('dataPermission', dataPermission);
-
-        setListPermission([...dataPermission]);
-        setCheckedList(e.target.checked ? permissions : []);
-        setIndeterminate(false);
-        setCheckAll(e.target.checked);
     };
 
     const getLableMode = () => {
@@ -132,9 +135,9 @@ const CreateUpdateRoleModal = (props: Props) => {
         };
     }, [detailUser]);
 
-    const {mutate: createUserMutate, isLoading} = useMutation({
-        mutationFn: createUser,
-        mutationKey: ['createUser'],
+    const {mutate: createRoleMutate, isLoading} = useMutation({
+        mutationFn: createRole,
+        mutationKey: ['createRole'],
         onSuccess: () => {
             notification.success({
                 message: 'Success ',
@@ -150,9 +153,9 @@ const CreateUpdateRoleModal = (props: Props) => {
         },
     });
 
-    const {mutate: updateUserMutate} = useMutation({
-        mutationFn: (data: any) => updateUser(id, data),
-        mutationKey: ['updateUser', id],
+    const {mutate: create} = useMutation({
+        mutationFn: (data: any) => createRole(data),
+        mutationKey: ['updateUser'],
         onSuccess: () => {
             notification.success({
                 message: 'Success ',
@@ -167,28 +170,19 @@ const CreateUpdateRoleModal = (props: Props) => {
             });
         },
     });
+    const [valuesSubmit, setValuesSubmit] = useState<any>([]);
 
     const handleFinish = (values: any) => {
         console.log('values', values);
-
+        const input = {
+            name: values?.name,
+            permission_ids: valuesSubmit,
+        };
+        createRoleMutate(input);
+        form.resetFields();
         onCancel();
     };
 
-    const statusOptions = [
-        {label: 'Kích hoạt', value: '1'},
-        {label: 'Chưa kích hoạt', value: '0'},
-    ];
-
-    const dateFormat = 'YYYY/MM/DD';
-    const [avatar, setAvatar] = useState('avatar.jpg');
-    useEffect(() => {
-        if (detailUser) {
-            setAvatar(detailUser.avatar);
-        }
-    }, [detailUser]);
-    const [checked, setChecked] = useState(false);
-    const checked1 = Form.useWatch('checked1', form);
-    console.log('checked1', checked1);
     return (
         <Modal
             visible={visible}
@@ -203,23 +197,53 @@ const CreateUpdateRoleModal = (props: Props) => {
                 layout="vertical"
                 onValuesChange={(changedValues, allValues) => {
                     console.log('changedValues', changedValues);
+                    console.log('data', data);
                     console.log('allValues', allValues);
-                    form.setFieldsValue({
-                        rules101: allValues?.rules1,
-                        rules102: allValues?.rules1,
-                        rules103: allValues?.rules1,
-                        rules104: allValues?.rules1,
-                        rules105: allValues?.rules1,
+                    const dataPer = data.filter((item: any) => {
+                        return changedValues[item?.name] === true;
                     });
-                    // const data = allValues?.rules?.map((item: any) => {
-                    //     return {
-                    //         ...item,
-                    //         checkall:
-                    //             item?.groupName === isTrue &&
-                    //             e?.target?.checked,
-                    //     };
-                    // });
-                    // setListPermission([...data]);
+
+                    const removePer = dataPer[0]?.permissions?.map(
+                        (item: any) => {
+                            return;
+                        },
+                    );
+                    console.log('removePer', removePer);
+
+                    if (dataPer.length > 0) {
+                        const permission_ids: any = dataPer[0]?.permissions.map(
+                            (item: any) => {
+                                return item?.value;
+                            },
+                        );
+
+                        console.log('permission_ids', permission_ids);
+
+                        setValuesSubmit((pre: any) => [
+                            ...pre,
+                            ...permission_ids,
+                        ]);
+                    }
+
+                    dataPer?.map((item: any) => {
+                        return item?.permissions?.map((per: any) => {
+                            return form.setFieldsValue({
+                                [`rules${per?.value + 100}`]: true,
+                            });
+                        });
+                    });
+                    console.log('dataPer', dataPer);
+
+                    const dataPerFalse = data?.filter((item: any) => {
+                        return changedValues[item?.value] === false;
+                    });
+                    dataPerFalse?.map((item: any) => {
+                        return item?.permissions?.map((per: any) => {
+                            return form.setFieldsValue({
+                                [`rules${per?.value + 100}`]: false,
+                            });
+                        });
+                    });
                 }}
             >
                 <Form.Item
@@ -239,7 +263,7 @@ const CreateUpdateRoleModal = (props: Props) => {
                 </Form.Item>
                 <div className="grid grid-cols-6">
                     {' '}
-                    {permissions?.map((item: any, index: any) => {
+                    {data?.map((per: any, index: any) => {
                         return (
                             <>
                                 {/* <Form.Item
@@ -254,19 +278,14 @@ const CreateUpdateRoleModal = (props: Props) => {
                                     valuePropName="checked"
                                     className="col-span-1"
                                 >
-                                    <Checkbox>{item?.groupName}</Checkbox>
+                                    <Checkbox value={index + 1}>
+                                        {per?.groupName}
+                                    </Checkbox>
                                 </Form.Item>
                                 <div className="grid grid-cols-4 col-span-5">
                                     {' '}
-                                    {item?.permissions?.map((item: any) => {
+                                    {per?.permissions?.map((item: any) => {
                                         return (
-                                            // <Form.Item
-                                            //     name={`checked${item?.value}`}
-                                            //     valuePropName="checked"
-                                            // >
-                                            //     {' '}
-                                            //     <Checkbox>{item?.label}</Checkbox>
-                                            // </Form.Item>
                                             <Form.Item
                                                 name={`rules${
                                                     item?.value + 100
