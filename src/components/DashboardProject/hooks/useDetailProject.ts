@@ -4,7 +4,7 @@ import {useParams} from 'react-router-dom';
 import {getDetailProject} from '../../../services/project';
 
 const useDetailProject = () => {
-    const [idProject, setIdProject] = useState('');
+    const [idProject, setIdProject] = useState<any>(1);
     const {id} = useParams();
     useEffect(() => {
         if (id) {
@@ -20,7 +20,6 @@ const useDetailProject = () => {
     const detailProject = useMemo(() => {
         return detailProjectResponse?.data?.data || [];
     }, [detailProjectResponse]);
-
 
     const detailToUpdate = useMemo(() => {
         return {

@@ -33,7 +33,7 @@ function getItem(
 
 const items: MenuItem[] = [
     getItem('Quản lý dự án', '/project', <OrderedListOutlined />),
-    getItem('Thống kê', '/task', <FundProjectionScreenOutlined />),
+    getItem('Thống kê', '/statistic', <FundProjectionScreenOutlined />),
     getItem(' Quản lý người dùng', '/user', <UserOutlined />),
     getItem(' Phân quyền', '/role', <ApartmentOutlined />),
 ];

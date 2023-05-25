@@ -11,6 +11,7 @@ import CreateUpdateTask from './components/DashboardTask/components/Create/creat
 import DetailUser from './components/DashboardUser/components/Detail/detailUser';
 import ListUser from './components/DashboardUser/components/List';
 import AllListTask from './components/ListTask/components';
+import Analystic from './components/Mock/analystic';
 import TaskManagerPage from './components/TaskManager';
 import UserProfile from './components/UserProfile';
 import UpdateProfile from './components/UserProfile/updateProfile';
@@ -60,8 +61,8 @@ const router = createBrowserRouter([
                 element: <CreateUpdateProject />,
             },
             {
-                path: '/task',
-                element: <TaskManagerPage />,
+                path: '/statistic',
+                element: <Analystic />,
             },
             {
                 path: '/project/:id/create-task',
