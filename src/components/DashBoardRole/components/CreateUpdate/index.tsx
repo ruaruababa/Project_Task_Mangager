@@ -237,46 +237,53 @@ const CreateUpdateRoleModal = (props: Props) => {
                         placeholder="Vui lòng nhập tên nhóm vai trò"
                     />
                 </Form.Item>
-
-                {permissions?.map((item: any, index: any) => {
-                    return (
-                        <>
-                            {/* <Form.Item
+                <div className="grid grid-cols-6">
+                    {' '}
+                    {permissions?.map((item: any, index: any) => {
+                        return (
+                            <>
+                                {/* <Form.Item
                                 name={`role${index}`}
                                 className="col-span-3"
                                 valuePropName="checked"
                             >
                                 <Checkbox>{item?.groupName}</Checkbox>
                             </Form.Item> */}
-                            <Form.Item
-                                name={`rules${index + 1}`}
-                                valuePropName="checked"
-                            >
-                                <Checkbox>{item?.groupName}</Checkbox>
-                            </Form.Item>
-                            <div className="grid grid-cols-4 col-span-9">
-                                {' '}
-                                {item?.permissions?.map((item: any) => {
-                                    return (
-                                        // <Form.Item
-                                        //     name={`checked${item?.value}`}
-                                        //     valuePropName="checked"
-                                        // >
-                                        //     {' '}
-                                        //     <Checkbox>{item?.label}</Checkbox>
-                                        // </Form.Item>
-                                        <Form.Item
-                                            name={`rules${item?.value + 100}`}
-                                            valuePropName="checked"
-                                        >
-                                            <Checkbox>{item?.label}</Checkbox>
-                                        </Form.Item>
-                                    );
-                                })}
-                            </div>
-                        </>
-                    );
-                })}
+                                <Form.Item
+                                    name={`rules${index + 1}`}
+                                    valuePropName="checked"
+                                    className="col-span-1"
+                                >
+                                    <Checkbox>{item?.groupName}</Checkbox>
+                                </Form.Item>
+                                <div className="grid grid-cols-4 col-span-5">
+                                    {' '}
+                                    {item?.permissions?.map((item: any) => {
+                                        return (
+                                            // <Form.Item
+                                            //     name={`checked${item?.value}`}
+                                            //     valuePropName="checked"
+                                            // >
+                                            //     {' '}
+                                            //     <Checkbox>{item?.label}</Checkbox>
+                                            // </Form.Item>
+                                            <Form.Item
+                                                name={`rules${
+                                                    item?.value + 100
+                                                }`}
+                                                valuePropName="checked"
+                                            >
+                                                <Checkbox>
+                                                    {item?.label}
+                                                </Checkbox>
+                                            </Form.Item>
+                                        );
+                                    })}
+                                </div>
+                            </>
+                        );
+                    })}
+                </div>
 
                 {getLableMode() && (
                     <Form.Item className="flex justify-center">

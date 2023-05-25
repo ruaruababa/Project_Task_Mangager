@@ -1,7 +1,6 @@
 import {useMutation, useQueryClient} from '@tanstack/react-query';
 import {Card} from 'antd';
 import {markReadNoti} from '../../services/user';
-import {convertDate} from '../../utils/format';
 
 const Item = ({data}: any) => {
     const queryClient = useQueryClient();
@@ -27,11 +26,10 @@ const Item = ({data}: any) => {
                     !data?.read_at && 'bg-slate-300'
                 } cursor-pointer !shadow-2xl`}
             >
-                <p className="text-base font-bold">
-                    {data?.title || 'Thêm data vào title đi :))'}
+                <p className="text-sm font-bold line-clamp-2">
+                    {data?.content}
                 </p>
-                <p className="text-sm line-clamp-2">{data?.content}</p>
-                <p className="text-xs">{convertDate(data?.created_at)}</p>
+                <p className="text-xs">{data?.created_at_for_human}</p>
             </Card>
         </>
     );
