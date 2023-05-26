@@ -1,13 +1,19 @@
-import {DeleteOutlined, ExclamationCircleOutlined} from '@ant-design/icons';
+import {
+    DeleteOutlined,
+    ExclamationCircleOutlined,
+    FileAddOutlined,
+} from '@ant-design/icons';
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
-import {Button, Card, Modal, Tag, notification} from 'antd';
+import {Button, Card, Form, Modal, Tag, notification} from 'antd';
 import {useMemo, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
+import {uploadReportFile} from '../../../../services/file';
 import {
     getDetailTaskInProject,
     removeReportFile,
 } from '../../../../services/tasks';
 import {convertDate} from '../../../../utils/format';
+import UploadReportFileInput from '../../../Upload';
 import UserAvatar from '../Item/avatar';
 interface Props {
     isShow: boolean;
@@ -32,6 +38,35 @@ const ModalConfirm = (props: Props) => {
             onCancel={onCancel}
         >
             <span>File bị xóa sẽ không thể khôi phục lại</span>
+        </Modal>
+    );
+};
+
+const ModalReportFile = ({taskId, isShow, onCancel, handleReportFile}: any) => {
+    const form = Form.useForm();
+
+    const title = (
+        <div className="flex gap-3">
+            <FileAddOutlined />{' '}
+            <h2 className="!text-2xl font-bold text-red-500">Nộp báo cáo</h2>
+        </div>
+    );
+    return (
+        <Modal visible={isShow} onCancel={onCancel} title={title} footer={[]}>
+            <UploadReportFileInput
+                fieldName={'report'}
+                url={uploadReportFile(taskId)}
+            ></UploadReportFileInput>
+
+            <Button
+                htmlType="submit"
+                block
+                type="primary"
+                className="!text-center !block"
+                size="large"
+            >
+                {'Nộp báo cáo'}
+            </Button>
         </Modal>
     );
 };
@@ -93,6 +128,14 @@ const DetailTask = () => {
         setIsShow(false);
     };
 
+    const [isShowReportFile, setIsShowReportFile] = useState(false);
+    const handleShowModalReportFile = () => {
+        setIsShowReportFile(true);
+    };
+    const handleCancelReportFile = () => {
+        setIsShowReportFile(false);
+    };
+
     const CardTitle = ({item, index}: any) => (
         <div className="flex justify-between">
             <h3>
@@ -142,14 +185,23 @@ const DetailTask = () => {
                     {' / '}
                     <span>Chi tiết task</span>
                 </div>
-                <Button
-                    type="primary"
-                    onClick={() => {
-                        navigate(`/project/${id}/tasks/${taskId}/edit`);
-                    }}
-                >
-                    Chỉnh sửa
-                </Button>
+                <div className="">
+                    {' '}
+                    <Button
+                        type="primary"
+                        onClick={() => {
+                            navigate(`/project/${id}/tasks/${taskId}/edit`);
+                        }}
+                    >
+                        Chỉnh sửa
+                    </Button>{' '}
+                    <Button
+                        className="text-white bg-blue-500 hover:bg-blue-600"
+                        onClick={handleShowModalReportFile}
+                    >
+                        Nộp báo cáo
+                    </Button>
+                </div>
             </div>
             <div className="flex flex-col gap-10">
                 {' '}
@@ -443,6 +495,13 @@ const DetailTask = () => {
                     isShow={isShow}
                     handleRemoveReportFile={handleRemoveReportFile}
                     onCancel={handleCancel}
+                />
+            }
+            {
+                <ModalReportFile
+                    isShow={isShowReportFile}
+                    onCancel={handleCancelReportFile}
+                    taskId={taskId}
                 />
             }
         </>

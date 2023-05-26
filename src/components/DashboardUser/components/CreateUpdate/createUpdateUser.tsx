@@ -14,6 +14,7 @@ import {useEffect, useMemo, useState} from 'react';
 import {useParams} from 'react-router-dom';
 import {styled} from 'styled-components';
 import useRole from '../../../../hooks/useRole';
+import {uploadAvatar} from '../../../../services/uploadAvatar';
 import {createUser, getDetailUser, updateUser} from '../../../../services/user';
 import UploadCustom from './upload';
 
@@ -184,9 +185,9 @@ const CreateUpdateUserModal = (props: Props) => {
             >
                 <div className="flex justify-center">
                     <UploadCustom
+                        url={uploadAvatar(id)}
                         isSingle={true}
                         fieldName={'avatar'}
-                        id={id}
                         image={avatar || 'avatar.jpg'}
                         defaultImage={'avatar.jpg'}
                         wrapper={AvatarWrapper}

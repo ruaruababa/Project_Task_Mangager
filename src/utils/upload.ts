@@ -7,28 +7,20 @@ interface CallbackResponse {
     percent: any;
 }
 
-const imageUrl = (id: any) => {
-    return `http://103.90.227.166:2100/api/users/${id}/avatar`;
-};
-const fileUrl = (id: any) => {
-    return `http://103.90.227.166:2100/api/tasks/${id}/attach-files`;
-};
-
 export const uploadChunk = (
     isSingle: boolean,
     fieldName: any,
-    id: any,
     file: any,
+    url: any,
     callback: (input: any, data: CallbackResponse) => void,
 ) => {
     console.log('file', file);
     console.log('fieldName', fieldName);
     console.log('length', typeof file);
-    console.log('id', id);
     return new Promise((resolve) => {
         axios
             .post(
-                isSingle ? imageUrl(id) : fileUrl(id),
+                url,
                 {
                     [fieldName]: file,
                 },

@@ -2,8 +2,9 @@ import {useMutation, useQueryClient} from '@tanstack/react-query';
 import {Button, DatePicker, Form, Input, notification} from 'antd';
 import dayjs from 'dayjs';
 import {useEffect, useMemo} from 'react';
-import {useNavigate} from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import useProfile from '../../hooks/useProfile';
+import {uploadAvatar} from '../../services/uploadAvatar';
 import {updateProfile} from '../../services/user';
 import Upload from '../DashboardUser/components/CreateUpdate/upload';
 
@@ -12,6 +13,7 @@ const UpdateProfile = () => {
     const {userProfile} = useProfile();
     const queryClient = useQueryClient();
     const navagate = useNavigate();
+    const id = useParams();
     const userConvert = useMemo(() => {
         if (!userProfile) return;
         return {
@@ -66,9 +68,9 @@ const UpdateProfile = () => {
                 >
                     <div className="flex justify-center rounded-full">
                         <Upload
+                            url={uploadAvatar(id)}
                             isSingle={true}
                             fieldName={'avatar'}
-                            id={userProfile?.id}
                             image={userProfile?.avatar || 'avatar.jpg'}
                             defaultImage={'avatar.jpg'}
                             className="rounded-full"

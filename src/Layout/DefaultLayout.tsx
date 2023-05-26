@@ -95,9 +95,10 @@ const DefaultLayout = () => {
             </Sider>
             <Layout className="site-layout">
                 <Header
-                    className="flex !bg-white header-container"
+                    className="bg-white header-container"
                     style={{
                         alignItems: 'center',
+                        display: 'none',
                     }}
                 >
                     <div className="left">

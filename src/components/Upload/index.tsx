@@ -1,7 +1,6 @@
 import {useQueryClient} from '@tanstack/react-query';
 import {useCallback, useState} from 'react';
-import {uploadChunk} from '../../../../utils/upload';
-import {SubTitle, Wrapper} from './styled';
+import {uploadChunk} from '../../utils/upload';
 
 interface IProps {
     wrapper?: any;
@@ -16,8 +15,7 @@ interface IProps {
     isSingle?: boolean;
     url: any;
 }
-
-const Upload = (props: IProps) => {
+const UploadReportFileInput = (props: IProps) => {
     const {
         isSingle,
         title,
@@ -29,7 +27,6 @@ const Upload = (props: IProps) => {
         fieldName,
         url,
     } = props;
-    const UploadWrapper = props?.wrapper || Wrapper;
     const [percent, setPercent] = useState(0);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const queryClient = useQueryClient();
@@ -72,47 +69,23 @@ const Upload = (props: IProps) => {
         [fieldName, isSingle, queryClient, url],
     );
     return (
-        <>
-            <UploadWrapper
-                disabled={disabled}
-                className={`${props?.className}`}
-            >
-                <img
-                    src={image}
-                    alt={'Image'}
-                    style={{
-                        width: '150px',
-                        height: '150px',
-                    }}
-                    className="rounded-full"
-                />
-                {defaultImage && title && (
-                    <SubTitle className="sub">{title}</SubTitle>
-                )}
-
-                <input
-                    multiple
-                    className="z-30"
-                    type="file"
-                    onChange={handleUpload}
-                    accept="image/*"
-                    required={isRequire}
-                    onInvalid={(e) => {
-                        e.currentTarget.setCustomValidity(
-                            'Vui lòng tải lên ảnh',
-                        );
-                    }}
-                    onInput={(e) => {
-                        e.currentTarget.setCustomValidity('');
-                    }}
-                ></input>
-
-                {isLoading && (
-                    <span className="loading-percent">Đang tải lên...</span>
-                )}
-            </UploadWrapper>
-        </>
+        <div>
+            {' '}
+            <input
+                multiple
+                className="z-30"
+                type="file"
+                onChange={handleUpload}
+                accept="image/*"
+                onInvalid={(e) => {
+                    e.currentTarget.setCustomValidity('Vui lòng tải lên ảnh');
+                }}
+                onInput={(e) => {
+                    e.currentTarget.setCustomValidity('');
+                }}
+            ></input>
+        </div>
     );
 };
 
-export default Upload;
+export default UploadReportFileInput;
