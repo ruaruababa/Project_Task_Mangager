@@ -170,13 +170,27 @@ const CreateUpdateRoleModal = (props: Props) => {
             });
         },
     });
-    const [valuesSubmit, setValuesSubmit] = useState<any>([]);
 
     const handleFinish = (values: any) => {
-        console.log('values', values);
+        const values_ = [];
+        for (let x in values) {
+            if (values[x] === true) {
+                values_.push(x);
+            }
+        }
+        const lastResult = values_.map((item: any) => {
+            if (item.includes('checked')) {
+                return item.split('checked')[1];
+            }
+        });
+
+        const input_ = lastResult.filter((item: any) => {
+            return item !== undefined;
+        });
+
         const input = {
             name: values?.name,
-            permission_ids: valuesSubmit,
+            permission_ids: input_,
         };
         createRoleMutate(input);
         form.resetFields();
@@ -203,28 +217,15 @@ const CreateUpdateRoleModal = (props: Props) => {
                         return changedValues[item?.name] === true;
                     });
 
-                    if (dataPer.length > 0) {
-                        const permission_ids: any = dataPer[0]?.permissions.map(
-                            (item: any) => {
-                                return item?.value;
-                            },
-                        );
+                    console.log('dataPer', dataPer);
 
-                        console.log('permission_ids', permission_ids);
-
-                        setValuesSubmit((pre: any) => [
-                            ...pre,
-                            ...permission_ids,
-                        ]);
-                    }
-
-                    dataPer?.map((item: any) => {
-                        return item?.permissions?.map((per: any) => {
+                    if (dataPer?.length > 0) {
+                        dataPer[0]?.permissions?.map((per: any) => {
                             return form.setFieldsValue({
-                                [`rules${per?.value + 100}`]: true,
+                                [`checked${per?.value}`]: true,
                             });
                         });
-                    });
+                    }
 
                     const dataPerFalse = data?.filter((item: any) => {
                         return changedValues[item?.name] === false;
@@ -232,7 +233,7 @@ const CreateUpdateRoleModal = (props: Props) => {
                     dataPerFalse?.map((item: any) => {
                         return item?.permissions?.map((per: any) => {
                             return form.setFieldsValue({
-                                [`rules${per?.value + 100}`]: false,
+                                [`checked${per?.value}`]: false,
                             });
                         });
                     });
@@ -279,9 +280,7 @@ const CreateUpdateRoleModal = (props: Props) => {
                                     {per?.permissions?.map((item: any) => {
                                         return (
                                             <Form.Item
-                                                name={`rules${
-                                                    item?.value + 100
-                                                }`}
+                                                name={`checked${item?.value}`}
                                                 valuePropName="checked"
                                             >
                                                 <Checkbox>
