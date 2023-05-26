@@ -45,7 +45,7 @@ const Item = ({item}: any) => {
                                         key={item?.groupName}
                                     >
                                         <Badge color="#f50" />
-                                        <span>{'Phân quyền'}</span>
+                                        <span>{item?.groupName}</span>
                                     </p>
                                 );
                             })}
