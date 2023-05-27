@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import {useEffect, useMemo} from 'react';
 import {useNavigate} from 'react-router-dom';
 import useProfile from '../../hooks/useProfile';
-import {updateProfile} from '../../services/user';
+import {updateProfile, uploadAvatarPropfile} from '../../services/user';
 import Upload from '../DashboardUser/components/CreateUpdate/upload';
 
 const UpdateProfile = () => {
@@ -64,14 +64,13 @@ const UpdateProfile = () => {
                     initialValues={userConvert}
                     layout="vertical"
                 >
-                    <div className="flex justify-center rounded-full">
+                    <div className="flex justify-center pb-5 rounded-full">
                         <Upload
+                            url={uploadAvatarPropfile()}
                             isSingle={true}
                             fieldName={'avatar'}
-                            id={userProfile?.id}
                             image={userProfile?.avatar || 'avatar.jpg'}
                             defaultImage={'avatar.jpg'}
-                            className="rounded-full"
                             // onUploadSuccess={(media) => {
                             //     updateAvatarMutate({
                             //         media_id: media.id,

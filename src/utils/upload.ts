@@ -7,28 +7,18 @@ interface CallbackResponse {
     percent: any;
 }
 
-const imageUrl = (id: any) => {
-    return `http://103.90.227.166:2100/api/users/${id}/avatar`;
-};
 const fileUrl = (id: any) => {
     return `http://103.90.227.166:2100/api/tasks/${id}/attach-files`;
 };
 
-export const uploadChunk = (
-    isSingle: boolean,
-    fieldName: any,
-    id: any,
-    file: any,
-    callback: (input: any, data: CallbackResponse) => void,
-) => {
+export const uploadChunk = (file: any, url: string, fieldName: string) => {
     console.log('file', file);
     console.log('fieldName', fieldName);
     console.log('length', typeof file);
-    console.log('id', id);
     return new Promise((resolve) => {
         axios
             .post(
-                isSingle ? imageUrl(id) : fileUrl(id),
+                url,
                 {
                     [fieldName]: file,
                 },
@@ -40,10 +30,6 @@ export const uploadChunk = (
                 },
             )
             .then((response) => {
-                callback(null, {
-                    percent: 100,
-                    data: response.data,
-                });
                 resolve(response.data);
                 notification.success({
                     message: 'Upload Thành công',
@@ -53,21 +39,6 @@ export const uploadChunk = (
             .catch((error) => {
                 console.log('error', error);
                 const message = error?.response?.data?.message;
-                if (message === 'File type not supported') {
-                    return callback(new Error('Không hỗ trợ định dạng này'), {
-                        percent: 0,
-                        data: null,
-                    });
-                }
-                callback(
-                    new Error(
-                        'Không thể tải lên file lúc này. Vui lòng thử lại sau',
-                    ),
-                    {
-                        percent: 0,
-                        data: null,
-                    },
-                );
             });
     });
 };

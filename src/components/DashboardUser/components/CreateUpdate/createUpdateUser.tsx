@@ -1,4 +1,4 @@
-import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
+import {useMutation, useQueryClient} from '@tanstack/react-query';
 import {
     Button,
     Checkbox,
@@ -11,10 +11,13 @@ import {
 } from 'antd';
 import dayjs from 'dayjs';
 import {useEffect, useMemo, useState} from 'react';
-import {useParams} from 'react-router-dom';
 import {styled} from 'styled-components';
 import useRole from '../../../../hooks/useRole';
-import {createUser, getDetailUser, updateUser} from '../../../../services/user';
+import {
+    createUser,
+    updateAvatarUser,
+    updateUser,
+} from '../../../../services/user';
 import UploadCustom from './upload';
 
 const {Option} = Select;
@@ -63,19 +66,9 @@ export const AvatarWrapper = styled.div`
 const CreateUpdateUserModal = (props: Props) => {
     const {visible, onCancel, initalValues} = props;
 
-    const {id} = useParams();
     const [form] = Form.useForm();
     const {roleOptions} = useRole();
     const queryCLient = useQueryClient();
-
-    const {data: detailUserResponse} = useQuery({
-        queryKey: ['getDetailUser', id],
-        queryFn: () => getDetailUser(id),
-    });
-
-    const detailUser = useMemo(() => {
-        return detailUserResponse?.data?.data || [];
-    }, [detailUserResponse]);
 
     const detailConvert = useMemo(() => {
         return {
@@ -162,12 +155,10 @@ const CreateUpdateUserModal = (props: Props) => {
     const dateFormat = 'YYYY/MM/DD';
     const [avatar, setAvatar] = useState('avatar.jpg');
     useEffect(() => {
-        if (detailUser) {
-            setAvatar(detailUser.avatar);
+        if (initalValues) {
+            setAvatar(initalValues.avatar);
         }
-    }, [detailUser]);
-
-    console.log(initalValues);
+    }, [initalValues]);
 
     return (
         <Modal
@@ -176,17 +167,11 @@ const CreateUpdateUserModal = (props: Props) => {
             title={initalValues ? 'Cập nhật người dùng' : 'Thêm mới người dùng'}
             footer={[]}
         >
-            <Form
-                form={form}
-                onFinish={handleFinish}
-                initialValues={initalValues}
-                layout="vertical"
-            >
+            <Form form={form} onFinish={handleFinish} layout="vertical">
                 <div className="flex justify-center">
                     <UploadCustom
-                        isSingle={true}
+                        url={updateAvatarUser(initalValues?.id)}
                         fieldName={'avatar'}
-                        id={id}
                         image={avatar || 'avatar.jpg'}
                         defaultImage={'avatar.jpg'}
                         wrapper={AvatarWrapper}

@@ -1,5 +1,4 @@
-import {baseAPIRequest} from '../utils/service';
-
+import {baseAPIRequest, baseURL} from '../utils/service';
 export const getListUserInProject = (id: any) => {
     return baseAPIRequest.get(`api/projects/${id}/users`);
 };
@@ -44,4 +43,12 @@ export const getMe = () => {
 
 export const updateProfile = (input: any) => {
     return baseAPIRequest.patch(`api/profile`, input);
+};
+
+export const uploadAvatarPropfile = () => {
+    return baseURL + `/api/profile/avatar`;
+};
+
+export const updateAvatarUser = (id: any) => {
+    return baseURL + `/api/users/${id}/avatar`;
 };
