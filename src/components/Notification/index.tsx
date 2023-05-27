@@ -4,8 +4,7 @@ import {
     useMutation,
     useQueryClient,
 } from '@tanstack/react-query';
-import {useEffect, useMemo, useState} from 'react';
-import {useInView} from 'react-intersection-observer';
+import {useMemo, useState} from 'react';
 import {getListNoti, markReadAllNoti} from '../../services/user';
 import HorizontalThreeDotsIcon from '../icons/hozizontaldot';
 import Item from './item';
@@ -40,7 +39,6 @@ const Notification = () => {
     const handleOpenMarkAllAsRead = () => {
         setIsShow((prev) => !prev);
     };
-    const {ref, inView} = useInView();
 
     const {
         data,
@@ -76,12 +74,6 @@ const Notification = () => {
         }, []);
     }, [data]);
 
-    console.log('listPage', listPage);
-    useEffect(() => {
-        if (inView) {
-            fetchNextPage();
-        }
-    }, [inView]);
     return (
         <div className="flex flex-col justify-center min-w-[350px] px-4  ">
             <div className="flex justify-between">
@@ -95,17 +87,13 @@ const Notification = () => {
                 </div>
             </div>
 
-            <div
-                className="max-h-[400px] overflow-y-auto flex flex-col gap-3 py-3"
-                ref={ref}
-            >
+            <div className="max-h-[400px] overflow-y-auto flex flex-col gap-3 py-3">
                 {listPage?.map((item: any, index: any) => (
                     <Item data={item} />
                 ))}
             </div>
             {hasNextPage && (
                 <div
-                    ref={ref}
                     className="font-bold text-center cursor-pointer"
                     onClick={() => fetchNextPage()}
                 >

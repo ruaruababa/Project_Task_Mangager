@@ -11,3 +11,11 @@ export const getListPermissions = () => {
 export const createRole = (input: any) => {
     return baseAPIRequest.post(`api/roles`, input);
 };
+
+export const getDetailRole = (id: any) => {
+    return baseAPIRequest.get(`api/roles/${id}`);
+};
+
+export const updateRole = (id: any, input: any) => {
+    return baseAPIRequest.patch(`api/roles/${id}`, input);
+};

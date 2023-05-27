@@ -1,13 +1,9 @@
-import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
+import {useMutation, useQueryClient} from '@tanstack/react-query';
 import {Button, Checkbox, Form, Input, Modal, Select, notification} from 'antd';
-import {CheckboxChangeEvent} from 'antd/es/checkbox';
-import dayjs from 'dayjs';
-import {useMemo, useState} from 'react';
-import {useParams} from 'react-router-dom';
+import {useEffect, useMemo} from 'react';
 import {styled} from 'styled-components';
 import usePermission from '../../../../hooks/usePermission';
-import {createRole} from '../../../../services/role';
-import {getDetailUser} from '../../../../services/user';
+import {createRole, updateRole} from '../../../../services/role';
 
 const {Option} = Select;
 
@@ -53,22 +49,18 @@ export const AvatarWrapper = styled.div`
     }
 `;
 
-const CheckboxGroup = Checkbox.Group;
-
-const plainOptions = ['Apple', 'Pear', 'Orange'];
-const defaultCheckedList = ['Apple', 'Orange'];
-
 const CreateUpdateRoleModal = (props: Props) => {
     const {visible, onCancel, initalValues, mode} = props;
-    const {id} = useParams();
     const [form] = Form.useForm();
     const {permissions} = usePermission();
-    const [listPermission, setListPermission] = useState<any>();
-    // const [groupRole, setGroupId] = useState<any>();
-    // const [groupUser, setGroupId] = useState<any>();
-    // const [groupTask, setGroupId] = useState<any>();
-    // const [groupId, setGroupId] = useState<any>();
+
     const queryCLient = useQueryClient();
+
+    useEffect(() => {
+        if (initalValues) {
+            form.setFieldsValue(initalValues);
+        }
+    }, [form, initalValues]);
 
     const data = useMemo(() => {
         return permissions?.map((item: any, index: any) => {
@@ -86,20 +78,6 @@ const CreateUpdateRoleModal = (props: Props) => {
         });
     }, [permissions]);
 
-    const listGroupName = useMemo(() => {
-        return permissions?.map((item: any) => item?.groupName);
-    }, [permissions]);
-
-    const onCheckAllChange = (e: CheckboxChangeEvent) => {
-        const isTrue = listGroupName?.find((item: any) => item === e.target.id);
-        const dataPermission = listPermission?.map((item: any) => {
-            return {
-                ...item,
-                checkall: item?.groupName === isTrue && e?.target?.checked,
-            };
-        });
-    };
-
     const getLableMode = () => {
         switch (mode) {
             case 'create':
@@ -111,30 +89,6 @@ const CreateUpdateRoleModal = (props: Props) => {
         }
     };
 
-    const {data: detailUserResponse} = useQuery({
-        queryKey: ['getDetailUser', id],
-        queryFn: () => getDetailUser(id),
-    });
-
-    const detailUser = useMemo(() => {
-        return detailUserResponse?.data?.data || [];
-    }, [detailUserResponse]);
-
-    const detailConvert = useMemo(() => {
-        return {
-            ...detailUser,
-            date_of_birth: dayjs(detailUser?.date_of_birth),
-            roles_id: detailUser?.roles?.map((item: any) =>
-                item?.id?.toString(),
-            ),
-            status: {
-                label:
-                    detailUser?.status === 1 ? 'Hoạt động' : 'Không hoạt động',
-                value: detailUser?.status,
-            },
-        };
-    }, [detailUser]);
-
     const {mutate: createRoleMutate, isLoading} = useMutation({
         mutationFn: createRole,
         mutationKey: ['createRole'],
@@ -143,6 +97,7 @@ const CreateUpdateRoleModal = (props: Props) => {
                 message: 'Success ',
                 description: 'Create successfully',
             });
+            queryCLient?.refetchQueries(['getListRole']);
             form.resetFields();
         },
         onError: () => {
@@ -153,15 +108,15 @@ const CreateUpdateRoleModal = (props: Props) => {
         },
     });
 
-    const {mutate: create} = useMutation({
-        mutationFn: (data: any) => createRole(data),
-        mutationKey: ['updateUser'],
+    const {mutate: updateRoleMutate} = useMutation({
+        mutationFn: (input: any) => updateRole(initalValues?.id, input),
+        mutationKey: ['updateRole'],
         onSuccess: () => {
+            queryCLient?.refetchQueries(['getListRole']);
             notification.success({
                 message: 'Success ',
                 description: 'Update successfully',
             });
-            queryCLient.refetchQueries(['getDetailUser', id]);
         },
         onError: (error: any) => {
             notification.error({
@@ -192,8 +147,11 @@ const CreateUpdateRoleModal = (props: Props) => {
             name: values?.name,
             permission_ids: input_,
         };
-        createRoleMutate(input);
-        form.resetFields();
+        if (initalValues) {
+            updateRoleMutate(input);
+        } else {
+            createRoleMutate(input);
+        }
         onCancel();
     };
 
@@ -211,7 +169,6 @@ const CreateUpdateRoleModal = (props: Props) => {
                 layout="vertical"
                 onValuesChange={(changedValues, allValues) => {
                     console.log('changedValues', changedValues);
-                    console.log('data', data);
                     console.log('allValues', allValues);
                     const dataPer = data.filter((item: any) => {
                         return changedValues[item?.name] === true;
