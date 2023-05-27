@@ -1,5 +1,5 @@
 import {FileAddOutlined} from '@ant-design/icons';
-import {Modal} from 'antd';
+import {Modal, Tag} from 'antd';
 import {useCallback, useState} from 'react';
 import {uploadChunk} from '../../utils/upload';
 interface IProps {
@@ -16,7 +16,7 @@ interface IProps {
 }
 
 const UploadReportFile = (props: IProps) => {
-    const {isRequire, fieldName, url, isShowModal, oncancel} = props;
+    const {isRequire, fieldName, url, isShowModal, oncancel, title} = props;
     const [reportFile, setReportFile] = useState<any>([]);
     const handleUpload = useCallback((event: any) => {
         event.stopPropagation();
@@ -46,7 +46,7 @@ const UploadReportFile = (props: IProps) => {
             >
                 {' '}
                 <div className="text-lg font-semibold">
-                    Tải lên file báo cáo của bạn:{' '}
+                    {title || 'Tải lên file báo cáo của bạn'}
                 </div>
                 <div className="relative">
                     {' '}
@@ -59,7 +59,27 @@ const UploadReportFile = (props: IProps) => {
                                 borderRight: '1px solid #ccc',
                             }}
                         />
-                        <div>{reportFile?.name || 'Chọn file của bạn'}</div>
+                        {reportFile.length > 1 || reportFile.name ? (
+                            <div className="">
+                                {reportFile[0]?.name && (
+                                    <Tag color="success">
+                                        {reportFile[0]?.name}
+                                    </Tag>
+                                )}
+                                {reportFile[0]?.name && (
+                                    <Tag color="success">
+                                        {reportFile[1]?.name}
+                                    </Tag>
+                                )}
+                                {reportFile?.name && (
+                                    <Tag color="success">
+                                        {reportFile?.name}
+                                    </Tag>
+                                )}
+                            </div>
+                        ) : (
+                            <div>Chọn file của bạn</div>
+                        )}
                     </div>
                     <div className="shadow-[inset_0_-1px_2px_rgba(0,0,0,0.6)] p-1 mt-5">
                         {' '}
