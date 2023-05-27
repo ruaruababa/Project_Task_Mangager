@@ -1,6 +1,7 @@
-import {Badge, Card} from 'antd';
+import {useMutation, useQueryClient} from '@tanstack/react-query';
+import {Badge, Card, notification} from 'antd';
 import {useState} from 'react';
-import {getDetailRole} from '../../../../services/role';
+import {getDetailRole, removeRole} from '../../../../services/role';
 import Action from '../../../Action';
 import CreateUpdateRoleModal from '../CreateUpdate';
 
@@ -77,15 +78,28 @@ const Item = ({item}: any) => {
 
         return data;
     };
+    const queryCLient = useQueryClient();
 
-    console.log('data', data);
-
-    // const {data: roleResponse} = useQuery({
-    //     queryKey: ['getDetailRole', item?.id],
-    //     queryFn: () => getDetailRole(item?.id),
-    // });
-
-    // console.log('roleResponse', roleResponse);
+    const {mutate: removeRoleMutate} = useMutation({
+        mutationFn: removeRole,
+        mutationKey: ['removeRole'],
+        onSuccess: () => {
+            queryCLient?.refetchQueries(['getListRole']);
+            notification.success({
+                message: 'Success ',
+                description: 'Remove successfully',
+            });
+        },
+        onError: (error: any) => {
+            notification.error({
+                message: 'Error',
+                description: error?.response?.data?.message,
+            });
+        },
+    });
+    const handleRemove = () => {
+        removeRoleMutate(item?.id);
+    };
 
     return (
         <>
@@ -99,6 +113,7 @@ const Item = ({item}: any) => {
                         <Action
                             handleView={handleToggleModal}
                             handleEdit={handleEdit}
+                            handleDelete={handleRemove}
                         />
                     }
                 >

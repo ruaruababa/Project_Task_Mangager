@@ -19,3 +19,7 @@ export const getDetailRole = (id: any) => {
 export const updateRole = (id: any, input: any) => {
     return baseAPIRequest.patch(`api/roles/${id}`, input);
 };
+
+export const removeRole = (id: any) => {
+    return baseAPIRequest.delete(`api/roles/${id}`);
+};
