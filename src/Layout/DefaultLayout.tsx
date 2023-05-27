@@ -39,7 +39,6 @@ const items: MenuItem[] = [
 ];
 
 const avatarUrl = 'avatar.jpg';
-const logoUrl = 'logo512.png';
 
 const DefaultLayout = () => {
     const [collapsed, setCollapsed] = useState(false);
@@ -54,7 +53,7 @@ const DefaultLayout = () => {
         const key = e.key;
         console.log('key', e);
         const item = items?.find((item: any) => {
-            item?.children.find((child: any) => child?.key === key);
+            return item?.children.find((child: any) => child?.key === key);
         });
         console.log('item', item);
         // @ts-ignore

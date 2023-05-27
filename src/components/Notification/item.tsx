@@ -4,7 +4,7 @@ import {markReadNoti} from '../../services/user';
 
 const Item = ({data}: any) => {
     const queryClient = useQueryClient();
-    const {mutate: markNotiMutate, isLoading} = useMutation({
+    const {mutate: markNotiMutate} = useMutation({
         mutationFn: markReadNoti,
         mutationKey: ['markReadNoti'],
         onSuccess: () => {

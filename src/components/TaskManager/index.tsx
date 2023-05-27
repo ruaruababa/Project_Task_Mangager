@@ -13,7 +13,7 @@ const TaskManager = () => {
     const [page, setPage] = useState(1);
     const {options} = useProject();
 
-    const {isLoading, data: tasksResponse} = useQuery({
+    const {data: tasksResponse} = useQuery({
         queryKey: ['getMyTasks', page],
         queryFn: () => getMyTasks(page),
         keepPreviousData: true,

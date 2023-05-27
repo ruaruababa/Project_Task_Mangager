@@ -1,7 +1,6 @@
 import {useQuery} from '@tanstack/react-query';
 import {Button, Input} from 'antd';
 import {useMemo, useState} from 'react';
-import {useNavigate} from 'react-router-dom';
 import {getListUserInSystem} from '../../../../services/user';
 import Pagination from '../../../Pagination';
 import CreateUpdateUserModal from '../CreateUpdate/createUpdateUser';
@@ -10,9 +9,8 @@ import UserItem from '../Item/item';
 const ListUser = () => {
     const [page, setPage] = useState(1);
     const [isShowCreateModal, setIsShowCreateModal] = useState(false);
-    const router = useNavigate();
 
-    const {isLoading, data: listUserResponse} = useQuery({
+    const {data: listUserResponse} = useQuery({
         queryKey: ['getListUserInSystem', page],
         queryFn: () => getListUserInSystem(page),
         keepPreviousData: true,

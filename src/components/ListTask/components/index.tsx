@@ -1,11 +1,9 @@
 import {Button} from 'antd';
-import {useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import {convertDate} from '../../../utils/format';
 import useTaskInProject from '../../DashboardProject/hooks/useTaskProject';
 
 const AllListTask = () => {
-    const [page, setPage] = useState(1);
     const {id} = useParams();
     const navigate = useNavigate();
     const {taskInProjects} = useTaskInProject();

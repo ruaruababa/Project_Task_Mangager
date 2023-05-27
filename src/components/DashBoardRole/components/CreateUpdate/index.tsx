@@ -1,11 +1,9 @@
 import {useMutation, useQueryClient} from '@tanstack/react-query';
-import {Button, Checkbox, Form, Input, Modal, Select, notification} from 'antd';
+import {Button, Checkbox, Form, Input, Modal, notification} from 'antd';
 import {useEffect, useMemo} from 'react';
 import {styled} from 'styled-components';
 import usePermission from '../../../../hooks/usePermission';
 import {createRole, updateRole} from '../../../../services/role';
-
-const {Option} = Select;
 
 interface Props {
     visible: boolean;

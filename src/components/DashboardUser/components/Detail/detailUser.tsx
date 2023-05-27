@@ -1,7 +1,7 @@
 import {useQuery} from '@tanstack/react-query';
 import {Button, Image} from 'antd';
 import {useMemo, useState} from 'react';
-import {useNavigate, useParams} from 'react-router-dom';
+import {useParams} from 'react-router-dom';
 import {getDetailUser} from '../../../../services/user';
 import {convertDate} from '../../../../utils/format';
 import CreateUpdateUserModal from '../CreateUpdate/createUpdateUser';
@@ -10,11 +10,10 @@ const DetailUser = () => {
     const {id} = useParams();
     const [isShow, setIsShow] = useState(false);
 
-    const navigate = useNavigate();
     const handleShowModal = () => {
         setIsShow(!isShow);
     };
-    const {isLoading, data: detailUserResponse} = useQuery({
+    const {data: detailUserResponse} = useQuery({
         queryKey: ['getDetailUser', id],
         queryFn: () => getDetailUser(id),
     });
@@ -22,24 +21,6 @@ const DetailUser = () => {
     const detailUser = useMemo(() => {
         return detailUserResponse?.data?.data || [];
     }, [detailUserResponse]);
-
-    const detailConvert = useMemo(() => {
-        return {
-            ...detailUser,
-            date_of_birth: convertDate(detailUser?.date_of_birth),
-            roles_id: detailUser?.roles?.map((item: any) => {
-                return {
-                    label: item.name,
-                    value: item.id,
-                };
-            }),
-            status: {
-                label:
-                    detailUser?.status === 1 ? 'Hoạt động' : 'Không hoạt động',
-                value: detailUser?.status,
-            },
-        };
-    }, [detailUser]);
 
     return (
         <div className="p-10 bg-white rounded-lg">

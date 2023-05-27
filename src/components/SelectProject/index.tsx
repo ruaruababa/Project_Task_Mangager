@@ -1,14 +1,13 @@
 import {Select} from 'antd';
-import useProject from '../DashboardProject/hooks/useProject';
 
 interface Props {
     name: string;
     holder?: string;
-    options:any
+    options: any;
 }
 
 const SelectProject = (props: Props) => {
-    const {name, holder, options} = props;
+    const {holder, options} = props;
 
     return (
         <Select

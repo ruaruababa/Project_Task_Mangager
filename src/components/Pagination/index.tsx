@@ -7,7 +7,6 @@ const Pagination = (props: any) => {
         siblingCount = 1,
         currentPage,
         pageSize,
-        className,
     } = props;
 
     const paginationRange = usePagination({
