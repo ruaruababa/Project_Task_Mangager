@@ -1,6 +1,5 @@
 import {TaskDto} from '../types/task.dto';
-import {baseAPIRequest} from '../utils/service';
-
+import {baseAPIRequest, baseURL} from '../utils/service';
 export const getMyTasks = (page: any) => {
     return baseAPIRequest.get(`api/tasks?page=${page}&per_page=10`);
 };
@@ -30,4 +29,7 @@ export const updateTask = (id: string, data: TaskDto) => {
 
 export const removeReportFile = (taskId: any) => {
     return baseAPIRequest.delete(`/api/tasks/${taskId}/report`);
+};
+export const uploadReportFile = (taskId: any) => {
+    return baseURL + `/api/tasks/${taskId}/report`;
 };

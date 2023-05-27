@@ -6,8 +6,10 @@ import {useNavigate, useParams} from 'react-router-dom';
 import {
     getDetailTaskInProject,
     removeReportFile,
+    uploadReportFile,
 } from '../../../../services/tasks';
 import {convertDate} from '../../../../utils/format';
+import UploadReportFile from '../../../Uploads/uploadFile';
 import UserAvatar from '../Item/avatar';
 interface Props {
     isShow: boolean;
@@ -40,7 +42,7 @@ export const ModalConfirm = (props: Props) => {
 const DetailTask = () => {
     const {id, taskId} = useParams();
     const navigate = useNavigate();
-
+    const [isShowModal, setIsShowModal] = useState(false);
     const {data: detailTaskResponse} = useQuery({
         queryKey: ['getDetailTaskInProject', id, taskId],
         queryFn: () => getDetailTaskInProject(id, taskId),
@@ -111,7 +113,16 @@ const DetailTask = () => {
 
     return (
         <>
-            {' '}
+            {
+                <UploadReportFile
+                    oncancel={() => {
+                        setIsShowModal(false);
+                    }}
+                    isShowModal={isShowModal}
+                    url={uploadReportFile(taskId)}
+                    fieldName={'report'}
+                />
+            }
             <div className="flex justify-between py-5">
                 <div className="">
                     <span
@@ -143,14 +154,24 @@ const DetailTask = () => {
                     {' / '}
                     <span>Chi tiết task</span>
                 </div>
-                <Button
-                    type="primary"
-                    onClick={() => {
-                        navigate(`/project/${id}/tasks/${taskId}/edit`);
-                    }}
-                >
-                    Chỉnh sửa
-                </Button>
+                <div className="flex gap-3">
+                    <Button
+                        type="primary"
+                        onClick={() => {
+                            navigate(`/project/${id}/tasks/${taskId}/edit`);
+                        }}
+                    >
+                        Chỉnh sửa
+                    </Button>
+                    <Button
+                        className="text-white bg-blue-500 hover:bg-blue-600"
+                        onClick={() => {
+                            setIsShowModal(true);
+                        }}
+                    >
+                        Nộp báo cáo
+                    </Button>
+                </div>
             </div>
             <div className="flex flex-col gap-10">
                 {' '}

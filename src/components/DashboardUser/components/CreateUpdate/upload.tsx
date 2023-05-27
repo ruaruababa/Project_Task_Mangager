@@ -1,7 +1,6 @@
-import {useQueryClient} from '@tanstack/react-query';
 import {useCallback, useState} from 'react';
 import {uploadChunk} from '../../../../utils/upload';
-import {SubTitle, Wrapper} from './styled';
+import {SubTitle} from './styled';
 
 interface IProps {
     wrapper?: any;
@@ -12,27 +11,17 @@ interface IProps {
     isRequire?: any;
     disabled?: boolean;
     className?: string;
-    id: any;
     fieldName: any;
     isSingle?: boolean;
+    url: any;
 }
 
 const Upload = (props: IProps) => {
-    const {
-        isSingle,
-        title,
-        isRequire,
-        disabled,
-        image,
-        onUploadSuccess,
-        defaultImage,
-        id,
-        fieldName,
-    } = props;
-    const UploadWrapper = props?.wrapper || Wrapper;
+    const {title, isRequire, disabled, image, defaultImage, fieldName, url} =
+        props;
     const [percent, setPercent] = useState(0);
+    const [fileUpload, setFileUpload] = useState<any>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const queryClient = useQueryClient();
     const handleUpload = useCallback((event: any) => {
         event.stopPropagation();
         event.preventDefault();
@@ -45,44 +34,25 @@ const Upload = (props: IProps) => {
         }
 
         const file = file_.length === 1 ? file_[0] : files;
-
+        setFileUpload(file);
         if (!file) return;
 
         setIsLoading(true);
-        uploadChunk(
-            isSingle || true,
-            fieldName,
-            id,
-            file,
-            (err, {data, percent}) => {
-                if (err) {
-                    setIsLoading(false);
-                    setPercent(0);
-                }
-                if (data) {
-                    setIsLoading(false);
-                    setPercent(0);
-                    queryClient.invalidateQueries(['getDetailUser'], id);
-                } else {
-                    setPercent(percent);
-                }
-            },
-        );
+        uploadChunk(file, url, fieldName);
     }, []);
+
+    const avatar = fileUpload ? URL.createObjectURL(fileUpload) : image;
     return (
         <>
-            <UploadWrapper
-                disabled={disabled}
-                className={`${props?.className}`}
-            >
+            <div className="relative">
                 <img
-                    src={image}
+                    src={avatar}
                     alt={'Image'}
                     style={{
                         width: '150px',
                         height: '150px',
                     }}
-                    className="rounded-full"
+                    className="absolute object-cover bg-cover rounded-full"
                 />
                 {defaultImage && title && (
                     <SubTitle className="sub">{title}</SubTitle>
@@ -90,7 +60,7 @@ const Upload = (props: IProps) => {
 
                 <input
                     multiple
-                    className="z-30"
+                    className="z-30 !w-[150px] !h-[150px] opacity-0 cursor-pointer"
                     type="file"
                     onChange={handleUpload}
                     accept="image/*"
@@ -104,11 +74,7 @@ const Upload = (props: IProps) => {
                         e.currentTarget.setCustomValidity('');
                     }}
                 ></input>
-
-                {isLoading && (
-                    <span className="loading-percent">Đang tải lên...</span>
-                )}
-            </UploadWrapper>
+            </div>
         </>
     );
 };
