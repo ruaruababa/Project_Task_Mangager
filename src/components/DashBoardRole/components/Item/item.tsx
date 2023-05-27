@@ -3,6 +3,7 @@ import {Badge, Card, notification} from 'antd';
 import {useState} from 'react';
 import {getDetailRole, removeRole} from '../../../../services/role';
 import Action from '../../../Action';
+import {ModalConfirm} from '../../../DashboardProject/components/Task/detailTask';
 import CreateUpdateRoleModal from '../CreateUpdate';
 
 const Item = ({item}: any) => {
@@ -79,6 +80,7 @@ const Item = ({item}: any) => {
         return data;
     };
     const queryCLient = useQueryClient();
+    const [isOpen, setIsOpen] = useState(false);
 
     const {mutate: removeRoleMutate} = useMutation({
         mutationFn: removeRole,
@@ -89,6 +91,7 @@ const Item = ({item}: any) => {
                 message: 'Success ',
                 description: 'Remove successfully',
             });
+            setIsOpen(false);
         },
         onError: (error: any) => {
             notification.error({
@@ -103,7 +106,6 @@ const Item = ({item}: any) => {
 
     return (
         <>
-            {' '}
             <div>
                 <Card
                     title={item?.name}
@@ -113,7 +115,7 @@ const Item = ({item}: any) => {
                         <Action
                             handleView={handleToggleModal}
                             handleEdit={handleEdit}
-                            handleDelete={handleRemove}
+                            handleDelete={() => setIsOpen(true)}
                         />
                     }
                 >
@@ -134,14 +136,20 @@ const Item = ({item}: any) => {
                     </div>
                 </Card>
             </div>
-            {
+            <ModalConfirm
+                isShow={isOpen}
+                onCancel={() => setIsOpen(false)}
+                handleRemoveReportFile={handleRemove}
+                title="Xóa danh mục phân quyền"
+            />
+            <>
                 <CreateUpdateRoleModal
                     visible={isShow}
                     onCancel={handleCancel}
                     mode={isEdit && 'update'}
                     initalValues={data}
                 />
-            }
+            </>
         </>
     );
 };

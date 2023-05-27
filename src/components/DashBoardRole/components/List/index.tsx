@@ -4,6 +4,7 @@ import {useState} from 'react';
 import useRole from '../../../../hooks/useRole';
 import CreateUpdateRoleModal from '../CreateUpdate';
 import Item from '../Item/item';
+
 const ListRole = () => {
     const {roles} = useRole();
     const [isShow, setIsShow] = useState(false);
@@ -14,6 +15,7 @@ const ListRole = () => {
     const handleOpenModal = () => {
         setIsShow(true);
     };
+
     return (
         <>
             {' '}
@@ -36,13 +38,11 @@ const ListRole = () => {
                     <Item key={index} item={item} />
                 ))}
             </div>
-            {
-                <CreateUpdateRoleModal
-                    visible={isShow}
-                    onCancel={handleCancel}
-                    mode={'create'}
-                />
-            }
+            <CreateUpdateRoleModal
+                visible={isShow}
+                onCancel={handleCancel}
+                mode={'create'}
+            />
         </>
     );
 };

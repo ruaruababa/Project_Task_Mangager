@@ -12,26 +12,27 @@ import UserAvatar from '../Item/avatar';
 interface Props {
     isShow: boolean;
     onCancel: () => void;
-    handleRemoveReportFile: () => void;
+    handleRemoveReportFile?: () => void;
+    title?: any;
 }
-const ModalConfirm = (props: Props) => {
-    const {isShow, onCancel, handleRemoveReportFile} = props;
-    const title = (
+export const ModalConfirm = (props: Props) => {
+    const {isShow, onCancel, handleRemoveReportFile, title} = props;
+    const customTitle = (
         <div className="flex gap-3">
             <ExclamationCircleOutlined />{' '}
             <h2 className="!text-2xl font-bold text-red-500">
-                Bạn có chắc chắn muốn xóa file?
+                {title || 'Bạn có chắc chắn muốn xóa file?'}
             </h2>
         </div>
     );
     return (
         <Modal
-            title={title}
+            title={customTitle}
             open={isShow}
             onOk={handleRemoveReportFile}
             onCancel={onCancel}
         >
-            <span>File bị xóa sẽ không thể khôi phục lại</span>
+            <span>Bạn sẽ không thể khôi phục lại</span>
         </Modal>
     );
 };
