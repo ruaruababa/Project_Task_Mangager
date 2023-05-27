@@ -376,15 +376,17 @@ const DetailTask = () => {
                         </div>
                     </div>
                     <div className="col-span-4 text-lg bg-white rounded-xl">
-                        <div className="flex justify-center mt-5">
-                            <Tag
-                                icon={<CheckCircleOutlined />}
-                                color="success"
-                                className="text-2xl"
-                            >
-                                Tệp đính kèm:
-                            </Tag>
-                        </div>
+                        {detailTaskInProject?.files?.length > 0 && (
+                            <div className="flex justify-center mt-5">
+                                <Tag
+                                    icon={<CheckCircleOutlined />}
+                                    color="success"
+                                    className="text-2xl"
+                                >
+                                    Tệp đính kèm:
+                                </Tag>
+                            </div>
+                        )}
                         <div className="flex flex-col gap-2 mt-5">
                             {detailTaskInProject?.files?.map(
                                 (item: any, index: any) => (
@@ -435,11 +437,13 @@ const DetailTask = () => {
                                 ),
                             )}
                         </div>
-                        <div className="flex justify-center mt-5">
-                            <Tag color="warning" className="text-2xl">
-                                Report files
-                            </Tag>
-                        </div>
+                        {detailTaskInProject?.reports.length > 0 && (
+                            <div className="flex justify-center mt-5">
+                                <Tag color="warning" className="text-2xl">
+                                    Report files
+                                </Tag>
+                            </div>
+                        )}
                         <div className="flex flex-col gap-2 mt-5">
                             {detailTaskInProject?.reports?.map(
                                 (item: any, index: any) => (
