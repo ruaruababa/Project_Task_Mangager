@@ -84,7 +84,7 @@ function TaskInProject() {
     // }, [taskList, taskList_]);
 
     const queryClient = useQueryClient();
-    const {mutate: updateTaskInProject, isLoading} = useMutation({
+    const {mutate: updateTaskInProject} = useMutation({
         mutationFn: (params: any) => updateTask(params, id, params?.idTask),
         mutationKey: ['updateTask'],
         onSuccess: () => {

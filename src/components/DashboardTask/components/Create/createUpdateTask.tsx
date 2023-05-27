@@ -64,7 +64,7 @@ const CreateUpdateTask = () => {
             : form.setFieldsValue({
                   status_id: 'Not Started',
               });
-    }, [statusOptions, detailToUpdate, id, taskId]);
+    }, [statusOptions, detailToUpdate, id, taskId, form]);
 
     const {mutate: createTaskInProjectMutate, isLoading} = useMutation({
         mutationFn: (data: any) => createTaskInProject(data, id),

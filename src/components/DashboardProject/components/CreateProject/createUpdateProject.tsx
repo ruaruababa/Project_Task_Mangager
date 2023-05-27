@@ -9,12 +9,6 @@ import useUser from '../../../../hooks/useUser';
 import {createProject, updateProject} from '../../../../services/project';
 import useDetailProject from '../../hooks/useDetailProject';
 
-interface Props {
-    visible?: boolean;
-    onCancel?: () => void;
-    initalValues?: any;
-}
-
 const CreateUpdateProject = () => {
     const [form] = Form.useForm();
     const {users} = useUser();

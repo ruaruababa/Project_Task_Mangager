@@ -70,7 +70,7 @@ const UserProfile = () => {
                         <div className="flex gap-3">
                             <div className="font-semibold">Trạng thái:</div>
                             <div className="">
-                                {userProfile?.status == 0
+                                {userProfile?.status === 0
                                     ? ' Chưa kích hoạt'
                                     : 'Đã kích hoạt'}
                             </div>

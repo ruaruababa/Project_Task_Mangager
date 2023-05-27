@@ -2,7 +2,6 @@ import {useQuery} from '@tanstack/react-query';
 import {useMemo} from 'react';
 import {useParams} from 'react-router-dom';
 import {getListTaskInProject} from '../../../services/project';
-import {getDetailTaskInProject} from '../../../services/tasks';
 
 const useTaskInProject = () => {
     const {id, taskId} = useParams();
@@ -14,8 +13,6 @@ const useTaskInProject = () => {
         queryKey: ['getListTaskInProject', id],
         queryFn: () => getListTaskInProject(id),
     });
-
-
 
     const taskInProjects = useMemo(() => {
         return taskInProjectResponse?.data?.data || [];

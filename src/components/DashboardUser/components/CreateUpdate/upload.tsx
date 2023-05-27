@@ -17,29 +17,28 @@ interface IProps {
 }
 
 const Upload = (props: IProps) => {
-    const {title, isRequire, disabled, image, defaultImage, fieldName, url} =
-        props;
-    const [percent, setPercent] = useState(0);
+    const {title, isRequire, image, defaultImage, fieldName, url} = props;
     const [fileUpload, setFileUpload] = useState<any>(null);
-    const [isLoading, setIsLoading] = useState<boolean>(false);
-    const handleUpload = useCallback((event: any) => {
-        event.stopPropagation();
-        event.preventDefault();
-        // console.log('event', ...event?.target?.files);
-        const file_: any = event?.target?.files;
-        console.log('file_', file_);
-        const files: any = [];
-        for (let i = 0; i < file_.length; i++) {
-            files.push(file_[i]);
-        }
+    const handleUpload = useCallback(
+        (event: any) => {
+            event.stopPropagation();
+            event.preventDefault();
+            // console.log('event', ...event?.target?.files);
+            const file_: any = event?.target?.files;
+            console.log('file_', file_);
+            const files: any = [];
+            for (let i = 0; i < file_.length; i++) {
+                files.push(file_[i]);
+            }
 
-        const file = file_.length === 1 ? file_[0] : files;
-        setFileUpload(file);
-        if (!file) return;
+            const file = file_.length === 1 ? file_[0] : files;
+            setFileUpload(file);
+            if (!file) return;
 
-        setIsLoading(true);
-        uploadChunk(file, url, fieldName);
-    }, []);
+            uploadChunk(file, url, fieldName);
+        },
+        [fieldName, url],
+    );
 
     const avatar = fileUpload ? URL.createObjectURL(fileUpload) : image;
     return (

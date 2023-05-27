@@ -10,7 +10,7 @@ import HorizontalThreeDotsIcon from '../icons/hozizontaldot';
 import Item from './item';
 const MarkAllAsRead = () => {
     const queryClient = useQueryClient();
-    const {mutate: markAllMutate, isLoading} = useMutation({
+    const {mutate: markAllMutate} = useMutation({
         mutationFn: markReadAllNoti,
         mutationKey: ['markReadAllNoti'],
         onSuccess: () => {
@@ -44,9 +44,7 @@ const Notification = () => {
         data,
 
         fetchNextPage,
-        fetchPreviousPage,
         hasNextPage,
-        hasPreviousPage,
     } = useInfiniteQuery({
         queryKey: ['getListNoti'],
         queryFn: ({pageParam = 0}) => getListNoti(pageParam),

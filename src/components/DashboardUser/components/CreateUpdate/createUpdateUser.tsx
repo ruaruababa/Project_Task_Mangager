@@ -20,8 +20,6 @@ import {
 } from '../../../../services/user';
 import UploadCustom from './upload';
 
-const {Option} = Select;
-
 interface Props {
     visible: boolean;
     onCancel: () => void;
