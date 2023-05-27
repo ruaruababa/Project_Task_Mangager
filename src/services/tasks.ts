@@ -30,6 +30,15 @@ export const updateTask = (id: string, data: TaskDto) => {
 export const removeReportFile = (taskId: any) => {
     return baseAPIRequest.delete(`/api/tasks/${taskId}/report`);
 };
+
 export const uploadReportFile = (taskId: any) => {
     return baseURL + `/api/tasks/${taskId}/report`;
+};
+
+export const uploadAttachFile = (taskId: any) => {
+    return baseURL + `/api/tasks/${taskId}/attach-files`;
+};
+
+export const removeAttachFile = (taskId: any, fileId: any) => {
+    return baseAPIRequest.delete(`/api/tasks/${taskId}/detach-file/${fileId}`);
 };

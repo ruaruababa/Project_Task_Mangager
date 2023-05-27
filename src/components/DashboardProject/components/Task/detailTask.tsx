@@ -1,11 +1,17 @@
-import {DeleteOutlined, ExclamationCircleOutlined} from '@ant-design/icons';
+import {
+    CheckCircleOutlined,
+    DeleteOutlined,
+    ExclamationCircleOutlined,
+} from '@ant-design/icons';
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import {Button, Card, Modal, Tag, notification} from 'antd';
 import {useMemo, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import {
     getDetailTaskInProject,
+    removeAttachFile,
     removeReportFile,
+    uploadAttachFile,
     uploadReportFile,
 } from '../../../../services/tasks';
 import {convertDate} from '../../../../utils/format';
@@ -68,6 +74,29 @@ const DetailTask = () => {
         },
     });
 
+    const {mutate: removeAttachMutate} = useMutation({
+        mutationKey: ['removeAttachFile'],
+        mutationFn: (filedId: any) => removeAttachFile(taskId, filedId),
+        onSuccess: () => {
+            notification.success({
+                message: 'Success ',
+                description: 'Xóa file thành công',
+            });
+            queryClient.invalidateQueries(['getDetailTaskInProject']);
+        },
+        onError: (error: any) => {
+            notification.error({
+                message: 'Error',
+                description: error?.response?.data?.message,
+            });
+        },
+    });
+
+    const handleRemoveAttachFile = (filedId: any) => {
+        removeAttachMutate(filedId);
+        setIsShow(false);
+    };
+
     const detailTaskInProject = useMemo(() => {
         return detailTaskResponse?.data?.data;
     }, [detailTaskResponse]);
@@ -95,24 +124,40 @@ const DetailTask = () => {
         removeReportFileMutate();
         setIsShow(false);
     };
+    const [attachId, setAttachId] = useState('');
 
-    const CardTitle = ({item, index}: any) => (
+    const CardTitle = ({item, index, title}: any) => (
         <div className="flex justify-between">
             <h3>
-                Báo cáo {index + 1}
+                {title || 'Báo cáo'} {index + 1}
                 {item?.is_editable}
             </h3>
             {item?.is_editable && (
                 <DeleteOutlined
                     className="cursor-pointer"
-                    onClick={handleShowModal}
+                    onClick={() => {
+                        setAttachId(item?.id);
+                        handleShowModal();
+                    }}
                 />
             )}
         </div>
     );
+    const [isOpenModalAttachment, setIsOpenModalAttachment] = useState(false);
 
     return (
         <>
+            {
+                <UploadReportFile
+                    oncancel={() => {
+                        setIsOpenModalAttachment(false);
+                    }}
+                    isShowModal={isOpenModalAttachment}
+                    url={uploadAttachFile(taskId)}
+                    fieldName={'attachments'}
+                    title="Tải lên tệp đính kèm"
+                />
+            }
             {
                 <UploadReportFile
                     oncancel={() => {
@@ -170,6 +215,14 @@ const DetailTask = () => {
                         }}
                     >
                         Nộp báo cáo
+                    </Button>
+                    <Button
+                        className="text-white bg-gray-500 hover:bg-gray-600"
+                        onClick={() => {
+                            setIsOpenModalAttachment(true);
+                        }}
+                    >
+                        Tệp đính kèm
                     </Button>
                 </div>
             </div>
@@ -261,7 +314,7 @@ const DetailTask = () => {
                                 <div className="col-span-2 text-lg font-semibold text-gray-400">
                                     File name:{' '}
                                 </div>
-                                <div className="col-span-10 font-semibold">
+                                <div className="flex flex-col col-span-10 font-semibold">
                                     {detailTaskInProject?.files?.map(
                                         (file: any) => (
                                             <a
@@ -323,6 +376,65 @@ const DetailTask = () => {
                         </div>
                     </div>
                     <div className="col-span-4 text-lg bg-white rounded-xl">
+                        <div className="flex justify-center mt-5">
+                            <Tag
+                                icon={<CheckCircleOutlined />}
+                                color="success"
+                                className="text-2xl"
+                            >
+                                Tệp đính kèm:
+                            </Tag>
+                        </div>
+                        <div className="flex flex-col gap-2 mt-5">
+                            {detailTaskInProject?.files?.map(
+                                (item: any, index: any) => (
+                                    <Card
+                                        title={
+                                            <CardTitle
+                                                index={index}
+                                                item={item}
+                                                title="Tệp đính kèm"
+                                            />
+                                        }
+                                        className="m-3 shadow-lg "
+                                    >
+                                        <div className="flex flex-col gap-2">
+                                            {' '}
+                                            <div className="flex justify-between">
+                                                {' '}
+                                                <span className="font-bold">
+                                                    Tập tin:{' '}
+                                                </span>
+                                                <a
+                                                    href={item?.url}
+                                                    target="_blank"
+                                                    rel="noreferrer"
+                                                    className="font-bold text-blue-500"
+                                                    style={{
+                                                        textDecoration:
+                                                            'underline',
+                                                    }}
+                                                    key={item?.name}
+                                                >
+                                                    {item?.name}
+                                                </a>
+                                            </div>
+                                            <div className="flex justify-between">
+                                                {' '}
+                                                <span className="font-bold">
+                                                    Thời gian:{' '}
+                                                </span>
+                                                <span className="font-bold">
+                                                    {convertDate(
+                                                        item?.file?.created_at,
+                                                    )}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </Card>
+                                ),
+                            )}
+                        </div>
                         <div className="flex justify-center mt-5">
                             <Tag color="warning" className="text-2xl">
                                 Report files
@@ -464,6 +576,15 @@ const DetailTask = () => {
                 <ModalConfirm
                     isShow={isShow}
                     handleRemoveReportFile={handleRemoveReportFile}
+                    onCancel={handleCancel}
+                />
+            }
+            {
+                <ModalConfirm
+                    isShow={isShow}
+                    handleRemoveReportFile={() =>
+                        handleRemoveAttachFile(attachId)
+                    }
                     onCancel={handleCancel}
                 />
             }
