@@ -11,24 +11,38 @@ const ModalChangePassword = (props: Props) => {
         <Modal
             visible={visible}
             onCancel={onCancel}
-            title="Create new task"
+            title="Đổi mật khẩu"
             footer={[]}
         >
             <Form form={form} onFinish={handleFinish} layout="vertical">
                 <Form.Item
                     name="oldPassword"
-                    label="Video URL"
+                    label="Mật khẩu cũ"
                     rules={[{required: true}]}
                 >
-                    <Input.Password placeholder="Enter video URL" />
+                    <Input.Password placeholder="Nhập mật khẩu hiện tại" />
                 </Form.Item>
 
                 <Form.Item
-                    name="numberOfViews"
-                    label="Number of Views"
+                    name="newPassword"
+                    label="Mật khẩu mới"
                     rules={[{required: true}]}
                 >
-                    <Input.Password type="number" placeholder="Enter number of views" />
+                    <Input.Password
+                        type="number"
+                        placeholder="Nhập lại mật khẩu mới"
+                    />
+                </Form.Item>
+
+                <Form.Item
+                    name="reNewPassword"
+                    label="Nhập lại mật khẩu mới"
+                    rules={[{required: true}]}
+                >
+                    <Input.Password
+                        type="number"
+                        placeholder="Nhập lại mật khẩu mới"
+                    />
                 </Form.Item>
 
                 <Form.Item>
