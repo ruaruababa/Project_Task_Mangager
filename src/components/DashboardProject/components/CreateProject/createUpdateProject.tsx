@@ -79,6 +79,9 @@ const CreateUpdateProject = () => {
                   starts_at: dayjs(startDate).format('YYYY/MM/DD'),
                   ends_at: dayjs(endDate).format('YYYY/MM/DD'),
                   status_id: values?.value,
+                  assigned_user_ids: values?.user_ids?.map(
+                      (item: any) => item.value,
+                  ),
               })
             : createProjectMutate({
                   ...values,
@@ -89,21 +92,18 @@ const CreateUpdateProject = () => {
     };
     return (
         <div className="p-10 bg-white rounded-xl">
-            <div className="mb-10">
-                <div className="mb-2 text-lg font-semibold">
-                    Danh sách dự án
-                </div>
+            <div className="mb-5">
                 <div className="">
                     <span
                         onClick={() => {
                             navigate('/');
                         }}
-                        className="font-semibold text-gray-400 cursor-pointer"
+                        className="font-semibold text-gray-400 cursor-pointer hover:text-blue-500"
                     >
                         Trang chủ /
                     </span>{' '}
                     <span
-                        className="font-semibold text-gray-400 cursor-pointer"
+                        className="font-semibold text-gray-400 cursor-pointer hover:text-blue-500"
                         onClick={() => {
                             navigate('/project');
                         }}

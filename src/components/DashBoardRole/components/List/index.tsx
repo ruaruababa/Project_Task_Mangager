@@ -1,6 +1,7 @@
 import {PlusOutlined} from '@ant-design/icons';
 import {Card} from 'antd';
 import {useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 import useRole from '../../../../hooks/useRole';
 import CreateUpdateRoleModal from '../CreateUpdate';
 import Item from '../Item/item';
@@ -16,9 +17,22 @@ const ListRole = () => {
         setIsShow(true);
     };
 
+    const navigate = useNavigate();
+
     return (
         <>
             {' '}
+            <div className="py-5 text-lg">
+                <span
+                    onClick={() => {
+                        navigate('/');
+                    }}
+                    className="font-semibold text-gray-400 cursor-pointer hover:text-blue-500 "
+                >
+                    Trang chủ /{' '}
+                </span>
+                <span className="font-semibold">Phân quyền</span>
+            </div>
             <div className="grid grid-cols-3 gap-3">
                 <Card
                     bordered={false}

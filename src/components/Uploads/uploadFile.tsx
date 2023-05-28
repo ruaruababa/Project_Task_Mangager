@@ -88,7 +88,7 @@ const UploadReportFile = (props: IProps) => {
                             className="relative z-30 w-full opacity-0"
                             type="file"
                             onChange={handleUpload}
-                            accept="image/*"
+                            accept="*"
                             required={isRequire}
                             onInvalid={(e) => {
                                 e.currentTarget.setCustomValidity(
