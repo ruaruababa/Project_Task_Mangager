@@ -64,7 +64,7 @@ const FilterGantt = (props: Props) => {
                         ></Input>
                     </Form.Item>
                 </div>
-                <Form.Item name={'user_do'} className="!h-[40px]">
+                {/* <Form.Item name={'user_do'} className="!h-[40px]">
                     <Select
                         placeholder="Chọn người thực hiện"
                         fieldNames={{label: 'name', value: 'id'}}
@@ -80,7 +80,7 @@ const FilterGantt = (props: Props) => {
                         }
                         options={users}
                     />
-                </Form.Item>
+                </Form.Item> */}
                 <Form.Item name={'status_id'}>
                     <Select
                         placeholder="Chọn trạng thái"
