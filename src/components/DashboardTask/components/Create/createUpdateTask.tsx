@@ -108,12 +108,13 @@ const CreateUpdateTask = () => {
     });
 
     const handleFinish = (values: any) => {
+        console.log('values', values);
         taskId
             ? updateTaskMutate({
                   ...values,
                   starts_at: dayjs(startDate).format('YYYY/MM/DD'),
                   ends_at: dayjs(endDate).format('YYYY/MM/DD'),
-                  status_id: values?.value,
+                  status_id: values?.status_id?.value,
               })
             : createTaskInProjectMutate({
                   ...values,
@@ -125,7 +126,6 @@ const CreateUpdateTask = () => {
     return (
         <div className="p-10 bg-white rounded-xl">
             <div className="mb-10">
-                <div className="mb-2 text-lg font-semibold">Tạo task mới</div>
                 <div className="">
                     <span
                         onClick={() => {
