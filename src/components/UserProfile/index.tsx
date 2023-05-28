@@ -1,7 +1,9 @@
 import {Button} from 'antd';
+import {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import useProfile from '../../hooks/useProfile';
 import {convertDate} from '../../utils/format';
+import ModalChangePassword from './modalChangePassword';
 
 const UserProfile = () => {
     const {userProfile} = useProfile();
@@ -9,6 +11,8 @@ const UserProfile = () => {
     const getUpdatePage = () => {
         navigate('/profile/update');
     };
+
+    const [visible, setVisible] = useState(false);
 
     return (
         <>
@@ -35,7 +39,7 @@ const UserProfile = () => {
                             </Button>
                             <Button
                                 type="primary"
-                                onClick={getUpdatePage}
+                                onClick={() => setVisible(true)}
                                 className="bg-blue-600"
                             >
                                 Đổi mật khẩu
@@ -94,6 +98,12 @@ const UserProfile = () => {
                     </div>
                 </div>
             </div>
+            {
+                <ModalChangePassword
+                    visible={visible}
+                    onCancel={() => setVisible(false)}
+                />
+            }
         </>
     );
 };
