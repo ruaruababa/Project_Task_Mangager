@@ -33,6 +33,8 @@ const useProject = () => {
         return projectResponse?.data?.data || [];
     }, [projectResponse]);
 
+    console.log('projects', projects);
+
     const options = useMemo(() => {
         return projects.map((project: any) => {
             return {

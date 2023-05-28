@@ -1,16 +1,17 @@
 import {Select} from 'antd';
 
 interface Props {
-    name: string;
+    name?: string;
     holder?: string;
     options: any;
 }
 
 const SelectProject = (props: Props) => {
-    const {holder, options} = props;
+    const {holder, options, name} = props;
 
     return (
         <Select
+            fieldNames={{label: 'label', value: 'value'}}
             className="w-full"
             size={'large'}
             showSearch
