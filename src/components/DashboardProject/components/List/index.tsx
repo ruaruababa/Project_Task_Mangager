@@ -1,15 +1,33 @@
-import {Button} from 'antd';
+import {useQuery} from '@tanstack/react-query';
+import {Button, Form} from 'antd';
+import {useEffect, useMemo, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import useStatus from '../../../../hooks/useStatus';
-import DatePickerCp from '../../../DatePicker';
+import {filterProject} from '../../../../services/project';
 import Pagination from '../../../Pagination';
-import SelectProject from '../../../SelectProject';
 import useProject from '../../hooks/useProject';
+import FilterProject from '../Filter/filter';
 import Item from '../Item/item';
 const ProjectManager = () => {
     const {projects, total, page, setPage, options} = useProject();
+    const [data, setData] = useState<any>(projects);
+    useEffect(() => {
+        if (projects) setData(projects);
+    }, [projects]);
     const {statusOptions} = useStatus();
+    const [form] = Form.useForm();
     const router = useNavigate();
+    const [values, setValues] = useState<any>();
+
+    const {data: projectFilterResponse} = useQuery({
+        queryKey: ['filterProject', values],
+        queryFn: () => filterProject(values),
+        enabled: !!values,
+    });
+
+    useMemo(() => {
+        setData(projectFilterResponse?.data?.data || []);
+    }, [projectFilterResponse]);
 
     return (
         <>
@@ -38,28 +56,13 @@ const ProjectManager = () => {
                 </div>
             </div>
             <div className="flex flex-col ">
-                <div className="grid grid-cols-6 gap-3 mb-10">
-                    <div className="col-span-2">
-                        <SelectProject
-                            options={options}
-                            name={'project'}
-                            holder="Chọn tên dự án"
-                        />
-                    </div>
-                    <DatePickerCp name={'startDate'} holder="Ngày bắt đầu" />
-                    <DatePickerCp name={'endDate'} holder="Ngày kết thúc" />
-                    <SelectProject
-                        options={statusOptions}
-                        name={'status'}
-                        holder="Chọn trạng thái"
-                    />
-
-                    <Button type="primary" size={'large'}>
-                        Tìm kiếm
-                    </Button>
-                </div>
+                <FilterProject
+                    projectOtpions={options}
+                    statusOptions={statusOptions}
+                    setValues={setValues}
+                />
                 <div className="flex flex-col gap-4">
-                    {projects.map((project: any) => {
+                    {data.map((project: any) => {
                         return <Item data={project} />;
                     })}
                 </div>

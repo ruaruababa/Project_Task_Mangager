@@ -3,9 +3,6 @@ import axios from 'axios';
 import {getAccessToken} from './auth';
 
 export const uploadChunk = (file: any, url: string, fieldName: string) => {
-    console.log('file', file);
-    console.log('fieldName', fieldName);
-    console.log('length', typeof file);
     return new Promise((resolve) => {
         axios
             .post(

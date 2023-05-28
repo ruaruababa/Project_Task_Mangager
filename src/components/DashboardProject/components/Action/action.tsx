@@ -1,5 +1,8 @@
 import {DeleteOutlined, EditOutlined, EyeOutlined} from '@ant-design/icons';
+import {useMutation, useQueryClient} from '@tanstack/react-query';
+import {notification} from 'antd';
 import {useNavigate} from 'react-router-dom';
+import {removeProject} from '../../../../services/project';
 const Action = (props: any) => {
     const {item} = props;
     const navigate = useNavigate();
@@ -10,6 +13,29 @@ const Action = (props: any) => {
 
     const handleEditProject = () => {
         navigate(`/project/edit/${item.id}`);
+    };
+    const queryClient = useQueryClient();
+
+    const {mutate: removeProjectMutate} = useMutation({
+        mutationKey: ['removeProject'],
+        mutationFn: () => removeProject(item?.id),
+        onSuccess: () => {
+            notification.success({
+                message: 'Success ',
+                description: 'Xóa Project thành công',
+            });
+            queryClient.invalidateQueries(['getListProject']);
+        },
+        onError: (error: any) => {
+            notification.error({
+                message: 'Error',
+                description: error?.response?.data?.message,
+            });
+        },
+    });
+
+    const handleRemoveProject = () => {
+        removeProjectMutate();
     };
 
     return (
@@ -28,7 +54,7 @@ const Action = (props: any) => {
             {/* <div className="cursor-pointer">
                 <CopyOutlined />
             </div> */}
-            <div className="cursor-pointer">
+            <div className="cursor-pointer" onClick={handleRemoveProject}>
                 <DeleteOutlined />
             </div>
         </div>

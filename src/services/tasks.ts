@@ -42,3 +42,4 @@ export const uploadAttachFile = (taskId: any) => {
 export const removeAttachFile = (taskId: any, fileId: any) => {
     return baseAPIRequest.delete(`/api/tasks/${taskId}/detach-file/${fileId}`);
 };
+

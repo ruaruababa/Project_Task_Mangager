@@ -1,56 +1,21 @@
-import {useMemo} from 'react';
+import {useMemo, useState} from 'react';
 // @ts-ignore
 import {DragDropContext} from 'react-beautiful-dnd';
 
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
-import {Button, Input, notification} from 'antd';
+import {Button, notification} from 'antd';
 import {useNavigate, useParams} from 'react-router';
-import {getListDragDrop, updateTask} from '../../../../services/project';
-import SelectProject from '../../../SelectProject';
+import {
+    filterTask,
+    getListDragDrop,
+    updateTask,
+} from '../../../../services/project';
+import FilterTask from '../Filter/taskFilter';
 import Column from './col';
 
 function TaskInProject() {
     const navigate = useNavigate();
     const {id} = useParams();
-
-    // let initialState = [
-    //     {
-    //         groupName: 'NotStarted',
-    //         tasks: [
-    //             {id: '1', title: 'Test-1'},
-    //             {id: '2', title: 'Test-2'},
-    //         ],
-    //     },
-    //     {
-    //         groupName: 'Pending',
-    //         tasks: [
-    //             {id: '3', title: 'Test-3'},
-    //             {id: '4', title: 'Test-4'},
-    //         ],
-    //     },
-    //     {
-    //         groupName: 'InProgress',
-    //         tasks: [
-    //             {id: '5', title: 'Test-3'},
-    //             {id: '6', title: 'Test-4'},
-    //         ],
-    //     },
-    //     {
-    //         groupName: 'BehindSchedule',
-    //         tasks: [
-    //             {id: '7', title: 'Test-3'},
-    //             {id: '8', title: 'Test-4'},
-    //         ],
-    //     },
-    //     {
-    //         groupName: 'Completed',
-    //         tasks: [
-    //             {id: '9', title: 'Test-3'},
-    //             {id: '10', title: 'Test-4'},
-    //         ],
-    //     },
-    // ];
-    // const [taskList, setTasks] = useState(initialState);
 
     const {isLoading: listTaskLoading, data: listTaskDragDropResponse} =
         useQuery({
@@ -63,25 +28,18 @@ function TaskInProject() {
         return listTaskDragDropResponse?.data?.data;
     }, [listTaskDragDropResponse?.data?.data]);
 
-    // const [taskList_, setTaskList_] = useState<any>(initListTask);
+    const [taskListState, setTaskListState] = useState<any>(taskList);
 
-    // useEffect(() => {
-    //     if (taskList) {
-    //         taskList.forEach((item: any) => {
-    //             const index = taskList_.findIndex(
-    //                 (i: any) => i.status_id === item.status_id,
-    //             );
-    //             if (index !== -1) {
-    //                 taskList_[index] = {
-    //                     ...taskList_[index],
-    //                     ...item,
-    //                 };
-    //             }
-    //         });
-    //         console.log('taskList_', taskList_);
-    //         setTaskList_(taskList_);
-    //     }
-    // }, [taskList, taskList_]);
+    const [values, setValues] = useState<any>();
+
+    const {data: taskFilterResponse} = useQuery({
+        queryKey: ['filterTask', id, values],
+        queryFn: () => filterTask({id, ...values}),
+    });
+
+    useMemo(() => {
+        setTaskListState(taskFilterResponse?.data?.data || []);
+    }, [taskFilterResponse]);
 
     const queryClient = useQueryClient();
     const {mutate: updateTaskInProject} = useMutation({
@@ -103,8 +61,6 @@ function TaskInProject() {
             });
         },
     });
-
-    console.log('listTaskDragDropResponse', taskList);
 
     if (listTaskLoading) {
         return <div>Loading...</div>;
@@ -221,7 +177,7 @@ function TaskInProject() {
                     </div>
                 </div>
                 <div className="">
-                    <div className="grid grid-cols-9 gap-3 mb-10">
+                    {/* <div className="grid grid-cols-9 gap-3 mb-10">
                         <div className="col-span-2">
                             <Input
                                 placeholder="Nhập tên task"
@@ -248,35 +204,12 @@ function TaskInProject() {
                                 Tìm kiếm
                             </Button>
                         </div>
-                    </div>
+                    </div> */}
+                    <FilterTask setValues={setValues} />
                 </div>
                 <DragDropContext onDragEnd={onDragEnd}>
                     <div className="grid grid-cols-5 wrapper">
-                        {/* <Column
-                            className="column"
-                            droppableId="1"
-                            list={taskList[0]?.tasks}
-                            type="TASK"
-                        />
-                        <Column
-                            className="column"
-                            droppableId="2"
-                            list={taskList[1]?.tasks}
-                            type="TASK"
-                        />
-                        <Column
-                            className="column"
-                            droppableId="3"
-                            list={taskList[2]?.tasks}
-                            type="TASK"
-                        />
-                        <Column
-                            className="column"
-                            droppableId="4"
-                            list={taskList[3]?.tasks}
-                            type="TASK"
-                        /> */}
-                        {taskList?.map((item: any, index: number) => {
+                        {taskListState?.map((item: any, index: number) => {
                             return (
                                 <Column
                                     className="column"

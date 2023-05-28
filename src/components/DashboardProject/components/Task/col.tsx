@@ -83,7 +83,7 @@ function Column(props: any) {
                             ></div>
                         </h2>
 
-                        <div className="flex flex-col gap-2 p-3 overflow-y-auto">
+                        <div className="flex flex-col gap-2 p-3 overflow-y-scroll min-h-[550px]">
                             {' '}
                             {(list || [])?.map((val: any, index: any) => {
                                 return (

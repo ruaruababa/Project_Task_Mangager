@@ -38,3 +38,41 @@ export const createProject = (values: any) => {
 export const updateProject = (values: any, id: any) => {
     return baseAPIRequest.patch(`api/projects/${id}`, values);
 };
+
+export const removeProject = (id: any) => {
+    return baseAPIRequest.delete(`api/projects/${id}`);
+};
+
+export const filterProject = ({name, status_id, start_at, end_at}: any) => {
+    const nameParams = `${name ? `name=${name}` : ''}`;
+    const statusParams = `${status_id ? `&status_id=${status_id}` : ''}`;
+    const startAtParams = `${start_at ? `&start_at=${start_at}` : ''}`;
+    const endAtParams = `${end_at ? `&end_at=${end_at}` : ''}`;
+    const params = `${nameParams && nameParams}${statusParams && statusParams}${
+        startAtParams && startAtParams
+    }${endAtParams && endAtParams}`;
+
+    console.log('params', params);
+
+    return baseAPIRequest.get(`api/projects?${params}`);
+};
+
+export const filterTask = ({id, task_name, status_id, user_do}: any) => {
+    const nameParams = `${task_name ? `name=${task_name}` : ''}`;
+    const statusParams = `${
+        status_id ? `${nameParams ? '&' : ''}status_id=${status_id}` : ''
+    }`;
+    const startAtParams = `${
+        user_do
+            ? `${nameParams || statusParams ? '&' : ''}assignee=${user_do}`
+            : ''
+    }`;
+    const params = `${nameParams && nameParams}${statusParams && statusParams}${
+        startAtParams && startAtParams
+    }`;
+
+    console.log('params', params);
+    console.log('sId', id);
+
+    return baseAPIRequest.get(`api/projects/${id}/tasks/kanban?${params}`);
+};

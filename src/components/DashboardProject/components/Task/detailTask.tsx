@@ -156,6 +156,7 @@ const DetailTask = () => {
                     url={uploadAttachFile(taskId)}
                     fieldName={'attachments'}
                     title="Tải lên tệp đính kèm"
+                    queryKey={['getDetailTaskInProject', id, taskId]}
                 />
             }
             {
@@ -166,6 +167,7 @@ const DetailTask = () => {
                     isShowModal={isShowModal}
                     url={uploadReportFile(taskId)}
                     fieldName={'report'}
+                    queryKey={['getDetailTaskInProject', id, taskId]}
                 />
             }
             <div className="flex justify-between py-5">
