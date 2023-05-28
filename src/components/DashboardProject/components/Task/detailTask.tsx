@@ -10,7 +10,6 @@ import {useNavigate, useParams} from 'react-router-dom';
 import {
     getDetailTaskInProject,
     removeAttachFile,
-    removeReportFile,
     uploadAttachFile,
     uploadReportFile,
 } from '../../../../services/tasks';
@@ -57,8 +56,8 @@ const DetailTask = () => {
     const queryClient = useQueryClient();
 
     const {mutate: removeReportFileMutate} = useMutation({
-        mutationFn: () => removeReportFile(taskId),
-        mutationKey: ['removeReportFile', taskId],
+        mutationFn: (fileId) => removeAttachFile(taskId, fileId),
+        mutationKey: ['removeAttachFile', taskId],
         onSuccess: () => {
             notification.success({
                 message: 'Success ',
@@ -120,8 +119,8 @@ const DetailTask = () => {
         setIsShow(false);
     };
 
-    const handleRemoveReportFile = () => {
-        removeReportFileMutate();
+    const handleRemoveReportFile = (filedId: any) => {
+        removeReportFileMutate(filedId);
         setIsShow(false);
     };
     const [attachId, setAttachId] = useState('');
@@ -581,7 +580,7 @@ const DetailTask = () => {
             {
                 <ModalConfirm
                     isShow={isShow}
-                    handleRemoveReportFile={handleRemoveReportFile}
+                    handleRemoveReportFile={()=>handleRemoveReportFile(attachId)}
                     onCancel={handleCancel}
                 />
             }
