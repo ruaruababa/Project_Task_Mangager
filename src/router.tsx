@@ -1,6 +1,7 @@
 import {createBrowserRouter} from 'react-router-dom';
 import DefaultLayout from './Layout/DefaultLayout';
 import GanttChart from './components/Chart/GanttChart';
+import TaskChart from './components/Chart/GanttChart/task';
 import ListRole from './components/DashBoardRole/components/List';
 import CreateUpdateProject from './components/DashboardProject/components/CreateProject/createUpdateProject';
 import DetailProject from './components/DashboardProject/components/Detail';
@@ -95,8 +96,12 @@ const router = createBrowserRouter([
                 element: <UpdateProfile />,
             },
             {
-                path: '/mock',
+                path: '/project/gantt-chart',
                 element: <GanttChart />,
+            },
+            {
+                path: '/task/gantt-chart',
+                element: <TaskChart />,
             },
         ],
     },
