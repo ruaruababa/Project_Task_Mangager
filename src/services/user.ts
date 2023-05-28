@@ -52,3 +52,16 @@ export const uploadAvatarPropfile = () => {
 export const updateAvatarUser = (id: any) => {
     return baseURL + `/api/users/${id}/avatar`;
 };
+
+export const filterUser = ({userName, email}: any) => {
+    const nameParam = `${userName ? `name=${userName}` : ''}`;
+    const emailParam = `${
+        email ? `${nameParam ? '&' : ''}email=${email}` : ''
+    }`;
+
+    const params = `${nameParam && nameParam}${emailParam && emailParam}`;
+
+    console.log('params', params);
+
+    return baseAPIRequest.get(`api/users?${params}`);
+};
