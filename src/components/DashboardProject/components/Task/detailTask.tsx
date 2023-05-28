@@ -376,7 +376,7 @@ const DetailTask = () => {
                         </div>
                     </div>
                     <div className="col-span-4 text-lg bg-white rounded-xl">
-                        {detailTaskInProject?.files?.length > 0 && (
+                        {detailTaskInProject?.files && (
                             <div className="flex justify-center mt-5">
                                 <Tag
                                     icon={<CheckCircleOutlined />}
@@ -437,7 +437,7 @@ const DetailTask = () => {
                                 ),
                             )}
                         </div>
-                        {detailTaskInProject?.reports.length > 0 && (
+                        {detailTaskInProject?.reports && (
                             <div className="flex justify-center mt-5">
                                 <Tag color="warning" className="text-2xl">
                                     Report files

@@ -32,21 +32,18 @@ const DetailProject = () => {
 
                     <div className="">
                         {' '}
-                        <div className="mb-2 text-lg font-semibold">
-                            Chi tiết dự án
-                        </div>
-                        <div className="">
+                        <div className="text-lg font-semibold">
                             <span
                                 onClick={() => {
                                     navigate('/');
                                 }}
-                                className="font-semibold text-gray-400 cursor-pointer"
+                                className="font-semibold text-gray-400 cursor-pointer hover:text-blue-500"
                             >
                                 Trang chủ
                             </span>
                             {' / '}
                             <span
-                                className="font-semibold text-gray-400 cursor-pointer"
+                                className="font-semibold text-gray-400 cursor-pointer hover:text-blue-500"
                                 onClick={() => {
                                     navigate('/project');
                                 }}

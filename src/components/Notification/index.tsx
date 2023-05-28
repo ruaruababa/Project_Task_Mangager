@@ -4,7 +4,7 @@ import {
     useMutation,
     useQueryClient,
 } from '@tanstack/react-query';
-import {useMemo, useState} from 'react';
+import {useMemo, useRef, useState} from 'react';
 import {getListNoti, markReadAllNoti} from '../../services/user';
 import HorizontalThreeDotsIcon from '../icons/hozizontaldot';
 import Item from './item';
@@ -61,16 +61,25 @@ const Notification = () => {
         },
     });
 
-    console.log('data>>>>', data);
-
     const listPage = useMemo(() => {
         return (data?.pages || [])?.reduce((result, response) => {
-            console.log('response', response?.data);
-            console.log('result', result);
             // @ts-ignore
             return [...result, ...(response?.data?.data || [])];
         }, []);
     }, [data]);
+
+    const listInnerRef = useRef<any>();
+
+    const onScroll = () => {
+        if (listInnerRef.current) {
+            const {scrollTop, scrollHeight, clientHeight} =
+                listInnerRef.current;
+            if (scrollTop + clientHeight === scrollHeight) {
+                // TO SOMETHING HERE
+                hasNextPage && fetchNextPage();
+            }
+        }
+    };
 
     return (
         <div className="flex flex-col justify-center min-w-[350px] px-4  ">
@@ -85,19 +94,23 @@ const Notification = () => {
                 </div>
             </div>
 
-            <div className="max-h-[400px] overflow-y-auto flex flex-col gap-3 py-3">
+            <div
+                className="max-h-[400px] overflow-y-auto flex flex-col gap-3 py-3"
+                ref={listInnerRef}
+                onScroll={onScroll}
+            >
                 {listPage?.map((item: any, index: any) => (
                     <Item data={item} />
                 ))}
             </div>
-            {hasNextPage && (
+            {/* {hasNextPage && (
                 <div
                     className="font-bold text-center cursor-pointer"
                     onClick={() => fetchNextPage()}
                 >
                     Xem thêm
                 </div>
-            )}
+            )} */}
         </div>
     );
 };

@@ -1,6 +1,7 @@
 import {useQuery} from '@tanstack/react-query';
 import {Button, Input} from 'antd';
 import {useMemo, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 import {getListUserInSystem} from '../../../../services/user';
 import Pagination from '../../../Pagination';
 import CreateUpdateUserModal from '../CreateUpdate/createUpdateUser';
@@ -24,12 +25,22 @@ const ListUser = () => {
         return listUserResponse?.data?.meta?.total || 0;
     }, [listUserResponse]);
 
+    const navigate = useNavigate();
+
     return (
         <>
-            <div className="mb-10 text-lg">
-                <div className="mb-2 text-lg font-semibold">
+            <div className="mb-5 text-lg">
+                <span
+                    onClick={() => {
+                        navigate('/');
+                    }}
+                    className="font-semibold text-gray-400 cursor-pointer hover:text-blue-500"
+                >
+                    Trang chủ /{' '}
+                </span>
+                <span className="mb-2 text-lg font-semibold">
                     Danh sách người dùng
-                </div>
+                </span>
             </div>
             <div className="flex flex-col p-10 bg-white rounded-lg">
                 <div className="flex justify-end gap-3 mb-10">
