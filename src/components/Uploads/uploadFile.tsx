@@ -1,4 +1,5 @@
 import {FileAddOutlined} from '@ant-design/icons';
+import {useMutation, useQueryClient} from '@tanstack/react-query';
 import {Modal, Tag} from 'antd';
 import {useCallback, useState} from 'react';
 import {uploadChunk} from '../../utils/upload';
@@ -13,11 +14,14 @@ interface IProps {
     url: any;
     isShowModal: boolean;
     oncancel: () => void;
+    queryKey?: any;
 }
 
 const UploadReportFile = (props: IProps) => {
-    const {isRequire, fieldName, url, isShowModal, oncancel, title} = props;
+    const {isRequire, fieldName, url, isShowModal, oncancel, title, queryKey} =
+        props;
     const [reportFile, setReportFile] = useState<any>([]);
+    const queryClient = useQueryClient();
     const handleUpload = useCallback((event: any) => {
         event.stopPropagation();
         event.preventDefault();
@@ -33,8 +37,16 @@ const UploadReportFile = (props: IProps) => {
         if (!file) return;
     }, []);
 
+    const {mutateAsync: uploadMutate} = useMutation({
+        mutationFn: (data: any) => uploadChunk(data, url, fieldName),
+        onSuccess: () => {
+            queryClient.invalidateQueries(queryKey);
+        },
+    });
+
     const handleSubmit = () => {
-        uploadChunk(reportFile, url, fieldName);
+        // uploadChunk(reportFile, url, fieldName);
+        uploadMutate(reportFile);
         oncancel();
     };
     return (
