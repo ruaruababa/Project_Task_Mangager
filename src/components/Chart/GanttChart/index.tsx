@@ -1,5 +1,6 @@
 import {Gantt, Task} from 'gantt-task-react';
 import 'gantt-task-react/dist/index.css';
+import FilterGantt from '../../DashboardProject/components/Filter/ganttFilter';
 
 const currentDate = new Date();
 
@@ -40,7 +41,6 @@ const tasks: Task[] = [
         name: 'Research',
         id: 'Task 1',
         progress: 25,
-        dependencies: ['Task 0'],
         type: 'task',
         project: 'ProjectSample',
     },
@@ -55,8 +55,7 @@ const tasks: Task[] = [
         ),
         name: 'Discussion with team',
         id: 'Task 2',
-        progress: 10,
-        dependencies: ['Task 1'],
+        progress: 67,
         type: 'task',
         project: 'ProjectSample',
     },
@@ -71,8 +70,7 @@ const tasks: Task[] = [
         ),
         name: 'Developing',
         id: 'Task 3',
-        progress: 2,
-        dependencies: ['Task 2'],
+        progress: 88,
         type: 'task',
         project: 'ProjectSample',
     },
@@ -83,7 +81,6 @@ const tasks: Task[] = [
         id: 'Task 4',
         type: 'task',
         progress: 70,
-        dependencies: ['Task 2'],
         project: 'ProjectSample',
     },
     {
@@ -93,7 +90,6 @@ const tasks: Task[] = [
         id: 'Task 6',
         progress: currentDate.getMonth(),
         type: 'task',
-        dependencies: ['Task 4'],
         project: 'ProjectSample',
     },
     {
@@ -101,7 +97,7 @@ const tasks: Task[] = [
         end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 19),
         name: 'Party Time',
         id: 'Task 9',
-        progress: 0,
+        progress: 1,
         isDisabled: true,
         type: 'task',
         project: 'ProjectSample',
@@ -110,6 +106,7 @@ const tasks: Task[] = [
 const GanttChart = () => {
     return (
         <div>
+            <FilterGantt/>
             <Gantt tasks={tasks} />
         </div>
     );
