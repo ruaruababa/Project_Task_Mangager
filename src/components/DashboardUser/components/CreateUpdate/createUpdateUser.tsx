@@ -67,11 +67,14 @@ const CreateUpdateUserModal = (props: Props) => {
     const [form] = Form.useForm();
     const {roleOptions} = useRole();
     const queryCLient = useQueryClient();
+    console.log('initalValues', initalValues);
 
     const detailConvert = useMemo(() => {
         return {
             ...initalValues,
-            date_of_birth: dayjs(initalValues?.date_of_birth),
+            date_of_birth:
+                initalValues?.date_of_birth &&
+                dayjs(initalValues?.date_of_birth),
             roles_id: initalValues?.roles?.map((item: any) =>
                 item?.id?.toString(),
             ),

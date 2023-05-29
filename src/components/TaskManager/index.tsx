@@ -1,17 +1,14 @@
 import {useQuery} from '@tanstack/react-query';
-import {Button, Input} from 'antd';
 import {useMemo, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {getMyTasks} from '../../services/tasks';
+import {filterMyTask, getMyTasks} from '../../services/tasks';
 import {convertDate} from '../../utils/format';
-import useProject from '../DashboardProject/hooks/useProject';
-import DatePickerCp from '../DatePicker';
+import FilterMyTask from '../DashboardProject/components/Filter/filterMyTask';
 import Pagination from '../Pagination';
-import SelectProject from '../SelectProject';
 
 const TaskManager = () => {
     const [page, setPage] = useState(1);
-    const {options} = useProject();
+    const [filter, setFilter] = useState<any>();
 
     const {data: tasksResponse} = useQuery({
         queryKey: ['getMyTasks', page],
@@ -19,9 +16,25 @@ const TaskManager = () => {
         keepPreviousData: true,
     });
 
+    const {data: filterMyTaskResponse} = useQuery({
+        queryKey: ['filterMyTask', page, filter],
+        queryFn: () => filterMyTask({page, ...filter}),
+        enabled: !!filter,
+        keepPreviousData: true,
+    });
+
     const tasks = useMemo(() => {
         return tasksResponse?.data?.data || [];
     }, [tasksResponse]);
+    const [data, setData] = useState<any>(tasks);
+
+    useMemo(() => {
+        if (filterMyTaskResponse?.data?.data) {
+            setData(filterMyTaskResponse?.data?.data);
+        } else {
+            setData(tasksResponse?.data?.data);
+        }
+    }, [filterMyTaskResponse, tasksResponse]);
 
     const total = useMemo(() => {
         return tasksResponse?.data?.meta?.total || 0;
@@ -51,7 +64,7 @@ const TaskManager = () => {
                 </div>
             </div>
             <div className="flex flex-col p-10 bg-white rounded-lg">
-                <div className="grid grid-cols-6 gap-3 mb-10">
+                {/* <div className="grid grid-cols-6 gap-3 mb-10">
                     <SelectProject
                         options={options}
                         name={'project'}
@@ -63,7 +76,8 @@ const TaskManager = () => {
                     <Button type="primary" size={'large'}>
                         Tìm kiếm
                     </Button>
-                </div>
+                </div> */}
+                <FilterMyTask setValues={setFilter} />
                 <div className="flex flex-col">
                     <div className="grid grid-cols-12 pb-4 text-xs font-semibold text-gray-400 border-bottom">
                         <div className="col-span-1">ID</div>

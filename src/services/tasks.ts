@@ -43,3 +43,24 @@ export const removeAttachFile = (taskId: any, fileId: any) => {
     return baseAPIRequest.delete(`/api/tasks/${taskId}/detach-file/${fileId}`);
 };
 
+export const filterMyTask = ({name, taskName, start_at, end_at, page}: any) => {
+    const nameParams = `${name ? `name=${name}` : ''}`;
+    const taskNameParams = `${
+        taskName ? `${nameParams ? '&' : ''}task_name=${taskName}` : ''
+    }`;
+    const startAtParams = `${
+        start_at
+            ? `${nameParams || taskNameParams ? '&' : ''}start_at=${start_at}`
+            : ''
+    }`;
+    const endAtParams = `${
+        end_at
+            ? `${nameParams || taskNameParams ? '&' : ''}end_at=${end_at}`
+            : ''
+    }`;
+    const params = `${nameParams && nameParams}${
+        taskNameParams && taskNameParams
+    }${startAtParams && startAtParams}${endAtParams && endAtParams}`;
+
+    return baseAPIRequest.get(`api/tasks?page=${page}&per_page=10&${params}`);
+};
