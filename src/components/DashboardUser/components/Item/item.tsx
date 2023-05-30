@@ -21,7 +21,7 @@ const UserItem = ({user}: any) => {
             <div className="">{user?.phone}</div>
             <div className="">{user?.job_title}</div>
             <div className="">
-                {user?.status === 1 ? 'Kích hoạt' : 'Chưa kích hoạt'}
+                {user?.status === 1 ? 'Đã Kích hoạt' : 'Chưa kích hoạt'}
             </div>
             <div className="">
                 <Action
