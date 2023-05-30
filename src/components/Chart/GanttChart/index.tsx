@@ -1,8 +1,11 @@
 import {Gantt, Task} from 'gantt-task-react';
 import 'gantt-task-react/dist/index.css';
 import FilterGantt from '../../DashboardProject/components/Filter/ganttFilter';
+import useGant from './useGant';
 
 const currentDate = new Date();
+
+console.log(currentDate);
 
 const tasks: Task[] = [
     {
@@ -104,10 +107,12 @@ const tasks: Task[] = [
     },
 ];
 const GanttChart = () => {
+    const {data, setValues} = useGant();
+
     return (
         <div>
-            <FilterGantt/>
-            <Gantt tasks={tasks} />
+            <FilterGantt setValues={setValues} />
+            <Gantt tasks={data || tasks} />
         </div>
     );
 };
