@@ -28,6 +28,13 @@ const DetailProject = () => {
                         >
                             Chỉnh sửa dự án
                         </Button>
+                        <Button
+                            className="text-white bg-blue-500"
+                            onClick={() => navigate(`/project/edit/${id}`)}
+                            size="large"
+                        >
+                            Gantt chart
+                        </Button>
                     </div>
 
                     <div className="">

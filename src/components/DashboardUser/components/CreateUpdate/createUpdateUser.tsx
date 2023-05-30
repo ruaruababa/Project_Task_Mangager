@@ -67,7 +67,6 @@ const CreateUpdateUserModal = (props: Props) => {
     const [form] = Form.useForm();
     const {roleOptions} = useRole();
     const queryCLient = useQueryClient();
-    console.log('initalValues', initalValues);
 
     const detailConvert = useMemo(() => {
         return {
@@ -81,8 +80,8 @@ const CreateUpdateUserModal = (props: Props) => {
             status: {
                 label:
                     initalValues?.status === 1
-                        ? 'Hoạt động'
-                        : 'Không hoạt động',
+                        ? 'Đã kích hoạt'
+                        : 'Chưa kích hoạt',
                 value: initalValues?.status,
             },
         };
@@ -120,7 +119,7 @@ const CreateUpdateUserModal = (props: Props) => {
                 message: 'Success ',
                 description: 'Update successfully',
             });
-            queryCLient.refetchQueries(['getDetailUser', initalValues?.id]);
+            queryCLient.invalidateQueries(['getListUserInSystem']);
         },
         onError: (error: any) => {
             notification.error({
@@ -136,7 +135,8 @@ const CreateUpdateUserModal = (props: Props) => {
             updateUserMutate({
                 ...values,
                 date_of_birth: dayjs(values.date_of_birth).format('YYYY-MM-DD'),
-                status: values.status?.value === '1' ? true : false,
+                status: values.status === '1' ? true : false,
+                role_ids: values.roles_id,
             });
         } else {
             createUserMutate({
@@ -149,7 +149,7 @@ const CreateUpdateUserModal = (props: Props) => {
     };
 
     const statusOptions = [
-        {label: 'Kích hoạt', value: '1'},
+        {label: 'Đã kích hoạt', value: '1'},
         {label: 'Chưa kích hoạt', value: '0'},
     ];
 
