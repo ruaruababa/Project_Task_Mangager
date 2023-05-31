@@ -1,10 +1,19 @@
 import {Button, DatePicker, Form, Input, Select} from 'antd';
+import {useState} from 'react';
+import styled from 'styled-components';
 import useStatus from '../../../../hooks/useStatus';
 import useUser from '../../../../hooks/useUser';
 interface Props {
     projectOtpions?: any;
     setValues?: any;
 }
+
+export const Container = styled.div<{toggleClearFiled: boolean}>`
+    .ant-select-clear {
+        opacity: ${({toggleClearFiled}) => (toggleClearFiled ? 1 : 0)};
+    }
+`;
+
 const FilterGantt = (props: Props) => {
     const [form] = Form.useForm();
     const {projectOtpions, setValues} = props;
@@ -19,11 +28,7 @@ const FilterGantt = (props: Props) => {
             .localeCompare((optionB?.label ?? '').toLowerCase());
     };
 
-    // const {data: projectFilterResponse} = useQuery({
-    //     queryKey: ['filterProject', values],
-    //     queryFn: () => filterProject(values),
-    //     enabled: !!values,
-    // });
+    const [toggleClearField, setToggleClearField] = useState<any>();
 
     return (
         <Form
@@ -83,21 +88,25 @@ const FilterGantt = (props: Props) => {
                     />
                 </Form.Item> */}
                 <Form.Item name={'status_id'}>
-                    <Select
-                        placeholder="Chọn trạng thái"
-                        fieldNames={{label: 'label', value: 'value'}}
-                        className="w-full"
-                        size={'large'}
-                        showSearch
-                        optionFilterProp="children"
-                        filterOption={(input: any, option: any) =>
-                            handleFilterOnChange(input, option)
-                        }
-                        filterSort={(optionA, optionB) =>
-                            handleFilterSort(optionA, optionB)
-                        }
-                        options={statusOptions}
-                    />
+                    <Container toggleClearFiled={toggleClearField}>
+                        <Select
+                            allowClear
+                            placeholder="Chọn trạng thái"
+                            fieldNames={{label: 'label', value: 'value'}}
+                            className="w-full"
+                            size={'large'}
+                            showSearch
+                            optionFilterProp="children"
+                            filterOption={(input: any, option: any) =>
+                                handleFilterOnChange(input, option)
+                            }
+                            options={statusOptions}
+                            onChange={(values) => {
+                                console.log('values', values);
+                                setToggleClearField(values);
+                            }}
+                        />
+                    </Container>
                 </Form.Item>
 
                 <Form.Item
@@ -130,14 +139,25 @@ const FilterGantt = (props: Props) => {
                         showTime
                     />
                 </Form.Item>
-                <Form.Item>
-                    <Button
-                        type="primary"
-                        htmlType="submit"
-                        className="!h-[40px]"
-                    >
-                        Submit
-                    </Button>
+                <Form.Item className="col-span-2">
+                    <div className="flex gap-3">
+                        {' '}
+                        <Button
+                            type="primary"
+                            htmlType="submit"
+                            className="!h-[40px]"
+                        >
+                            Tìm kiếm
+                        </Button>
+                        <Button
+                            className="!h-[40px] bg-blue-500 text-white hover:bg-blue-600"
+                            onClick={() => {
+                                form.resetFields();
+                            }}
+                        >
+                            Xóa bộ lọc
+                        </Button>
+                    </div>
                 </Form.Item>
             </div>
         </Form>
