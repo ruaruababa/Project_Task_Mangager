@@ -154,10 +154,10 @@ const CreateUpdateUserModal = (props: Props) => {
     ];
 
     const dateFormat = 'YYYY/MM/DD';
-    const [avatar, setAvatar] = useState('avatar.jpg');
+    const [avatar, setAvatar] = useState('/avatar.jpg');
     useEffect(() => {
-        if (initalValues) {
-            setAvatar(initalValues.avatar);
+        if (initalValues?.avatar) {
+            setAvatar(initalValues?.avatar);
         }
     }, [initalValues]);
 
@@ -173,8 +173,8 @@ const CreateUpdateUserModal = (props: Props) => {
                     <UploadCustom
                         url={updateAvatarUser(initalValues?.id)}
                         fieldName={'avatar'}
-                        image={avatar || 'avatar.jpg'}
-                        defaultImage={'avatar.jpg'}
+                        image={avatar || '/avatar.jpg'}
+                        defaultImage={'/avatar.jpg'}
                         wrapper={AvatarWrapper}
                         className="rounded"
                         // onUploadSuccess={(media) => {

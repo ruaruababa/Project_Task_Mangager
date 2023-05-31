@@ -100,6 +100,7 @@ const DetailUser = () => {
                 <CreateUpdateUserModal
                     onCancel={handleShowModal}
                     visible={isShow}
+                    initalValues={detailUser}
                 />
             }
         </div>
