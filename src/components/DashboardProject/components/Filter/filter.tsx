@@ -1,4 +1,5 @@
 import {Button, DatePicker, Form, Input, Select} from 'antd';
+import useStatus from '../../../../hooks/useStatus';
 interface Props {
     projectOtpions: any;
     statusOptions: any;
@@ -6,7 +7,8 @@ interface Props {
 }
 const FilterProject = (props: Props) => {
     const [form] = Form.useForm();
-    const {projectOtpions, statusOptions, setValues} = props;
+    const {projectOtpions, setValues} = props;
+    const {statusOptions} = useStatus();
     const handleFilterOnChange = (input: any, option: any) => {
         return (option?.label ?? '').includes(input);
     };

@@ -1,16 +1,17 @@
 import {Button, DatePicker, Form, Input, Select} from 'antd';
+import useStatus from '../../../../hooks/useStatus';
 import useUser from '../../../../hooks/useUser';
 interface Props {
     projectOtpions?: any;
-    statusOptions?: any;
     setValues?: any;
 }
 const FilterGantt = (props: Props) => {
     const [form] = Form.useForm();
-    const {projectOtpions, statusOptions, setValues} = props;
+    const {projectOtpions, setValues} = props;
     const handleFilterOnChange = (input: any, option: any) => {
         return (option?.label ?? '').includes(input);
     };
+    const {statusOptions} = useStatus();
     const {users} = useUser();
     const handleFilterSort = (optionA: any, optionB: any) => {
         return (optionA?.label ?? '')
