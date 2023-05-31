@@ -8,7 +8,6 @@ const useGant = () => {
         queryKey: ['ganttChartProject', values],
         queryFn: () => ganttChartProject(values),
     });
-    const currentDate = new Date();
     const data = useMemo(() => {
         return projectFilterResponse?.data?.data.map((item: any) => ({
             ...item,
