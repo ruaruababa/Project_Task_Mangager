@@ -100,7 +100,7 @@ const router = createBrowserRouter([
                 element: <GanttChart />,
             },
             {
-                path: '/task/gantt-chart',
+                path: '/project/:id/gantt-chart',
                 element: <TaskChart />,
             },
         ],

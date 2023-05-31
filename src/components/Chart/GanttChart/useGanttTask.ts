@@ -1,21 +1,22 @@
 import {useQuery} from '@tanstack/react-query';
 import React, {useMemo} from 'react';
-import {ganttChartProject} from '../../../services/chart';
+import {useParams} from 'react-router-dom';
+import {ganttChartTaskInProject} from '../../../services/chart';
 
 const useGanttTask = () => {
+    const {id} = useParams();
     const [values, setValues] = React.useState<any>('');
-    const {data: projectFilterResponse} = useQuery({
-        queryKey: ['ganttChartProject', values],
-        queryFn: () => ganttChartProject(values),
+    const {data: taskFilterResponse} = useQuery({
+        queryKey: ['ganttChartTaskInProject', id, values],
+        queryFn: () => ganttChartTaskInProject({id, ...values}),
     });
-    const currentDate = new Date();
     const data = useMemo(() => {
-        return projectFilterResponse?.data?.data.map((item: any) => ({
+        return taskFilterResponse?.data?.data.map((item: any) => ({
             ...item,
             start: new Date(item.start),
             end: new Date(item.end),
         }));
-    }, [projectFilterResponse?.data?.data]);
+    }, [taskFilterResponse]);
     return {data, setValues};
 };
 

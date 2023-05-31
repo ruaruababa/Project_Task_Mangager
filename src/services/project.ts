@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import {baseAPIRequest} from '../utils/service';
 
 export const getListProject = (page: any) => {
@@ -57,22 +58,41 @@ export const filterProject = ({name, status_id, start_at, end_at}: any) => {
     return baseAPIRequest.get(`api/projects?${params}`);
 };
 
-export const filterTask = ({id, task_name, status_id, user_do}: any) => {
+export const filterTask = ({
+    id,
+    task_name,
+    status_id,
+    user_do,
+    start_at,
+    end_at,
+}: any) => {
     const nameParams = `${task_name ? `name=${task_name}` : ''}`;
     const statusParams = `${
         status_id ? `${nameParams ? '&' : ''}status_id=${status_id}` : ''
     }`;
-    const startAtParams = `${
+    const userDoParams = `${
         user_do
             ? `${nameParams || statusParams ? '&' : ''}assignee=${user_do}`
             : ''
     }`;
+    const startAtParams = `${
+        start_at
+            ? `${nameParams || statusParams ? '&' : ''}start_at=${dayjs(
+                  start_at,
+              ).format('YYYY-MM-DD HH:mm')}`
+            : ''
+    }`;
+    const endAtParams = `${
+        end_at
+            ? `${nameParams || statusParams ? '&' : ''}end_at=${dayjs(
+                  end_at,
+              ).format('YYYY-MM-DD HH:mm')}`
+            : ''
+    }`;
     const params = `${nameParams && nameParams}${statusParams && statusParams}${
         startAtParams && startAtParams
-    }`;
+    }${endAtParams && endAtParams}${userDoParams && userDoParams}`;
 
-    console.log('params', params);
-    console.log('sId', id);
 
     return baseAPIRequest.get(`api/projects/${id}/tasks/kanban?${params}`);
 };

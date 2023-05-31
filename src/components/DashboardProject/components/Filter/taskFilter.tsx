@@ -1,4 +1,4 @@
-import {Button, Form, Input, Select} from 'antd';
+import {Button, DatePicker, Form, Input, Select} from 'antd';
 import useStatus from '../../../../hooks/useStatus';
 import useUser from '../../../../hooks/useUser';
 interface Props {
@@ -76,7 +76,34 @@ const FilterTask = (props: Props) => {
                         options={statusOptions}
                     />
                 </Form.Item>
-
+                <Form.Item
+                    name="start_at"
+                    valuePropName="startDate"
+                    className="!h-[40px]"
+                >
+                    <DatePicker
+                        className="!h-[40px]"
+                        placeholder="Ngày bắt đầu"
+                        onChange={() => {}}
+                        format={'YYYY/MM/DD HH:mm'}
+                        style={{
+                            width: '100%',
+                        }}
+                        showTime
+                    />
+                </Form.Item>
+                <Form.Item name="end_at" valuePropName="endDate">
+                    <DatePicker
+                        className="!h-[40px]"
+                        placeholder="Ngày kết thúc"
+                        onChange={() => {}}
+                        format={'YYYY/MM/DD HH:mm'}
+                        style={{
+                            width: '100%',
+                        }}
+                        showTime
+                    />
+                </Form.Item>
                 <Form.Item>
                     <Button
                         type="primary"

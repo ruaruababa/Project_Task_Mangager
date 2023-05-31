@@ -1,14 +1,13 @@
 import {Gantt, Task} from 'gantt-task-react';
 import 'gantt-task-react/dist/index.css';
-import FilterGantt from '../../DashboardProject/components/Filter/ganttFilter';
-
+import FilterTask from '../../DashboardProject/components/Filter/taskFilter';
+import useGanttTask from './useGanttTask';
 const currentDate = new Date();
-
 const tasks: Task[] = [
     {
         start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 1),
         end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 15),
-        name: 'Task List',
+        name: 'Some Project',
         id: 'ProjectSample',
         progress: 25,
         type: 'project',
@@ -19,11 +18,11 @@ const tasks: Task[] = [
         end: new Date(
             currentDate.getFullYear(),
             currentDate.getMonth(),
-            5,
+            2,
             12,
             28,
         ),
-        name: 'Build a demo',
+        name: 'Idea',
         id: 'Task 0',
         progress: 45,
         type: 'task',
@@ -34,11 +33,11 @@ const tasks: Task[] = [
         end: new Date(
             currentDate.getFullYear(),
             currentDate.getMonth(),
-            10,
+            4,
             0,
             0,
         ),
-        name: 'Build API',
+        name: 'Research',
         id: 'Task 1',
         progress: 25,
         type: 'task',
@@ -49,11 +48,11 @@ const tasks: Task[] = [
         end: new Date(
             currentDate.getFullYear(),
             currentDate.getMonth(),
-            12,
+            8,
             0,
             0,
         ),
-        name: 'Build UI',
+        name: 'Discussion with team',
         id: 'Task 2',
         progress: 67,
         type: 'task',
@@ -64,23 +63,23 @@ const tasks: Task[] = [
         end: new Date(
             currentDate.getFullYear(),
             currentDate.getMonth(),
-            14,
+            9,
             0,
             0,
         ),
-        name: 'Testing',
+        name: 'Developing',
         id: 'Task 3',
-        progress: 76,
+        progress: 88,
         type: 'task',
         project: 'ProjectSample',
     },
     {
         start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 8),
-        end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 15),
+        end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 10),
         name: 'Review',
         id: 'Task 4',
         type: 'task',
-        progress: 50,
+        progress: 70,
         project: 'ProjectSample',
     },
     {
@@ -104,10 +103,12 @@ const tasks: Task[] = [
     },
 ];
 const TaskChart = () => {
+    const {data, setValues} = useGanttTask();
+
     return (
         <div>
-            <FilterGantt />
-            <Gantt tasks={tasks} />
+            <FilterTask setValues={setValues} />
+            <Gantt tasks={data || tasks} />
         </div>
     );
 };

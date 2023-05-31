@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import {baseAPIRequest} from '../utils/service';
 
 export const ganttChartProject = ({name, status_id, start_at, end_at}: any) => {
@@ -19,22 +20,35 @@ export const ganttChartTaskInProject = ({
     task_name,
     status_id,
     user_do,
+    start_at,
+    end_at,
 }: any) => {
     const nameParams = `${task_name ? `name=${task_name}` : ''}`;
     const statusParams = `${
         status_id ? `${nameParams ? '&' : ''}status_id=${status_id}` : ''
     }`;
-    const startAtParams = `${
+    const userDoParams = `${
         user_do
             ? `${nameParams || statusParams ? '&' : ''}assignee=${user_do}`
             : ''
     }`;
+    const startAtParams = `${
+        start_at
+            ? `${
+                  nameParams || statusParams || userDoParams ? '&' : ''
+              }start_at=${dayjs(start_at).format('YYYY-MM-DD HH:mm')}`
+            : ''
+    }`;
+    const endAtParams = `${
+        end_at
+            ? `${
+                  nameParams || statusParams || startAtParams ? '&' : ''
+              }end_at=${dayjs(end_at).format('YYYY-MM-DD HH:mm')}`
+            : ''
+    }`;
     const params = `${nameParams && nameParams}${statusParams && statusParams}${
         startAtParams && startAtParams
-    }`;
-
-    console.log('params', params);
-    console.log('sId', id);
+    }${endAtParams && endAtParams}${userDoParams && userDoParams}`;
 
     return baseAPIRequest.get(`api/projects/${id}/tasks/gantt-chart?${params}`);
 };

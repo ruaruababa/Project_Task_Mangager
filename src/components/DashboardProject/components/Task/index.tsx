@@ -166,7 +166,14 @@ function TaskInProject() {
                         >
                             Tạo tạo task mới
                         </Button>
-                        <Button type="primary">Biểu đồ Gantt</Button>
+                        <Button
+                            type="primary"
+                            onClick={() =>
+                                navigate(`/project/${id}/gantt-chart`)
+                            }
+                        >
+                            Biểu đồ Gantt
+                        </Button>
                         <Button
                             className="text-white"
                             onClick={() => navigate(`/project/${id}/list-task`)}
