@@ -1,5 +1,6 @@
 import {Gantt, Task} from 'gantt-task-react';
 import 'gantt-task-react/dist/index.css';
+import {useNavigate, useParams} from 'react-router';
 import FilterTask from '../../DashboardProject/components/Filter/taskFilter';
 import useGanttTask from './useGanttTask';
 const currentDate = new Date();
@@ -103,12 +104,29 @@ const tasks: Task[] = [
     },
 ];
 const TaskChart = () => {
+    const navigate = useNavigate();
+    const {id} = useParams();
     const {data, setValues} = useGanttTask();
     if (!data) {
         return null;
     }
     return (
         <div>
+            <div className="py-10">
+                <span
+                    onClick={() => navigate('/')}
+                    className="text-lg font-semibold text-gray-400 cursor-pointer"
+                >
+                    Trang chủ /{' '}
+                </span>
+                <span
+                    onClick={() => navigate(`/project/${id}`)}
+                    className="font-semibold text-gray-400 cursor-pointer"
+                >
+                    Danh sách dự án /{' '}
+                </span>
+                <span className="text-sm">Gantt chart</span>
+            </div>
             <FilterTask setValues={setValues} />
             <Gantt tasks={data || []} />
         </div>
