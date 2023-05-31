@@ -1,27 +1,23 @@
 import {Button, DatePicker, Form, Input} from 'antd';
+import {useState} from 'react';
+import {styled} from 'styled-components';
 interface Props {
     projectOtpions?: any;
     statusOptions?: any;
     setValues?: any;
 }
+export const Container = styled.div<{toggleClearFiled: boolean}>`
+    .ant-select-clear {
+        opacity: ${({toggleClearFiled}) => (toggleClearFiled ? 1 : 0)};
+    }
+    .ant-picker-clear {
+        opacity: ${({toggleClearFiled}) => (toggleClearFiled ? 1 : 0)};
+    }
+`;
 const FilterMyTask = (props: Props) => {
     const [form] = Form.useForm();
     const {projectOtpions, statusOptions, setValues} = props;
-    const handleFilterOnChange = (input: any, option: any) => {
-        return (option?.label ?? '').includes(input);
-    };
-
-    const handleFilterSort = (optionA: any, optionB: any) => {
-        return (optionA?.label ?? '')
-            .toLowerCase()
-            .localeCompare((optionB?.label ?? '').toLowerCase());
-    };
-
-    // const {data: projectFilterResponse} = useQuery({
-    //     queryKey: ['filterProject', values],
-    //     queryFn: () => filterProject(values),
-    //     enabled: !!values,
-    // });
+    const [toggleClearFiled, setToggleClearFiled] = useState(false);
 
     return (
         <Form
@@ -38,7 +34,10 @@ const FilterMyTask = (props: Props) => {
             }}
             autoComplete="off"
         >
-            <div className="grid grid-cols-6 gap-3 mb-10">
+            <Container
+                toggleClearFiled={toggleClearFiled}
+                className="grid grid-cols-6 gap-3 mb-10"
+            >
                 <div className="col-span-2">
                     {' '}
                     <Form.Item name={'name'} className="!h-[40px]">
@@ -76,20 +75,26 @@ const FilterMyTask = (props: Props) => {
                     <DatePicker
                         className="!h-[40px]"
                         placeholder="Ngày bắt đầu"
-                        onChange={() => {}}
                         format={'YYYY/MM/DD HH:mm'}
                         style={{
                             backgroundColor: '#f5f5f5',
                             width: '100%',
                         }}
                         showTime
+                        allowClear
+                        onChange={() => {
+                            setToggleClearFiled(true);
+                        }}
                     />
                 </Form.Item>
                 <Form.Item name="end_at" valuePropName="endDate">
                     <DatePicker
                         className="!h-[40px]"
                         placeholder="Ngày kết thúc"
-                        onChange={() => {}}
+                        allowClear
+                        onChange={() => {
+                            setToggleClearFiled(true);
+                        }}
                         format={'YYYY/MM/DD HH:mm'}
                         style={{
                             backgroundColor: '#f5f5f5',
@@ -99,15 +104,25 @@ const FilterMyTask = (props: Props) => {
                     />
                 </Form.Item>
                 <Form.Item>
-                    <Button
-                        type="primary"
-                        htmlType="submit"
-                        className="!h-[40px]"
-                    >
-                        Submit
-                    </Button>
+                    <div className="flex gap-3">
+                        <Button
+                            type="primary"
+                            htmlType="submit"
+                            className="!h-[40px]"
+                        >
+                            Tìm kiếm
+                        </Button>
+                        <Button
+                            className="!h-[40px] bg-blue-500 text-white"
+                            onClick={() => {
+                                form.resetFields();
+                            }}
+                        >
+                            Xóa bộ lọc
+                        </Button>
+                    </div>
                 </Form.Item>
-            </div>
+            </Container>
         </Form>
     );
 };
