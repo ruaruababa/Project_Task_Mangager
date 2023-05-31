@@ -40,6 +40,13 @@ const ProjectManager = () => {
                     >
                         Tạo dự án
                     </Button>
+                    <Button
+                        type="primary"
+                        onClick={() => router(`/project/gantt-chart`)}
+                        size="large"
+                    >
+                        Gannt chart
+                    </Button>
                 </div>
 
                 <div className="text-lg">
