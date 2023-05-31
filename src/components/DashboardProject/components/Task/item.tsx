@@ -6,8 +6,7 @@ import UserAvatar from '../Item/avatar';
 import Action from './action';
 
 function Task(props: any) {
-    const {index, data, id} = props;
-
+    const {index, data, idProject} = props;
     const navigate = useNavigate();
 
     return (
@@ -23,7 +22,9 @@ function Task(props: any) {
                         <div
                             className="text-blue-500 cursor-pointer line-clamp-1"
                             onClick={() =>
-                                navigate(`/project/${id}/tasks/${data?.id}`)
+                                navigate(
+                                    `/project/${idProject}/tasks/${data?.id}`,
+                                )
                             }
                         >
                             {data?.name}

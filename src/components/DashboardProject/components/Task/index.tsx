@@ -17,6 +17,8 @@ function TaskInProject() {
     const navigate = useNavigate();
     const {id} = useParams();
 
+    console.log('id', id);
+
     const {isLoading: listTaskLoading, data: listTaskDragDropResponse} =
         useQuery({
             queryKey: ['getListDragDrop', id],
