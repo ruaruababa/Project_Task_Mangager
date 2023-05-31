@@ -1,7 +1,7 @@
 import {useQuery} from '@tanstack/react-query';
 import {useMemo, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {filterMyTask, getMyTasks} from '../../services/tasks';
+import {filterMyTask} from '../../services/tasks';
 import {convertDate} from '../../utils/format';
 import FilterMyTask from '../DashboardProject/components/Filter/filterMyTask';
 import Pagination from '../Pagination';
@@ -10,35 +10,25 @@ const TaskManager = () => {
     const [page, setPage] = useState(1);
     const [filter, setFilter] = useState<any>();
 
-    const {data: tasksResponse} = useQuery({
-        queryKey: ['getMyTasks', page],
-        queryFn: () => getMyTasks(page),
-        keepPreviousData: true,
-    });
+    // const {data: tasksResponse} = useQuery({
+    //     queryKey: ['getMyTasks', page],
+    //     queryFn: () => getMyTasks(page),
+    //     keepPreviousData: true,
+    // });
 
     const {data: filterMyTaskResponse} = useQuery({
         queryKey: ['filterMyTask', page, filter],
         queryFn: () => filterMyTask({page, ...filter}),
-        enabled: !!filter,
         keepPreviousData: true,
     });
 
     const tasks = useMemo(() => {
-        return tasksResponse?.data?.data || [];
-    }, [tasksResponse]);
-    const [data, setData] = useState<any>(tasks);
-
-    useMemo(() => {
-        if (filterMyTaskResponse?.data?.data) {
-            setData(filterMyTaskResponse?.data?.data);
-        } else {
-            setData(tasksResponse?.data?.data);
-        }
-    }, [filterMyTaskResponse, tasksResponse]);
+        return filterMyTaskResponse?.data?.data || [];
+    }, [filterMyTaskResponse]);
 
     const total = useMemo(() => {
-        return tasksResponse?.data?.meta?.total || 0;
-    }, [tasksResponse]);
+        return filterMyTaskResponse?.data?.meta?.total || 0;
+    }, [filterMyTaskResponse]);
 
     const router = useNavigate();
 

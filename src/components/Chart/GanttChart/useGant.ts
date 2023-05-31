@@ -6,7 +6,7 @@ const useGant = () => {
     const [values, setValues] = React.useState<any>('');
     const {data: projectFilterResponse} = useQuery({
         queryKey: ['ganttChartProject', values],
-        queryFn: () => ganttChartProject(values),
+        queryFn: () => ganttChartProject({...values}),
     });
     const data = useMemo(() => {
         return projectFilterResponse?.data?.data.map((item: any) => ({

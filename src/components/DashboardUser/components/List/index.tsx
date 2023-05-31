@@ -9,6 +9,7 @@ import UserItem from '../Item/item';
 
 const ListUser = () => {
     const [page, setPage] = useState(1);
+    const [form] = Form.useForm();
     const [isShowCreateModal, setIsShowCreateModal] = useState(false);
     const {data: listUserResponse} = useQuery({
         queryKey: ['getListUserInSystem', page],
@@ -57,6 +58,7 @@ const ListUser = () => {
             <div className="flex flex-col p-10 bg-white rounded-lg">
                 <div className="flex justify-between gap-3 mb-10 ">
                     <Form
+                        form={form}
                         name="basic"
                         onFinish={(values) => {
                             setParams(values);
@@ -73,9 +75,20 @@ const ListUser = () => {
                             </Form.Item>
 
                             <Form.Item>
-                                <Button type="primary" htmlType="submit">
-                                    Tìm kiếm
-                                </Button>
+                                <div className="flex gap-3">
+                                    {' '}
+                                    <Button type="primary" htmlType="submit">
+                                        Tìm kiếm
+                                    </Button>
+                                    <Button
+                                        onClick={() => {
+                                            form.resetFields();
+                                        }}
+                                        className="text-white bg-blue-500"
+                                    >
+                                        Xóa bộ lọc
+                                    </Button>
+                                </div>
                             </Form.Item>
                         </div>
                     </Form>

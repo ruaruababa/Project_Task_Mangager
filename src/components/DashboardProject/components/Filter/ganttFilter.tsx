@@ -2,7 +2,6 @@ import {Button, DatePicker, Form, Input, Select} from 'antd';
 import {useState} from 'react';
 import styled from 'styled-components';
 import useStatus from '../../../../hooks/useStatus';
-import useUser from '../../../../hooks/useUser';
 interface Props {
     projectOtpions?: any;
     setValues?: any;
@@ -21,12 +20,6 @@ const FilterGantt = (props: Props) => {
         return (option?.label ?? '').includes(input);
     };
     const {statusOptions} = useStatus();
-    const {users} = useUser();
-    const handleFilterSort = (optionA: any, optionB: any) => {
-        return (optionA?.label ?? '')
-            .toLowerCase()
-            .localeCompare((optionB?.label ?? '').toLowerCase());
-    };
 
     const [toggleClearField, setToggleClearField] = useState<any>();
 
@@ -35,12 +28,12 @@ const FilterGantt = (props: Props) => {
             form={form}
             name="basic"
             onFinish={(values) => {
+                console.log('values', values);
                 setValues({
                     ...values,
                     start_at: values?.start_at?.format('YYYY-MM-DD HH:mm'),
                     end_at: values?.end_at?.format('YYYY-MM-DD HH:mm'),
                 });
-                form.resetFields();
             }}
             autoComplete="off"
         >
@@ -87,8 +80,8 @@ const FilterGantt = (props: Props) => {
                         options={users}
                     />
                 </Form.Item> */}
-                <Form.Item name={'status_id'}>
-                    <Container toggleClearFiled={toggleClearField}>
+                <Container toggleClearFiled={toggleClearField}>
+                    <Form.Item name={'status_id'}>
                         <Select
                             allowClear
                             placeholder="Chọn trạng thái"
@@ -106,8 +99,8 @@ const FilterGantt = (props: Props) => {
                                 setToggleClearField(values);
                             }}
                         />
-                    </Container>
-                </Form.Item>
+                    </Form.Item>
+                </Container>
 
                 <Form.Item
                     name="start_at"
@@ -117,26 +110,32 @@ const FilterGantt = (props: Props) => {
                     <DatePicker
                         className="!h-[40px]"
                         placeholder="Ngày bắt đầu"
-                        onChange={() => {}}
                         format={'YYYY/MM/DD HH:mm'}
                         style={{
                             backgroundColor: '#f5f5f5',
                             width: '100%',
                         }}
                         showTime
+                        allowClear
+                        onChange={() => {
+                            setToggleClearField(true);
+                        }}
                     />
                 </Form.Item>
                 <Form.Item name="end_at" valuePropName="endDate">
                     <DatePicker
                         className="!h-[40px]"
                         placeholder="Ngày kết thúc"
-                        onChange={() => {}}
                         format={'YYYY/MM/DD HH:mm'}
                         style={{
                             backgroundColor: '#f5f5f5',
                             width: '100%',
                         }}
                         showTime
+                        allowClear
+                        onChange={() => {
+                            setToggleClearField(true);
+                        }}
                     />
                 </Form.Item>
                 <Form.Item className="col-span-2">

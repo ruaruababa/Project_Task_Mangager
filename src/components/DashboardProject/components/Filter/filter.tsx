@@ -1,14 +1,25 @@
 import {Button, DatePicker, Form, Input, Select} from 'antd';
+import {useState} from 'react';
+import {styled} from 'styled-components';
 import useStatus from '../../../../hooks/useStatus';
 interface Props {
     projectOtpions: any;
     statusOptions: any;
     setValues: any;
 }
+export const Container = styled.div<{toggleClearFiled: boolean}>`
+    .ant-select-clear {
+        opacity: ${({toggleClearFiled}) => (toggleClearFiled ? 1 : 0)};
+    }
+    .ant-picker-clear {
+        opacity: ${({toggleClearFiled}) => (toggleClearFiled ? 1 : 0)};
+    }
+`;
 const FilterProject = (props: Props) => {
     const [form] = Form.useForm();
     const {projectOtpions, setValues} = props;
     const {statusOptions} = useStatus();
+    const [toggleClearField, setToggleClearField] = useState<any>(false);
     const handleFilterOnChange = (input: any, option: any) => {
         return (option?.label ?? '').includes(input);
     };
@@ -35,11 +46,13 @@ const FilterProject = (props: Props) => {
                     start_at: values?.start_at?.format('YYYY-MM-DD HH:mm'),
                     end_at: values?.end_at?.format('YYYY-MM-DD HH:mm'),
                 });
-                form.resetFields();
             }}
             autoComplete="off"
         >
-            <div className="grid grid-cols-6 gap-3 mb-10">
+            <Container
+                toggleClearFiled={toggleClearField}
+                className="grid grid-cols-6 gap-3 mb-10"
+            >
                 <div className="col-span-2">
                     {' '}
                     <Form.Item name={'name'} className="!h-[40px]">
@@ -76,10 +89,11 @@ const FilterProject = (props: Props) => {
                         filterOption={(input: any, option: any) =>
                             handleFilterOnChange(input, option)
                         }
-                        filterSort={(optionA, optionB) =>
-                            handleFilterSort(optionA, optionB)
-                        }
                         options={statusOptions}
+                        allowClear
+                        onChange={(value) => {
+                            setToggleClearField(true);
+                        }}
                     />
                 </Form.Item>
 
@@ -91,38 +105,55 @@ const FilterProject = (props: Props) => {
                     <DatePicker
                         className="!h-[40px]"
                         placeholder="Ngày bắt đầu"
-                        onChange={() => {}}
                         format={'YYYY/MM/DD HH:mm'}
                         style={{
                             backgroundColor: '#f5f5f5',
                             width: '100%',
                         }}
                         showTime
+                        allowClear
+                        onChange={(value) => {
+                            setToggleClearField(true);
+                        }}
                     />
                 </Form.Item>
                 <Form.Item name="end_at" valuePropName="endDate">
                     <DatePicker
                         className="!h-[40px]"
                         placeholder="Ngày kết thúc"
-                        onChange={() => {}}
                         format={'YYYY/MM/DD HH:mm'}
                         style={{
                             backgroundColor: '#f5f5f5',
                             width: '100%',
                         }}
                         showTime
+                        allowClear
+                        onChange={(value) => {
+                            setToggleClearField(true);
+                        }}
                     />
                 </Form.Item>
                 <Form.Item>
-                    <Button
-                        type="primary"
-                        htmlType="submit"
-                        className="!h-[40px]"
-                    >
-                        Submit
-                    </Button>
+                    <div className="flex gap-3">
+                        {' '}
+                        <Button
+                            type="primary"
+                            htmlType="submit"
+                            className="!h-[40px]"
+                        >
+                            Submit
+                        </Button>
+                        <Button
+                            onClick={() => {
+                                form.resetFields();
+                            }}
+                            className="!h-[40px] bg-blue-500 text-white"
+                        >
+                            Xoá bộ lọc
+                        </Button>
+                    </div>
                 </Form.Item>
-            </div>
+            </Container>
         </Form>
     );
 };

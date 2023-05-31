@@ -110,9 +110,8 @@ const tasks: Task[] = [
 const GanttChart = () => {
     const navigate = useNavigate();
     const {data, setValues} = useGant();
-    if (!data) {
-        return null;
-    }
+    console.log('>>>>>', !data);
+
     return (
         <div>
             <div className="py-10">
@@ -131,7 +130,7 @@ const GanttChart = () => {
                 <span className="text-sm">Gantt chart</span>
             </div>
             <FilterGantt setValues={setValues} />
-            <Gantt tasks={data || tasks} />
+            {data?.length > 0 && <Gantt tasks={data} />}
         </div>
     );
 };
