@@ -30,7 +30,9 @@ const DetailProject = () => {
                         </Button>
                         <Button
                             className="text-white bg-blue-500"
-                            onClick={() => navigate(`/project/edit/${id}`)}
+                            onClick={() =>
+                                navigate(`/project/${id}/gantt-chart`)
+                            }
                             size="large"
                         >
                             Gantt chart

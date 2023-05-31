@@ -104,11 +104,13 @@ const tasks: Task[] = [
 ];
 const TaskChart = () => {
     const {data, setValues} = useGanttTask();
-
+    if (!data) {
+        return null;
+    }
     return (
         <div>
             <FilterTask setValues={setValues} />
-            <Gantt tasks={data || tasks} />
+            <Gantt tasks={data || []} />
         </div>
     );
 };

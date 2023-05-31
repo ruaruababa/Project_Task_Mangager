@@ -108,7 +108,9 @@ const tasks: Task[] = [
 ];
 const GanttChart = () => {
     const {data, setValues} = useGant();
-
+    if (!data) {
+        return null;
+    }
     return (
         <div>
             <FilterGantt setValues={setValues} />
