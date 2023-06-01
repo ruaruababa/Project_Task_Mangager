@@ -2,7 +2,7 @@ import {useQuery} from '@tanstack/react-query';
 import {Button, Form, Input} from 'antd';
 import {useMemo, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {filterUser, getListUserInSystem} from '../../../../services/user';
+import {filterUser} from '../../../../services/user';
 import Pagination from '../../../Pagination';
 import CreateUpdateUserModal from '../CreateUpdate/createUpdateUser';
 import UserItem from '../Item/item';
@@ -11,31 +11,35 @@ const ListUser = () => {
     const [page, setPage] = useState(1);
     const [form] = Form.useForm();
     const [isShowCreateModal, setIsShowCreateModal] = useState(false);
-    const {data: listUserResponse} = useQuery({
-        queryKey: ['getListUserInSystem', page],
-        queryFn: () => getListUserInSystem(page),
-        keepPreviousData: true,
-    });
+    // const {data: listUserResponse} = useQuery({
+    //     queryKey: ['getListUserInSystem', page],
+    //     queryFn: () => getListUserInSystem(page),
+    //     keepPreviousData: true,
+    // });
 
-    const listUser = useMemo(() => {
-        return listUserResponse?.data?.data || [];
-    }, [listUserResponse]);
+    // const listUser = useMemo(() => {
+    //     return listUserResponse?.data?.data || [];
+    // }, [listUserResponse]);
 
-    const [userData, setUserData] = useState<any>(listUser);
+    // const [userData, setUserData] = useState<any>(listUser);
 
-    const total = useMemo(() => {
-        return listUserResponse?.data?.meta?.total || 0;
-    }, [listUserResponse]);
+    // const total = useMemo(() => {
+    //     return listUserResponse?.data?.meta?.total || 0;
+    // }, [listUserResponse]);
 
     const [params, setParams] = useState<any>('');
 
     const {data: userFilterResponse} = useQuery({
-        queryKey: ['filterUser', params],
-        queryFn: () => filterUser({...params}),
+        queryKey: ['filterUser', page, params],
+        queryFn: () => filterUser({...params, page}),
     });
 
-    useMemo(() => {
-        setUserData(userFilterResponse?.data?.data || []);
+    const total = useMemo(() => {
+        return userFilterResponse?.data?.meta?.total || 0;
+    }, [userFilterResponse]);
+
+    const listUser = useMemo(() => {
+        return userFilterResponse?.data?.data || [];
     }, [userFilterResponse]);
 
     const navigate = useNavigate();
@@ -114,7 +118,7 @@ const ListUser = () => {
                         <div className="">TRẠNG THÁI</div>
                         <div className="text-center">ACTION</div>
                     </div>
-                    {userData?.map((user: any) => {
+                    {listUser?.map((user: any) => {
                         return (
                             <>
                                 <UserItem user={user} key={user?.name} />
@@ -126,7 +130,7 @@ const ListUser = () => {
             <div className="mt-5">
                 <Pagination
                     currentPage={page}
-                    totalCount={total || userData?.length || 0}
+                    totalCount={total || listUser?.length || 0}
                     pageSize={10}
                     onPageChange={(page: any) => setPage(page)}
                 />

@@ -53,7 +53,7 @@ export const updateAvatarUser = (id: any) => {
     return baseURL + `/api/users/${id}/avatar`;
 };
 
-export const filterUser = ({userName, email}: any) => {
+export const filterUser = ({userName, email, page}: any) => {
     const nameParam = `${userName ? `name=${userName}` : ''}`;
     const emailParam = `${
         email ? `${nameParam ? '&' : ''}email=${email}` : ''
@@ -63,5 +63,5 @@ export const filterUser = ({userName, email}: any) => {
 
     console.log('params', params);
 
-    return baseAPIRequest.get(`api/users?${params}`);
+    return baseAPIRequest.get(`api/users?${params}&page=${page}&per_page=10`);
 };

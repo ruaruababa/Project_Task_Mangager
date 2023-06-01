@@ -61,17 +61,15 @@ const Pagination = (props: any) => {
                         return (
                             <li
                                 key={index}
-                                className={`px-2 transition-colors duration-150 focus:shadow-outline !border`}
-                                style={{
-                                    color:
-                                        pageNumber === currentPage
-                                            ? 'white!important'
-                                            : '',
-                                }}
+                                className={`px-2 transition-colors duration-150 focus:shadow-outline !border `}
                             >
                                 <button
                                     onClick={() => onPageChange(pageNumber)}
-                                    className=""
+                                    className={`${
+                                        pageNumber === currentPage
+                                            ? 'bg-[#0012A3] text-white'
+                                            : 'text-[#0012A3]'
+                                    }`}
                                 >
                                     {pageNumber}
                                 </button>
