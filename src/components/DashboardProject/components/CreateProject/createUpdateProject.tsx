@@ -82,6 +82,7 @@ const CreateUpdateProject = () => {
                   assigned_user_ids: values?.user_ids?.map(
                       (item: any) => item.value,
                   ),
+                  user_ids: values?.user_ids?.map((item: any) => item.value),
               })
             : createProjectMutate({
                   ...values,
@@ -398,7 +399,7 @@ const CreateUpdateProject = () => {
                                 className="!text-center !block !min-w-[200px]"
                                 size="large"
                                 onClick={() => {
-                                    navigate('/project');
+                                    navigate(`/project/${id}`);
                                 }}
                             >
                                 {'Hủy'}

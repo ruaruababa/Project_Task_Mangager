@@ -31,8 +31,8 @@ const FilterGantt = (props: Props) => {
                 console.log('values', values);
                 setValues({
                     ...values,
-                    start_at: values?.start_at?.format('YYYY-MM-DD HH:mm'),
-                    end_at: values?.end_at?.format('YYYY-MM-DD HH:mm'),
+                    start_at: values?.start_at?.format('YYYY-MM-DD '),
+                    end_at: values?.end_at?.format('YYYY-MM-DD'),
                 });
             }}
             autoComplete="off"
@@ -110,7 +110,7 @@ const FilterGantt = (props: Props) => {
                     <DatePicker
                         className="!h-[40px]"
                         placeholder="Ngày bắt đầu"
-                        format={'YYYY/MM/DD HH:mm'}
+                        format={'YYYY/MM/DD'}
                         style={{
                             backgroundColor: '#f5f5f5',
                             width: '100%',
@@ -126,7 +126,7 @@ const FilterGantt = (props: Props) => {
                     <DatePicker
                         className="!h-[40px]"
                         placeholder="Ngày kết thúc"
-                        format={'YYYY/MM/DD HH:mm'}
+                        format={'YYYY/MM/DD'}
                         style={{
                             backgroundColor: '#f5f5f5',
                             width: '100%',
