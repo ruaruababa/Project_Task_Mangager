@@ -32,6 +32,7 @@ const ListUser = () => {
     const {data: userFilterResponse} = useQuery({
         queryKey: ['filterUser', page, params],
         queryFn: () => filterUser({...params, page}),
+        keepPreviousData: true,
     });
 
     const total = useMemo(() => {

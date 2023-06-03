@@ -9,6 +9,7 @@ import CreateUpdateRoleModal from '../CreateUpdate';
 const Item = ({item}: any) => {
     const [isShow, setIsShow] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
+    const [onlyCanView, setOnlyCanView] = useState(false);
     const [data, setData] = useState<any>([]);
     const handleCancel = () => {
         setIsShow(false);
@@ -16,11 +17,14 @@ const Item = ({item}: any) => {
     };
 
     const handleToggleModal = () => {
-        setIsShow(!isShow);
+        setIsShow(true);
+        needFetch();
+        setOnlyCanView(true);
         // setShouldFetch(!shouldFetch);
     };
 
     const handleEdit = () => {
+        setOnlyCanView(false);
         setIsShow(true);
         setIsEdit(true);
         needFetch();
@@ -72,7 +76,6 @@ const Item = ({item}: any) => {
             name: data?.data?.name,
             ...lastData,
         });
-
 
         return data;
     };
@@ -145,6 +148,7 @@ const Item = ({item}: any) => {
                     onCancel={handleCancel}
                     mode={isEdit && 'update'}
                     initalValues={data}
+                    viewOnly={onlyCanView || (item?.is_editable && true)}
                 />
             </>
         </>

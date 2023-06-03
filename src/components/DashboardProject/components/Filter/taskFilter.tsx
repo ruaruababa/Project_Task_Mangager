@@ -16,11 +16,12 @@ interface Props {
     projectOtpions?: any;
     statusOptions?: any;
     setValues?: any;
+    needHours?: any;
 }
 const FilterTask = (props: Props) => {
     const [form] = Form.useForm();
     const {statusOptions} = useStatus();
-    const {projectOtpions, setValues} = props;
+    const {needHours, setValues} = props;
     const handleFilterOnChange = (input: any, option: any) => {
         return (option?.name ?? '').includes(input);
     };
@@ -102,7 +103,7 @@ const FilterTask = (props: Props) => {
                         <DatePicker
                             className="!h-[40px]"
                             placeholder="Ngày bắt đầu"
-                            format={'YYYY/MM/DD'}
+                            format={`YYYY/MM/DD ${needHours && 'HH:mm'}`}
                             style={{
                                 width: '100%',
                             }}
@@ -117,7 +118,7 @@ const FilterTask = (props: Props) => {
                         <DatePicker
                             className="!h-[40px]"
                             placeholder="Ngày kết thúc"
-                            format={'YYYY/MM/DD'}
+                            format={`YYYY/MM/DD ${needHours && 'HH:mm'}`}
                             style={{
                                 width: '100%',
                             }}

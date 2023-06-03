@@ -62,7 +62,7 @@ const AllListTask = () => {
                     <span className="font-semibold">List task</span>
                 </div>
             </div>
-            <FilterTask setValues={setValues} />
+            <FilterTask setValues={setValues} needHours={true} />
             <div className="flex flex-col p-10 bg-white rounded-lg">
                 {/* <div className="grid grid-cols-6 gap-3 mb-10">
                     <SelectProject

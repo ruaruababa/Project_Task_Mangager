@@ -77,13 +77,7 @@ const CreateUpdateUserModal = (props: Props) => {
             roles_id: initalValues?.roles?.map((item: any) =>
                 item?.id?.toString(),
             ),
-            status: {
-                label:
-                    initalValues?.status === 1
-                        ? 'Đã kích hoạt'
-                        : 'Chưa kích hoạt',
-                value: initalValues?.status,
-            },
+            status: initalValues?.status,
         };
     }, [initalValues]);
 
@@ -119,7 +113,7 @@ const CreateUpdateUserModal = (props: Props) => {
                 message: 'Success ',
                 description: 'Update successfully',
             });
-            queryCLient.invalidateQueries(['getListUserInSystem']);
+            queryCLient.refetchQueries(['filterUser']);
         },
         onError: (error: any) => {
             notification.error({
@@ -134,7 +128,6 @@ const CreateUpdateUserModal = (props: Props) => {
             updateUserMutate({
                 ...values,
                 date_of_birth: dayjs(values.date_of_birth).format('YYYY-MM-DD'),
-                status: values.status === '1' ? true : false,
                 role_ids: values.roles_id,
             });
         } else {
@@ -148,8 +141,8 @@ const CreateUpdateUserModal = (props: Props) => {
     };
 
     const statusOptions = [
-        {label: 'Đã kích hoạt', value: '1'},
-        {label: 'Chưa kích hoạt', value: '0'},
+        {label: 'Đã kích hoạt', value: 1},
+        {label: 'Chưa kích hoạt', value: 0},
     ];
 
     const dateFormat = 'YYYY/MM/DD';
@@ -260,7 +253,6 @@ const CreateUpdateUserModal = (props: Props) => {
                         rules={[{required: true, message: 'Chọn trạng thái'}]}
                     >
                         <Select
-                            fieldNames={{label: 'label', value: 'value'}}
                             placeholder="Chọn trạng thái"
                             options={statusOptions}
                         ></Select>
