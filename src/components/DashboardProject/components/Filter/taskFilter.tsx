@@ -87,9 +87,6 @@ const FilterTask = (props: Props) => {
                             filterOption={(input: any, option: any) =>
                                 handleFilterOnChange(input, option)
                             }
-                            filterSort={(optionA, optionB) =>
-                                handleFilterSort(optionA, optionB)
-                            }
                             options={statusOptions}
                             allowClear
                             onChange={() => {

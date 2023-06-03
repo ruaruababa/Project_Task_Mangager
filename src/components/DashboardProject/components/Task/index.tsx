@@ -17,7 +17,6 @@ function TaskInProject() {
     const navigate = useNavigate();
     const {id} = useParams();
 
-
     const {isLoading: listTaskLoading, data: listTaskDragDropResponse} =
         useQuery({
             queryKey: ['getListDragDrop', id],
@@ -94,7 +93,6 @@ function TaskInProject() {
             (t: any) => t?.id?.toString() === draggableId,
         );
 
-
         const newSourceGroupTasks = sourceGroup.tasks.splice(source.index, 1);
 
         const newDestinationGroupTasks = destinationGroup?.tasks?.splice(
@@ -160,10 +158,12 @@ function TaskInProject() {
                                 navigate(`/project/${id}/create-task`)
                             }
                             type="primary"
+                            size="large"
                         >
                             Tạo tạo task mới
                         </Button>
                         <Button
+                            size="large"
                             type="primary"
                             onClick={() =>
                                 navigate(`/project/${id}/gantt-chart`)
@@ -172,6 +172,7 @@ function TaskInProject() {
                             Biểu đồ Gantt
                         </Button>
                         <Button
+                            size="large"
                             className="text-white"
                             onClick={() => navigate(`/project/${id}/list-task`)}
                             type="primary"

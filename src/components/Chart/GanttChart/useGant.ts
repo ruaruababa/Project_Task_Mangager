@@ -7,6 +7,7 @@ const useGant = () => {
     const {data: projectFilterResponse} = useQuery({
         queryKey: ['ganttChartProject', values],
         queryFn: () => ganttChartProject({...values}),
+        keepPreviousData: true,
     });
     const data = useMemo(() => {
         return projectFilterResponse?.data?.data.map((item: any) => ({
