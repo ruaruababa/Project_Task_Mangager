@@ -24,8 +24,42 @@ export const updateTask = (
     return baseAPIRequest.patch(`api/projects/${id}/tasks/${isTask}`, input);
 };
 
-export const getListTaskInProject = (id: any) => {
-    return baseAPIRequest.get(`api/projects/${id}/tasks`);
+export const getListTaskInProject = ({
+    id,
+    task_name,
+    status_id,
+    user_do,
+    start_at,
+    end_at,
+}: any) => {
+    const nameParams = `${task_name ? `name=${task_name}` : ''}`;
+    const statusParams = `${
+        status_id ? `${nameParams ? '&' : ''}status_id=${status_id}` : ''
+    }`;
+    const userDoParams = `${
+        user_do
+            ? `${nameParams || statusParams ? '&' : ''}assignee=${user_do}`
+            : ''
+    }`;
+    const startAtParams = `${
+        start_at
+            ? `${nameParams || statusParams ? '&' : ''}start_at=${dayjs(
+                  start_at,
+              ).format('YYYY-MM-DD HH:mm')}`
+            : ''
+    }`;
+    const endAtParams = `${
+        end_at
+            ? `${nameParams || statusParams ? '&' : ''}end_at=${dayjs(
+                  end_at,
+              ).format('YYYY-MM-DD HH:mm')}`
+            : ''
+    }`;
+    const params = `${nameParams && nameParams}${statusParams && statusParams}${
+        startAtParams && startAtParams
+    }${endAtParams && endAtParams}${userDoParams && userDoParams}`;
+
+    return baseAPIRequest.get(`api/projects/1/tasks?${params}`);
 };
 
 export const getListDragDrop = (id: any) => {
@@ -52,7 +86,6 @@ export const filterProject = ({name, status_id, start_at, end_at}: any) => {
     const params = `${nameParams && nameParams}${statusParams && statusParams}${
         startAtParams && startAtParams
     }${endAtParams && endAtParams}`;
-
 
     return baseAPIRequest.get(`api/projects?${params}`);
 };
@@ -91,7 +124,6 @@ export const filterTask = ({
     const params = `${nameParams && nameParams}${statusParams && statusParams}${
         startAtParams && startAtParams
     }${endAtParams && endAtParams}${userDoParams && userDoParams}`;
-
 
     return baseAPIRequest.get(`api/projects/${id}/tasks/kanban?${params}`);
 };

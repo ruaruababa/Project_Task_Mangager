@@ -9,6 +9,7 @@ const useGanttTask = () => {
     const {data: taskFilterResponse} = useQuery({
         queryKey: ['ganttChartTaskInProject', id, values],
         queryFn: () => ganttChartTaskInProject({id, ...values}),
+        keepPreviousData: true,
     });
     const data = useMemo(() => {
         return taskFilterResponse?.data?.data.map((item: any) => ({
@@ -17,7 +18,7 @@ const useGanttTask = () => {
             end: new Date(item.end),
         }));
     }, [taskFilterResponse]);
-    return {data, setValues};
+    return {data, setValues, id};
 };
 
 export default useGanttTask;

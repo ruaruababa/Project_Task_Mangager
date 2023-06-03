@@ -35,12 +35,14 @@ const FilterProject = (props: Props) => {
     //     queryFn: () => filterProject(values),
     //     enabled: !!values,
     // });
-
+    function onClickStopProg(e: any) {
+        e.stopPropagation();
+    }
     return (
         <Form
             form={form}
             name="basic"
-            onFinish={(values) => {
+            onFinish={(values: any) => {
                 setValues({
                     ...values,
                     start_at: values?.start_at?.format('YYYY-MM-DD HH:mm'),
@@ -144,6 +146,7 @@ const FilterProject = (props: Props) => {
                             Submit
                         </Button>
                         <Button
+                            htmlType="button"
                             onClick={() => {
                                 form.resetFields();
                             }}

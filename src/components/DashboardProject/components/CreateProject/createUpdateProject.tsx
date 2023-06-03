@@ -13,11 +13,14 @@ const CreateUpdateProject = () => {
     const [form] = Form.useForm();
     const {users} = useUser();
     const {id} = useParams();
+    const parmas = useParams();
+    console.log('parmas>>>', parmas);
     const {statusOptions} = useStatus();
     const {detailToUpdate, detailProject} = useDetailProject();
     const startDate = Form.useWatch('starts_at', form);
     const endDate = Form.useWatch('ends_at', form);
 
+    console.log('id>>>', !!id);
 
     const options: any = users?.map((user: any) => ({
         label: user.name,
@@ -28,12 +31,12 @@ const CreateUpdateProject = () => {
     const queryClient = useQueryClient();
 
     useEffect(() => {
-        id
+        !!id
             ? form.setFieldsValue(detailToUpdate)
             : form.setFieldsValue({
                   status_id: 'Not Started',
               });
-    }, [statusOptions, detailProject, form, id, detailToUpdate]);
+    }, [detailProject, parmas]);
 
     const {mutate: createProjectMutate, isLoading} = useMutation({
         mutationFn: createProject,
@@ -115,7 +118,7 @@ const CreateUpdateProject = () => {
                 form={form}
                 onFinish={handleFinish}
                 layout="vertical"
-                initialValues={detailToUpdate}
+                // initialValues={detailToUpdate}
             >
                 <Form.Item
                     name="customer_name"

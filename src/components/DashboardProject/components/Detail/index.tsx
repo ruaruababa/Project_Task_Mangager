@@ -10,7 +10,7 @@ const DetailProject = () => {
     const navigate = useNavigate();
 
     const handleViewTask = () => {
-        navigate(`/project/${id}/tasks`);
+        navigate(`/project/${id}/list-task`);
     };
 
     return (
@@ -27,15 +27,6 @@ const DetailProject = () => {
                             size="large"
                         >
                             Chỉnh sửa dự án
-                        </Button>
-                        <Button
-                            className="text-white bg-blue-500"
-                            onClick={() =>
-                                navigate(`/project/${id}/gantt-chart`)
-                            }
-                            size="large"
-                        >
-                            Gantt chart
                         </Button>
                     </div>
 

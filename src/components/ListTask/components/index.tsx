@@ -1,24 +1,43 @@
 import {Button} from 'antd';
 import {useNavigate, useParams} from 'react-router-dom';
-import {convertDate} from '../../../utils/format';
+import {convertDateTime} from '../../../utils/format';
+import Action from '../../Action';
+import FilterTask from '../../DashboardProject/components/Filter/taskFilter';
 import useTaskInProject from '../../DashboardProject/hooks/useTaskProject';
 
 const AllListTask = () => {
     const {id} = useParams();
     const navigate = useNavigate();
-    const {taskInProjects} = useTaskInProject();
+    const {taskInProjects, setValues} = useTaskInProject();
     const router = useNavigate();
 
     return (
         <>
+            {' '}
             <div className="mb-10">
                 <div className="flex justify-end gap-3 mb-10">
-                    <Button type="primary">Biểu đồ Gantt</Button>
                     <Button
+                        size="large"
+                        type="primary"
+                        onClick={() => {
+                            navigate(`/project/${id}/gantt-chart`);
+                        }}
+                    >
+                        Biểu đồ Gantt
+                    </Button>
+                    <Button
+                        size="large"
                         className="text-white bg-blue-600"
                         onClick={() => navigate(`/project/${id}/tasks`)}
                     >
                         List task
+                    </Button>
+                    <Button
+                        size="large"
+                        className="text-white bg-green-600"
+                        onClick={() => navigate(`/project/${id}/create-task`)}
+                    >
+                        Tạo task mới
                     </Button>
                 </div>
                 <div className="mb-2 text-lg font-semibold">
@@ -29,19 +48,21 @@ const AllListTask = () => {
                         onClick={() => {
                             router('/');
                         }}
-                        className="text-gray-400 cursor-pointer"
+                        className="font-semibold text-gray-400 cursor-pointer"
                     >
-                        Trang chủ
+                        Trang chủ /{' '}
                     </span>
-                    {' / '}
+
                     <span
-                        className="font-semibold cursor-pointer"
+                        className="font-semibold text-gray-400 cursor-pointer"
                         onClick={() => navigate(`/project/${1}`)}
                     >
-                        Project {id}
+                        Project {id} /{' '}
                     </span>
+                    <span className="font-semibold">List task</span>
                 </div>
             </div>
+            <FilterTask setValues={setValues} />
             <div className="flex flex-col p-10 bg-white rounded-lg">
                 {/* <div className="grid grid-cols-6 gap-3 mb-10">
                     <SelectProject
@@ -62,9 +83,19 @@ const AllListTask = () => {
                         <div className="items-center col-span-4">
                             TÊN TASK/SUB-TASK
                         </div>
-                        <div className="col-span-2">NGÀY BẮT ĐẦU</div>
-                        <div className="col-span-2">NGÀY KẾT THÚC</div>
-                        <div className="col-span-2">TRẠNG THÁI</div>
+                        <div className="grid grid-cols-8 col-span-6">
+                            {' '}
+                            <div className="col-span-2">THỜI GIAN BẮT ĐẦU</div>
+                            <div className="col-span-2 text-center">
+                                THỜI GIAN KẾT KẾT THÚC
+                            </div>
+                            <div className="col-span-2 ml-[55%] translate-x-[-50%]">
+                                TRẠNG THÁI
+                            </div>
+                            <div className="flex justify-center col-span-2">
+                                ACTION
+                            </div>
+                        </div>
                     </div>
                     {(taskInProjects || [])?.map((task: any) => {
                         return (
@@ -72,21 +103,34 @@ const AllListTask = () => {
                                 <div className="grid grid-cols-12 py-4 pb-4 border-bottom">
                                     <div className="col-span-2">{task?.id}</div>
 
-                                    <div className="items-center col-span-4 text-blue-700 cursor-pointer hover:text-blue-900">
+                                    <div
+                                        className="items-center col-span-4 text-blue-700 cursor-pointer hover:text-blue-900"
+                                        onClick={() =>
+                                            navigate(
+                                                `/project/${task?.project_id}/tasks/${task?.id}}`,
+                                            )
+                                        }
+                                    >
                                         {task?.name}
                                     </div>
-                                    <div className="col-span-2">
-                                        {convertDate(task?.starts_at)}
-                                    </div>
-                                    <div className="col-span-2">
-                                        {convertDate(task?.ends_at)}
-                                    </div>
-                                    <div
-                                        style={{
-                                            color: task?.status?.color,
-                                        }}
-                                    >
-                                        {task?.status?.name}
+                                    <div className="grid grid-cols-8 col-span-6">
+                                        <div className="col-span-2">
+                                            {convertDateTime(task?.starts_at)}
+                                        </div>
+                                        <div className="col-span-2 text-center">
+                                            {convertDateTime(task?.ends_at)}
+                                        </div>
+                                        <div
+                                            className="flex col-span-2 ml-[55%] translate-x-[-50%]"
+                                            style={{
+                                                color: task?.status?.color,
+                                            }}
+                                        >
+                                            {task?.status?.name}
+                                        </div>
+                                        <div className="flex justify-center col-span-2">
+                                            <Action />
+                                        </div>
                                     </div>
                                 </div>
                             </>
@@ -94,14 +138,6 @@ const AllListTask = () => {
                     })}
                 </div>
             </div>
-            {/* <div className="mt-5">
-                <Pagination
-                    currentPage={page}
-                    totalCount={total}
-                    pageSize={10}
-                    onPageChange={(page: any) => setPage(page)}
-                />
-            </div> */}
         </>
     );
 };

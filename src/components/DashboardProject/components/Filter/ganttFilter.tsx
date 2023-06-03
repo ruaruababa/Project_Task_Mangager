@@ -15,7 +15,7 @@ export const Container = styled.div<{toggleClearFiled: boolean}>`
 
 const FilterGantt = (props: Props) => {
     const [form] = Form.useForm();
-    const {projectOtpions, setValues} = props;
+    const {setValues} = props;
     const handleFilterOnChange = (input: any, option: any) => {
         return (option?.label ?? '').includes(input);
     };

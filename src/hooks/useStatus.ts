@@ -20,8 +20,6 @@ const useStatus = () => {
         });
     }, [listStatus]);
 
-    console.log('statusOptions', statusOptions);
-
     return {listStatus, statusOptions};
 };
 

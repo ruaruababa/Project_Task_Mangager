@@ -71,20 +71,31 @@ const ListUser = () => {
                     >
                         <div className="grid grid-cols-8 gap-3">
                             <Form.Item name="userName" className="col-span-3">
-                                <Input placeholder="Nhập tên người dùng" />
+                                <Input
+                                    placeholder="Nhập tên người dùng"
+                                    className="!h-[40px]"
+                                />
                             </Form.Item>
 
-                            <Form.Item name="email" className="col-span-3">
-                                <Input placeholder="Nhập email" />
+                            <Form.Item name="email" className="col-span-3 ">
+                                <Input
+                                    placeholder="Nhập email"
+                                    className="!h-[40px]"
+                                />
                             </Form.Item>
 
                             <Form.Item>
                                 <div className="flex gap-3">
                                     {' '}
-                                    <Button type="primary" htmlType="submit">
+                                    <Button
+                                        type="primary"
+                                        htmlType="submit"
+                                        size="large"
+                                    >
                                         Tìm kiếm
                                     </Button>
                                     <Button
+                                        size="large"
                                         onClick={() => {
                                             form.resetFields();
                                         }}

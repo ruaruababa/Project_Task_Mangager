@@ -7,3 +7,7 @@ export function formatNumber(x: any) {
 export const convertDate = (date: any) => {
     return dayjs(date).format('DD/MM/YYYY')
 }
+
+export const convertDateTime = (date: any) => {
+    return dayjs(date).format('DD/MM/YYYY HH:mm')
+}
