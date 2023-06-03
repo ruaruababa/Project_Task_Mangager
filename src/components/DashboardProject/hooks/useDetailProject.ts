@@ -29,10 +29,7 @@ const useDetailProject = () => {
                 value: detailProject?.status?.id,
             },
             user_ids: detailProject?.users?.map((item: any) => {
-                return {
-                    label: item?.name,
-                    value: item?.id,
-                };
+                return item?.id;
             }),
         };
     }, [detailProject]);
