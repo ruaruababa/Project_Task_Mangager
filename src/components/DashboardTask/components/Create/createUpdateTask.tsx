@@ -24,6 +24,7 @@ const CreateUpdateTask = () => {
     const {statusOptions} = useStatus();
     const startDate = Form.useWatch('starts_at', form);
     const endDate = Form.useWatch('ends_at', form);
+    console.log('startDate', startDate);
 
     const options: any = users?.map((user: any) => ({
         label: user.name,
@@ -42,15 +43,9 @@ const CreateUpdateTask = () => {
     const detailToUpdate = useMemo(() => {
         return {
             ...detailTaskInProject,
-            status_id: {
-                label: detailTaskInProject?.status?.name,
-                value: detailTaskInProject?.status?.id,
-            },
+            status_id: detailTaskInProject?.status?.id,
             user_ids: detailTaskInProject?.users?.map((item: any) => {
-                return {
-                    label: item?.name,
-                    value: item?.id,
-                };
+                return item?.id;
             }),
         };
     }, [detailTaskInProject]);
@@ -114,7 +109,6 @@ const CreateUpdateTask = () => {
                   ...values,
                   starts_at: dayjs(startDate).format('YYYY/MM/DD'),
                   ends_at: dayjs(endDate).format('YYYY/MM/DD'),
-                  status_id: values?.status_id?.value,
               })
             : createTaskInProjectMutate({
                   ...values,
@@ -246,13 +240,12 @@ const CreateUpdateTask = () => {
                         >
                             <DatePicker
                                 showTime={{format: 'HH:mm'}}
-                                disabledDate={(d) =>
-                                    !d ||
-                                    d.isBefore(
-                                        dayjs().format('YYYY/MM/DD HH:mm'),
-                                    )
-                                }
-                                onChange={() => {}}
+                                // disabledDate={(d) =>
+                                //     !d ||
+                                //     d.isBefore(
+                                //         dayjs().format('YYYY/MM/DD HH:mm'),
+                                //     )
+                                // }
                                 format="YYYY-MM-DD HH:mm"
                                 style={{
                                     backgroundColor: '#f5f5f5',
@@ -269,14 +262,14 @@ const CreateUpdateTask = () => {
                         >
                             <DatePicker
                                 showTime={{format: 'HH:mm'}}
-                                disabledDate={(d) =>
-                                    !d ||
-                                    d.isBefore(
-                                        dayjs(startDate).format(
-                                            'YYYY/MM/DD HH:mm',
-                                        ),
-                                    )
-                                }
+                                // disabledDate={(d) =>
+                                //     !d ||
+                                //     d.isBefore(
+                                //         dayjs(startDate).format(
+                                //             'YYYY/MM/DD HH:mm',
+                                //         ),
+                                //     )
+                                // }
                                 onChange={() => {}}
                                 format="YYYY-MM-DD HH:mm"
                                 style={{
@@ -382,7 +375,7 @@ const CreateUpdateTask = () => {
                         <Form.Item className="w-full">
                             <Button
                                 onClick={() => {
-                                    navigate(`/project/${id}/tasks`);
+                                    navigate(`/project/${id}/tasks/${taskId}`);
                                 }}
                                 block
                                 type="primary"

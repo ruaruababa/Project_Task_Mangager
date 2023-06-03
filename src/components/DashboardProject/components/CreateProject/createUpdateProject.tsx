@@ -79,10 +79,6 @@ const CreateUpdateProject = () => {
                   starts_at: dayjs(startDate).format('YYYY/MM/DD'),
                   ends_at: dayjs(endDate).format('YYYY/MM/DD'),
                   status_id: values?.value,
-                  assigned_user_ids: values?.user_ids?.map(
-                      (item: any) => item.value,
-                  ),
-                  user_ids: values?.user_ids?.map((item: any) => item.value),
               })
             : createProjectMutate({
                   ...values,
@@ -172,14 +168,6 @@ const CreateUpdateProject = () => {
                             rules={[{required: true}]}
                         >
                             <DatePicker
-                                disabledDate={(d) =>
-                                    !d ||
-                                    d.isBefore(
-                                        dayjs(detailToUpdate.starts_at).format(
-                                            'YYYY/MM/DD',
-                                        ),
-                                    )
-                                }
                                 onChange={() => {}}
                                 format={'YYYY/MM/DD'}
                                 style={{
@@ -201,12 +189,6 @@ const CreateUpdateProject = () => {
                             rules={[{required: true}]}
                         >
                             <DatePicker
-                                disabledDate={(d) =>
-                                    !d ||
-                                    d.isBefore(
-                                        dayjs(startDate).format('YYYY/MM/DD'),
-                                    )
-                                }
                                 onChange={() => {}}
                                 format={'YYYY/MM/DD'}
                                 style={{
@@ -232,10 +214,6 @@ const CreateUpdateProject = () => {
                             rules={[{required: true}]}
                         >
                             <DatePicker
-                                disabledDate={(d) =>
-                                    !d ||
-                                    d.isBefore(dayjs().format('YYYY/MM/DD'))
-                                }
                                 onChange={() => {}}
                                 format={'YYYY/MM/DD'}
                                 style={{
@@ -252,12 +230,6 @@ const CreateUpdateProject = () => {
                             rules={[{required: true}]}
                         >
                             <DatePicker
-                                disabledDate={(d) =>
-                                    !d ||
-                                    d.isBefore(
-                                        dayjs(startDate).format('YYYY/MM/DD'),
-                                    )
-                                }
                                 onChange={() => {}}
                                 format={'YYYY/MM/DD'}
                                 style={{
@@ -283,7 +255,6 @@ const CreateUpdateProject = () => {
                         mode="multiple"
                         style={{width: '100%'}}
                         placeholder="Chọn người thực hiện"
-                        onChange={() => {}}
                         options={options || []}
                     />
                 </Form.Item>

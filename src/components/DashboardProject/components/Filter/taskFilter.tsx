@@ -105,7 +105,7 @@ const FilterTask = (props: Props) => {
                         <DatePicker
                             className="!h-[40px]"
                             placeholder="Ngày bắt đầu"
-                            format={'YYYY/MM/DD HH:mm'}
+                            format={'YYYY/MM/DD'}
                             style={{
                                 width: '100%',
                             }}
@@ -120,7 +120,7 @@ const FilterTask = (props: Props) => {
                         <DatePicker
                             className="!h-[40px]"
                             placeholder="Ngày kết thúc"
-                            format={'YYYY/MM/DD HH:mm'}
+                            format={'YYYY/MM/DD'}
                             style={{
                                 width: '100%',
                             }}
