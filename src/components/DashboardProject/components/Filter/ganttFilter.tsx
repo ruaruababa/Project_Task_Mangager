@@ -28,7 +28,6 @@ const FilterGantt = (props: Props) => {
             form={form}
             name="basic"
             onFinish={(values) => {
-                console.log('values', values);
                 setValues({
                     ...values,
                     start_at: values?.start_at?.format('YYYY-MM-DD '),
@@ -95,7 +94,6 @@ const FilterGantt = (props: Props) => {
                             }
                             options={statusOptions}
                             onChange={(values) => {
-                                console.log('values', values);
                                 setToggleClearField(values);
                             }}
                         />

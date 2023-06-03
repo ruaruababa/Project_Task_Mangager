@@ -42,7 +42,6 @@ const Item = ({item}: any) => {
                 };
             },
         );
-        console.log('newData', newData);
 
         const flattenedData = newData.flatMap(({name, permissions}: any) =>
             permissions.map((user: any) => ({name, ...user})),
@@ -73,9 +72,7 @@ const Item = ({item}: any) => {
             name: data?.data?.name,
             ...lastData,
         });
-        console.log('lastData', lastData);
 
-        console.log('flattenedData', flattenedData);
 
         return data;
     };

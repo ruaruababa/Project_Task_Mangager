@@ -18,6 +18,7 @@ const CreateUpdateProject = () => {
     const startDate = Form.useWatch('starts_at', form);
     const endDate = Form.useWatch('ends_at', form);
 
+
     const options: any = users?.map((user: any) => ({
         label: user.name,
         value: user.id,
@@ -71,8 +72,6 @@ const CreateUpdateProject = () => {
     });
 
     const handleFinish = (values: any) => {
-        console.log('values', values);
-
         id
             ? updateProjectMutate({
                   ...values,

@@ -17,7 +17,6 @@ function TaskInProject() {
     const navigate = useNavigate();
     const {id} = useParams();
 
-    console.log('id', id);
 
     const {isLoading: listTaskLoading, data: listTaskDragDropResponse} =
         useQuery({
@@ -55,7 +54,6 @@ function TaskInProject() {
             queryClient.refetchQueries(['getListDragDrop', id]);
         },
         onError: (error: any) => {
-            console.log('error', error);
             const messError = error?.response?.data?.message;
             notification.error({
                 message: 'Error',
@@ -96,17 +94,14 @@ function TaskInProject() {
             (t: any) => t?.id?.toString() === draggableId,
         );
 
-        console.log('movingTask', movingTask);
 
         const newSourceGroupTasks = sourceGroup.tasks.splice(source.index, 1);
 
-        console.log('newSourceGroupTasks', newSourceGroupTasks);
         const newDestinationGroupTasks = destinationGroup?.tasks?.splice(
             destination.index,
             0,
             movingTask,
         );
-        console.log('newDestinationGroupTasks>>>', newDestinationGroupTasks);
 
         // Mapping over the task lists means that you can easily
         // add new columns

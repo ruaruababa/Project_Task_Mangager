@@ -12,6 +12,5 @@ export const createComputer = (input: {
 }
 
 export const removeComputer = (id: string) => {
-    console.log("id", id)
     return baseAPIRequest.delete('computers/' + id)
 }

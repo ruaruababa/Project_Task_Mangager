@@ -27,13 +27,11 @@ const useProject = () => {
         return detailProjectResponse?.data?.data || [];
     }, [detailProjectResponse]);
 
-    console.log('detailProject', detailProject);
 
     const projects = useMemo(() => {
         return projectResponse?.data?.data || [];
     }, [projectResponse]);
 
-    console.log('projects', projects);
 
     const options = useMemo(() => {
         return projects.map((project: any) => {

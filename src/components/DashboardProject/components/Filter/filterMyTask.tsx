@@ -24,7 +24,6 @@ const FilterMyTask = (props: Props) => {
             form={form}
             name="basic"
             onFinish={(values) => {
-                console.log('values', values);
                 setValues({
                     ...values,
                     start_at: values?.start_at?.format('YYYY-MM-DD HH:mm'),

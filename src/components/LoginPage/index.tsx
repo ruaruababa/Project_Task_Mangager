@@ -9,7 +9,6 @@ const LoginPage = () => {
         mutationFn: login,
         mutationKey: ['login'],
         onSuccess: (response: any) => {
-            console.log('response', response);
             const token = response?.data?.data?.access_token?.token || '';
             setAccessToken(token);
             notification.success({
@@ -27,7 +26,6 @@ const LoginPage = () => {
     });
     const onFinish = (values: any) => {
         loginMutate(values);
-        console.log('Received values of form: ', values);
     };
 
     return (

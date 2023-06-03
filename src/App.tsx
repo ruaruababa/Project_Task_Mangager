@@ -19,7 +19,6 @@ function App() {
     );
 
     const accessToken = getAccessToken();
-    console.log('accessToken', accessToken);
     return (
         <div className="App">
             <QueryClientProvider client={queryClient}>

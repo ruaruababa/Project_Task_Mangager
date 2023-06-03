@@ -166,8 +166,6 @@ const CreateUpdateRoleModal = (props: Props) => {
                 onFinish={handleFinish}
                 layout="vertical"
                 onValuesChange={(changedValues, allValues) => {
-                    console.log('changedValues', changedValues);
-                    console.log('allValues', allValues);
                     const dataPer = data.filter((item: any) => {
                         return changedValues[item?.name] === true;
                     });

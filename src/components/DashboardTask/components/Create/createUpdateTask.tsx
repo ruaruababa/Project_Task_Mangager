@@ -3,12 +3,12 @@
 // };
 
 // export default CreateUpdateTask;
-import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
-import {Button, DatePicker, Form, Input, Select, notification} from 'antd';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { Button, DatePicker, Form, Input, Select, notification } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 import dayjs from 'dayjs';
-import {useEffect, useMemo} from 'react';
-import {useNavigate, useParams} from 'react-router-dom';
+import { useEffect, useMemo } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import useStatus from '../../../../hooks/useStatus';
 import useUser from '../../../../hooks/useUser';
 import {
@@ -24,7 +24,6 @@ const CreateUpdateTask = () => {
     const {statusOptions} = useStatus();
     const startDate = Form.useWatch('starts_at', form);
     const endDate = Form.useWatch('ends_at', form);
-    console.log('startDate', startDate);
 
     const options: any = users?.map((user: any) => ({
         label: user.name,
@@ -103,7 +102,6 @@ const CreateUpdateTask = () => {
     });
 
     const handleFinish = (values: any) => {
-        console.log('values', values);
         taskId
             ? updateTaskMutate({
                   ...values,
