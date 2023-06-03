@@ -6,7 +6,6 @@ import useGant from './useGant';
 
 const currentDate = new Date();
 
-console.log(currentDate);
 
 const tasks: Task[] = [
     {
@@ -110,7 +109,6 @@ const tasks: Task[] = [
 const GanttChart = () => {
     const navigate = useNavigate();
     const {data, setValues} = useGant();
-    console.log('>>>>>', !data);
 
     return (
         <div>

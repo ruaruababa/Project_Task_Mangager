@@ -131,7 +131,6 @@ const CreateUpdateUserModal = (props: Props) => {
 
     const handleFinish = (values: any) => {
         if (initalValues) {
-            console.log({...values});
             updateUserMutate({
                 ...values,
                 date_of_birth: dayjs(values.date_of_birth).format('YYYY-MM-DD'),

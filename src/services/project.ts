@@ -53,7 +53,6 @@ export const filterProject = ({name, status_id, start_at, end_at}: any) => {
         startAtParams && startAtParams
     }${endAtParams && endAtParams}`;
 
-    console.log('params', params);
 
     return baseAPIRequest.get(`api/projects?${params}`);
 };

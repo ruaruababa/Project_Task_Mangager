@@ -6,8 +6,6 @@ import {getListTaskInProject} from '../../../services/project';
 const useTaskInProject = () => {
     const {id, taskId} = useParams();
 
-    console.log('id', id);
-    console.log('taskId', taskId);
 
     const {data: taskInProjectResponse} = useQuery({
         queryKey: ['getListTaskInProject', id],

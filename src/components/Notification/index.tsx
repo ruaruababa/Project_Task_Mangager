@@ -50,10 +50,7 @@ const Notification = () => {
         queryFn: ({pageParam = 0}) => getListNoti(pageParam),
 
         getNextPageParam: (lastPage: any, pages) => {
-            console.log(
-                'lastPage?.links?.next',
-                lastPage?.data?.meta?.next_cursor,
-            );
+           
             console.log('pages', pages);
             if (lastPage?.data?.meta?.next_cursor)
                 return lastPage?.data?.meta?.next_cursor;

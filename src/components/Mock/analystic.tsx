@@ -39,8 +39,6 @@ const Analystic = () => {
         tasks_count: 2,
     });
 
-    console.log(detailProject?.tasks_count_by_status);
-    console.log(fakeMock);
     return (
         <>
             {' '}

@@ -133,7 +133,6 @@ const ComputerPage = () => {
                                         title="Delete the computer"
                                         description="Are you sure to delete this computer?"
                                         onConfirm={() => {
-                                            console.log(computer)
                                             remove(computer._id)
                                         }}
                                         okText="Yes"

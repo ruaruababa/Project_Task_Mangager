@@ -23,9 +23,7 @@ const Upload = (props: IProps) => {
         (event: any) => {
             event.stopPropagation();
             event.preventDefault();
-            // console.log('event', ...event?.target?.files);
             const file_: any = event?.target?.files;
-            console.log('file_', file_);
             const files: any = [];
             for (let i = 0; i < file_.length; i++) {
                 files.push(file_[i]);

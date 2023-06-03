@@ -7,7 +7,6 @@ function Column(props: any) {
     const {droppableId, list, type} = props;
 
     const {id} = useParams();
-    console.log('id = ', id);
 
     let style = {
         width: '90%',

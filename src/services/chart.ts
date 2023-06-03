@@ -10,9 +10,7 @@ export const ganttChartProject = ({name, status_id, start_at, end_at}: any) => {
         startAtParams && startAtParams
     }${endAtParams && endAtParams}`;
 
-    console.log('status_id', status_id);
 
-    console.log('params', params);
 
     return baseAPIRequest.get(`api/projects/gantt-chart?${params}`);
 };

@@ -46,7 +46,6 @@ const EditTask = (props: Props) => {
     });
 
     const handleFinish = (values: any) => {
-        console.log('values: ', values);
         if (initalValues) {
             return;
         }

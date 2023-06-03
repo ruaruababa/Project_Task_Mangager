@@ -6,7 +6,6 @@ import {ganttChartTaskInProject} from '../../../../services/chart';
 const useFilterTask = ({values}: any) => {
     const {id} = useParams();
 
-    console.log('values', values);
     const {data: taskFilterResponse} = useQuery({
         queryKey: ['ganttChartTaskInProject', id, values],
         queryFn: () => ganttChartTaskInProject(values),

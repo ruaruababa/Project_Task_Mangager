@@ -51,7 +51,6 @@ const DefaultLayout = () => {
     const onClickMenu = (e: any) => {
         navigate(e.key);
         const key = e.key;
-        console.log('key', e);
         const item = items?.find((item: any) => {
             return item?.children.find((child: any) => child?.key === key);
         });
