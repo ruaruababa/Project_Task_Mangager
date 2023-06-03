@@ -46,6 +46,7 @@ const DefaultLayout = () => {
         token: {colorBgContainer},
     } = theme.useToken();
     const navigate = useNavigate();
+
     const {userProfile} = useProfile();
 
     const onClickMenu = (e: any) => {

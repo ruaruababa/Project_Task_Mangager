@@ -1,4 +1,6 @@
+import {useQueryClient} from '@tanstack/react-query';
 import {Button} from 'antd';
+import {useEffect} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import {convertDate} from '../../../../utils/format';
 import PiChart from '../../../Chart/PieChart';
@@ -12,6 +14,11 @@ const DetailProject = () => {
     const handleViewTask = () => {
         navigate(`/project/${id}/list-task`);
     };
+    const queryClient = useQueryClient();
+
+    useEffect(() => {
+        queryClient.refetchQueries(['getDetailProject', id]);
+    }, [detailProject]);
 
     return (
         <>

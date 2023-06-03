@@ -64,7 +64,7 @@ const CreateUpdateProject = () => {
                 message: 'Success ',
                 description: 'Update successfully',
             });
-            queryClient.invalidateQueries(['detailProject', id]);
+            navigate(`/project/${id}`);
         },
         onError: (error: any) => {
             notification.error({
@@ -362,7 +362,7 @@ const CreateUpdateProject = () => {
                                 className="!text-center !block !min-w-[200px] bg-blue-600"
                                 size="large"
                             >
-                                {id ? 'Chỉnh sửa' : 'Tạo'}
+                                {id ? 'Lưu' : 'Tạo'}
                             </Button>
                         </Form.Item>
                         <Form.Item className="flex justify-center w-full">
@@ -372,7 +372,7 @@ const CreateUpdateProject = () => {
                                 className="!text-center !block !min-w-[200px]"
                                 size="large"
                                 onClick={() => {
-                                    navigate(`/project/${id}`);
+                                    navigate(`/project`);
                                 }}
                             >
                                 {'Hủy'}

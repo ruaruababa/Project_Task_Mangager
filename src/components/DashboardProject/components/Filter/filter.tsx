@@ -107,7 +107,7 @@ const FilterProject = (props: Props) => {
                     <DatePicker
                         className="!h-[40px]"
                         placeholder="Ngày bắt đầu"
-                        format={'YYYY/MM/DD HH:mm'}
+                        format={'YYYY/MM/DD'}
                         style={{
                             backgroundColor: '#f5f5f5',
                             width: '100%',
@@ -123,7 +123,7 @@ const FilterProject = (props: Props) => {
                     <DatePicker
                         className="!h-[40px]"
                         placeholder="Ngày kết thúc"
-                        format={'YYYY/MM/DD HH:mm'}
+                        format={'YYYY/MM/DD'}
                         style={{
                             backgroundColor: '#f5f5f5',
                             width: '100%',
@@ -143,7 +143,7 @@ const FilterProject = (props: Props) => {
                             htmlType="submit"
                             className="!h-[40px]"
                         >
-                            Submit
+                            Tìm kiếm
                         </Button>
                         <Button
                             htmlType="button"

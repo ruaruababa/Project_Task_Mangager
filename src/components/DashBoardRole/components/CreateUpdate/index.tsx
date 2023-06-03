@@ -10,6 +10,7 @@ interface Props {
     onCancel: () => void;
     initalValues?: any;
     mode?: any;
+    viewOnly?: boolean;
 }
 
 export const AvatarWrapper = styled.div`
@@ -48,7 +49,7 @@ export const AvatarWrapper = styled.div`
 `;
 
 const CreateUpdateRoleModal = (props: Props) => {
-    const {visible, onCancel, initalValues, mode} = props;
+    const {visible, onCancel, initalValues, mode, viewOnly} = props;
     const [form] = Form.useForm();
     const {permissions} = usePermission();
 
@@ -59,6 +60,20 @@ const CreateUpdateRoleModal = (props: Props) => {
             form.setFieldsValue(initalValues);
         }
     }, [form, initalValues]);
+
+    useEffect(() => {
+        if (viewOnly) {
+            const fields = form.getFieldsValue(); // Get the current values of all fields
+            const disabledFields = Object.keys(fields).reduce(
+                (acc: any, key: any) => {
+                    acc[key] = true; // Set the disabled prop to true for each field
+                    return acc;
+                },
+                {},
+            );
+            form.setFieldsValue(disabledFields);
+        }
+    }, [form, viewOnly]);
 
     const data = useMemo(() => {
         return permissions?.map((item: any, index: any) => {
@@ -162,6 +177,7 @@ const CreateUpdateRoleModal = (props: Props) => {
             width={1000}
         >
             <Form
+                disabled={viewOnly}
                 form={form}
                 onFinish={handleFinish}
                 layout="vertical"
