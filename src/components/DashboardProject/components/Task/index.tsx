@@ -8,10 +8,13 @@ import {useNavigate, useParams} from 'react-router';
 import {filterTask, updateTask} from '../../../../services/project';
 import FilterTask from '../Filter/taskFilter';
 import Column from './col';
+import ModalPendingReason from './modalPendingReason';
 
 function TaskInProject() {
     const navigate = useNavigate();
     const {id} = useParams();
+    const [isShow, setIsShow] = useState(false);
+    const [data, setData] = useState<any>();
 
     // const {isLoading: listTaskLoading, data: listTaskDragDropResponse} =
     //     useQuery({
@@ -68,6 +71,10 @@ function TaskInProject() {
         /// A different way!
         const {draggableId, source, destination} = val;
 
+        console.log('draggableId', draggableId);
+        console.log('source', source);
+        console.log('destination', destination);
+
         const [sourceGroup] = taskFilter?.filter(
             (column: any) =>
                 column?.status_id?.toString() === source?.droppableId,
@@ -113,10 +120,22 @@ function TaskInProject() {
             }
             return column;
         });
-        updateTaskInProject({
-            status_id: destination?.droppableId,
-            idTask: draggableId,
-        });
+        if (destination?.droppableId === '3') {
+            setIsShow(true);
+            setData({
+                status_id: destination?.droppableId,
+                idTask: draggableId,
+            });
+        }
+        if (
+            source?.droppableId !== destination?.droppableId &&
+            destination?.droppableId !== '3'
+        ) {
+            updateTaskInProject({
+                status_id: destination?.droppableId,
+                idTask: draggableId,
+            });
+        }
     }
 
     return (
@@ -223,6 +242,14 @@ function TaskInProject() {
                     </div>
                 </DragDropContext>
             </div>
+            {
+                <ModalPendingReason
+                    visible={isShow}
+                    onCancel={() => setIsShow(false)}
+                    data={data}
+                    setVisible={setIsShow}
+                />
+            }
         </>
     );
 }

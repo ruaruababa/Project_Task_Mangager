@@ -48,12 +48,12 @@ const DetailTask = () => {
     const {id, taskId} = useParams();
     const navigate = useNavigate();
     const [isShowModal, setIsShowModal] = useState(false);
+    const queryClient = useQueryClient();
+
     const {data: detailTaskResponse} = useQuery({
         queryKey: ['getDetailTaskInProject', id, taskId],
         queryFn: () => getDetailTaskInProject(id, taskId),
     });
-
-    const queryClient = useQueryClient();
 
     const {mutate: removeReportFileMutate} = useMutation({
         mutationFn: (fileId) => removeAttachFile(taskId, fileId),
@@ -580,7 +580,9 @@ const DetailTask = () => {
             {
                 <ModalConfirm
                     isShow={isShow}
-                    handleRemoveReportFile={()=>handleRemoveReportFile(attachId)}
+                    handleRemoveReportFile={() =>
+                        handleRemoveReportFile(attachId)
+                    }
                     onCancel={handleCancel}
                 />
             }

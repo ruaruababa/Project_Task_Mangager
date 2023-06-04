@@ -28,13 +28,13 @@ function Column(props: any) {
                 };
             case '2':
                 return {
-                    label: 'Pending',
-                    color: '#e0e00a',
+                    label: 'In Progress',
+                    color: '#fa7725',
                 };
             case '3':
                 return {
-                    label: 'In Progress',
-                    color: '#fa7725',
+                    label: 'Pending',
+                    color: '#e0e00a',
                 };
             case '4':
                 return {
