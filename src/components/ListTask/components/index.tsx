@@ -1,14 +1,13 @@
 import {Button} from 'antd';
 import {useNavigate, useParams} from 'react-router-dom';
-import {convertDateTime} from '../../../utils/format';
-import Action from '../../Action';
 import FilterTask from '../../DashboardProject/components/Filter/taskFilter';
 import useTaskInProject from '../../DashboardProject/hooks/useTaskProject';
+import TaskItem from './item';
 
 const AllListTask = () => {
     const {id} = useParams();
     const navigate = useNavigate();
-    const {taskInProjects, setValues} = useTaskInProject();
+    const {taskInProjects, setValues, id: projectId} = useTaskInProject();
     const router = useNavigate();
 
     return (
@@ -100,39 +99,7 @@ const AllListTask = () => {
                     {(taskInProjects || [])?.map((task: any) => {
                         return (
                             <>
-                                <div className="grid grid-cols-12 py-4 pb-4 border-bottom">
-                                    <div className="col-span-2">{task?.id}</div>
-
-                                    <div
-                                        className="items-center col-span-4 text-blue-700 cursor-pointer hover:text-blue-900"
-                                        onClick={() =>
-                                            navigate(
-                                                `/project/${task?.project_id}/tasks/${task?.id}}`,
-                                            )
-                                        }
-                                    >
-                                        {task?.name}
-                                    </div>
-                                    <div className="grid grid-cols-8 col-span-6">
-                                        <div className="col-span-2">
-                                            {convertDateTime(task?.starts_at)}
-                                        </div>
-                                        <div className="col-span-2 text-center">
-                                            {convertDateTime(task?.ends_at)}
-                                        </div>
-                                        <div
-                                            className="flex col-span-2 ml-[55%] translate-x-[-50%]"
-                                            style={{
-                                                color: task?.status?.color,
-                                            }}
-                                        >
-                                            {task?.status?.name}
-                                        </div>
-                                        <div className="flex justify-center col-span-2">
-                                            <Action />
-                                        </div>
-                                    </div>
-                                </div>
+                                <TaskItem task={task} projectId={projectId} />
                             </>
                         );
                     })}

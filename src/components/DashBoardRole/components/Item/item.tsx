@@ -116,6 +116,7 @@ const Item = ({item}: any) => {
                             handleView={handleToggleModal}
                             handleEdit={handleEdit}
                             handleDelete={() => setIsOpen(true)}
+                            onlyCanView={!item?.is_editable && true}
                         />
                     }
                 >
@@ -148,7 +149,7 @@ const Item = ({item}: any) => {
                     onCancel={handleCancel}
                     mode={isEdit && 'update'}
                     initalValues={data}
-                    viewOnly={onlyCanView || (item?.is_editable && true)}
+                    viewOnly={onlyCanView || (!item?.is_editable && true)}
                 />
             </>
         </>

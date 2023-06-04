@@ -3,9 +3,9 @@ import {useState} from 'react';
 import {styled} from 'styled-components';
 import useStatus from '../../../../hooks/useStatus';
 interface Props {
-    projectOtpions: any;
-    statusOptions: any;
-    setValues: any;
+    projectOtpions?: any;
+    statusOptions?: any;
+    setValues?: any;
 }
 export const Container = styled.div<{toggleClearFiled: boolean}>`
     .ant-select-clear {
@@ -45,8 +45,8 @@ const FilterProject = (props: Props) => {
             onFinish={(values: any) => {
                 setValues({
                     ...values,
-                    start_at: values?.start_at?.format('YYYY-MM-DD HH:mm'),
-                    end_at: values?.end_at?.format('YYYY-MM-DD HH:mm'),
+                    start_at: values?.start_at?.format('YYYY-MM-DD'),
+                    end_at: values?.end_at?.format('YYYY-MM-DD'),
                 });
             }}
             autoComplete="off"

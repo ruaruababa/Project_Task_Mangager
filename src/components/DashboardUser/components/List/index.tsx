@@ -99,6 +99,7 @@ const ListUser = () => {
                                         size="large"
                                         onClick={() => {
                                             form.resetFields();
+                                            setPage(1);
                                         }}
                                         className="text-white bg-blue-500"
                                     >

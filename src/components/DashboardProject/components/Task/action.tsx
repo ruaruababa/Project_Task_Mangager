@@ -7,10 +7,11 @@ import {useNavigate, useParams} from 'react-router-dom';
 
 interface IProps {
     item: any;
+    setShowModal?: any;
 }
 
 const Action = (props: IProps) => {
-    const {item} = props;
+    const {item, setShowModal} = props;
     const {id} = useParams();
     const navigate = useNavigate();
 
@@ -30,7 +31,7 @@ const Action = (props: IProps) => {
             >
                 <EditOutlined />
             </div>
-            <div className="cursor-pointer">
+            <div className="cursor-pointer" onClick={() => setShowModal(true)}>
                 <DeleteOutlined />
             </div>
         </div>

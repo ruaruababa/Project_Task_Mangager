@@ -64,3 +64,8 @@ export const filterMyTask = ({name, taskName, start_at, end_at, page}: any) => {
 
     return baseAPIRequest.get(`api/tasks?page=${page}&per_page=10&${params}`);
 };
+
+export const removeTaskInProject = (projectId: any, taskId: any) => {
+    return baseAPIRequest.delete(`api/projects/${projectId}/tasks/${taskId}`);
+};
+
