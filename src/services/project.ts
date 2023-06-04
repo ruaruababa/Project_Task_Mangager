@@ -9,6 +9,10 @@ export const getDetailProject = (id: any) => {
     return baseAPIRequest.get(`api/projects/${id}`);
 };
 
+export const getHistoryProject = (id: any) => {
+    return baseAPIRequest.get(`api/projects/${id}/history`);
+};
+
 export const updateTask = (
     input: {
         name?: string;
