@@ -5,11 +5,7 @@ import {DragDropContext} from 'react-beautiful-dnd';
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import {Button, notification} from 'antd';
 import {useNavigate, useParams} from 'react-router';
-import {
-    filterTask,
-    getListDragDrop,
-    updateTask,
-} from '../../../../services/project';
+import {filterTask, updateTask} from '../../../../services/project';
 import FilterTask from '../Filter/taskFilter';
 import Column from './col';
 
@@ -17,28 +13,27 @@ function TaskInProject() {
     const navigate = useNavigate();
     const {id} = useParams();
 
-    const {isLoading: listTaskLoading, data: listTaskDragDropResponse} =
-        useQuery({
-            queryKey: ['getListDragDrop', id],
-            queryFn: () => getListDragDrop(id),
-            enabled: !!id,
-        });
+    // const {isLoading: listTaskLoading, data: listTaskDragDropResponse} =
+    //     useQuery({
+    //         queryKey: ['getListDragDrop', id],
+    //         queryFn: () => getListDragDrop(id),
+    //         enabled: !!id,
+    //     });
 
-    const taskList = useMemo(() => {
-        return listTaskDragDropResponse?.data?.data;
-    }, [listTaskDragDropResponse?.data?.data]);
-
-    const [taskListState, setTaskListState] = useState<any>(taskList);
+    // const taskList = useMemo(() => {
+    //     return listTaskDragDropResponse?.data?.data;
+    // }, [listTaskDragDropResponse?.data?.data]);
 
     const [values, setValues] = useState<any>();
 
-    const {data: taskFilterResponse} = useQuery({
+    const {data: taskFilterResponse, isLoading: taskListLoading} = useQuery({
         queryKey: ['filterTask', id, values],
         queryFn: () => filterTask({id, ...values}),
+        keepPreviousData: true,
     });
 
-    useMemo(() => {
-        setTaskListState(taskFilterResponse?.data?.data || []);
+    const taskFilter = useMemo(() => {
+        return taskFilterResponse?.data?.data;
     }, [taskFilterResponse]);
 
     const queryClient = useQueryClient();
@@ -50,7 +45,7 @@ function TaskInProject() {
                 message: 'Success ',
                 description: 'Update successfully',
             });
-            queryClient.refetchQueries(['getListDragDrop', id]);
+            queryClient.refetchQueries(['filterTask']);
         },
         onError: (error: any) => {
             const messError = error?.response?.data?.message;
@@ -61,7 +56,7 @@ function TaskInProject() {
         },
     });
 
-    if (listTaskLoading) {
+    if (taskListLoading) {
         return <div>Loading...</div>;
     }
 
@@ -73,7 +68,7 @@ function TaskInProject() {
         /// A different way!
         const {draggableId, source, destination} = val;
 
-        const [sourceGroup] = taskList?.filter(
+        const [sourceGroup] = taskFilter?.filter(
             (column: any) =>
                 column?.status_id?.toString() === source?.droppableId,
         );
@@ -82,7 +77,7 @@ function TaskInProject() {
         // dropped outside any drop area. In this case the
         // task reamins in the same column so `destination` is same as `source`
         const [destinationGroup]: any = destination
-            ? taskList.filter(
+            ? taskFilter.filter(
                   (column: any) =>
                       column?.status_id?.toString() === destination.droppableId,
               )
@@ -103,21 +98,21 @@ function TaskInProject() {
 
         // Mapping over the task lists means that you can easily
         // add new columns
-        // const newTaskList = taskList?.map((column: any) => {
-        //     if (column.status_id === source.status_id) {
-        //         return {
-        //             status_id: column.status_id,
-        //             tasks: newSourceGroupTasks,
-        //         };
-        //     }
-        //     if (column.status_id === destination.status_id) {
-        //         return {
-        //             status_id: column.status_id,
-        //             tasks: newDestinationGroupTasks,
-        //         };
-        //     }
-        //     return column;
-        // });
+        const newTaskList = taskFilter?.map((column: any) => {
+            if (column.status_id === source.status_id) {
+                return {
+                    status_id: column.status_id,
+                    tasks: newSourceGroupTasks,
+                };
+            }
+            if (column.status_id === destination.status_id) {
+                return {
+                    status_id: column.status_id,
+                    tasks: newDestinationGroupTasks,
+                };
+            }
+            return column;
+        });
         updateTaskInProject({
             status_id: destination?.droppableId,
             idTask: draggableId,
@@ -214,7 +209,7 @@ function TaskInProject() {
                 </div>
                 <DragDropContext onDragEnd={onDragEnd}>
                     <div className="grid grid-cols-5 wrapper">
-                        {taskListState?.map((item: any, index: number) => {
+                        {taskFilter?.map((item: any, index: number) => {
                             return (
                                 <Column
                                     className="column"
@@ -225,13 +220,6 @@ function TaskInProject() {
                                 />
                             );
                         })}
-                        {/* <Column
-                            className="column"
-                            droppableId="5"
-                            list={taskList[4]?.tasks}
-                            type="TASK"
-                            status_id={taskList[4]?.groupName}
-                        /> */}
                     </div>
                 </DragDropContext>
             </div>

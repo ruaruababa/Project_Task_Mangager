@@ -24,6 +24,7 @@ const useTaskInProject = () => {
         setValues,
         taskInProjects,
         total,
+        id
     };
 };
 

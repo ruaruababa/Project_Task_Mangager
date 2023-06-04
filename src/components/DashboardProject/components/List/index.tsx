@@ -1,33 +1,50 @@
 import {useQuery} from '@tanstack/react-query';
-import {Button, Form} from 'antd';
-import {useEffect, useMemo, useState} from 'react';
+import {Button} from 'antd';
+import {useMemo, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import useStatus from '../../../../hooks/useStatus';
 import {filterProject} from '../../../../services/project';
 import Pagination from '../../../Pagination';
-import useProject from '../../hooks/useProject';
 import FilterProject from '../Filter/filter';
 import Item from '../Item/item';
 const ProjectManager = () => {
-    const {projects, total, page, setPage, options} = useProject();
-    const [data, setData] = useState<any>(projects);
-    useEffect(() => {
-        if (projects) setData(projects);
-    }, [projects]);
     const {statusOptions} = useStatus();
-    const [form] = Form.useForm();
     const router = useNavigate();
     const [values, setValues] = useState<any>();
 
+    const [page, setPage] = useState(1);
+
     const {data: projectFilterResponse} = useQuery({
-        queryKey: ['filterProject', values],
-        queryFn: () => filterProject(values),
-        enabled: !!values,
+        queryKey: ['filterProject', page, values],
+        queryFn: () => filterProject({...values, page}),
+        keepPreviousData: true,
     });
 
-    useMemo(() => {
-        setData(projectFilterResponse?.data?.data || []);
+    const listProject = useMemo(() => {
+        return projectFilterResponse?.data?.data || [];
     }, [projectFilterResponse]);
+
+    const totalProject = useMemo(() => {
+        return projectFilterResponse?.data?.meta?.total || 0;
+    }, [projectFilterResponse]);
+
+    console.log('listProject', projectFilterResponse?.data?.data);
+
+    // const [params, setParams] = useState<any>('');
+
+    // const {data: userFilterResponse} = useQuery({
+    //     queryKey: ['filterUser', page, params],
+    //     queryFn: () => filterUser({...params, page}),
+    //     keepPreviousData: true,
+    // });
+
+    // const total = useMemo(() => {
+    //     return userFilterResponse?.data?.meta?.total || 0;
+    // }, [userFilterResponse]);
+
+    // const listUser = useMemo(() => {
+    //     return userFilterResponse?.data?.data || [];
+    // }, [userFilterResponse]);
 
     return (
         <>
@@ -64,12 +81,11 @@ const ProjectManager = () => {
             </div>
             <div className="flex flex-col ">
                 <FilterProject
-                    projectOtpions={options}
                     statusOptions={statusOptions}
                     setValues={setValues}
                 />
                 <div className="flex flex-col gap-4">
-                    {data.map((project: any) => {
+                    {listProject?.map((project: any) => {
                         return <Item data={project} />;
                     })}
                 </div>
@@ -77,7 +93,7 @@ const ProjectManager = () => {
             <div className="!bg-[#F5F5F5] mt-10">
                 <Pagination
                     currentPage={page}
-                    totalCount={total}
+                    totalCount={totalProject}
                     pageSize={10}
                     onPageChange={(page: any) => setPage(page)}
                 />

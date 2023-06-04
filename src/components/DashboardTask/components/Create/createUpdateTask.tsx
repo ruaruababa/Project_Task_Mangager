@@ -3,12 +3,12 @@
 // };
 
 // export default CreateUpdateTask;
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Button, DatePicker, Form, Input, Select, notification } from 'antd';
+import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
+import {Button, DatePicker, Form, Input, Select, notification} from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 import dayjs from 'dayjs';
-import { useEffect, useMemo } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import {useEffect, useMemo} from 'react';
+import {useNavigate, useParams} from 'react-router-dom';
 import useStatus from '../../../../hooks/useStatus';
 import useUser from '../../../../hooks/useUser';
 import {
@@ -24,6 +24,9 @@ const CreateUpdateTask = () => {
     const {statusOptions} = useStatus();
     const startDate = Form.useWatch('starts_at', form);
     const endDate = Form.useWatch('ends_at', form);
+    const statusId = Form.useWatch('status_id', form);
+
+    console.log('startDate', statusId);
 
     const options: any = users?.map((user: any) => ({
         label: user.name,
@@ -105,8 +108,8 @@ const CreateUpdateTask = () => {
         taskId
             ? updateTaskMutate({
                   ...values,
-                  starts_at: dayjs(startDate).format('YYYY/MM/DD'),
-                  ends_at: dayjs(endDate).format('YYYY/MM/DD'),
+                  starts_at: dayjs(startDate).format('YYYY/MM/DD HH:mm'),
+                  ends_at: dayjs(endDate).format('YYYY/MM/DD HH:mm'),
               })
             : createTaskInProjectMutate({
                   ...values,
@@ -191,7 +194,7 @@ const CreateUpdateTask = () => {
                                 }}
                                 value={
                                     startDate
-                                        ? dayjs()
+                                        ? dayjs(startDate)
                                         : dayjs(detailTaskInProject?.starts_at)
                                 }
                             />
@@ -334,6 +337,27 @@ const CreateUpdateTask = () => {
                             />
                         )}
                     </Form.Item>
+                    {taskId && statusId === 3 && (
+                        <Form.Item
+                            className="w-1/2"
+                            name="pending_reason"
+                            label="Lý do"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Vui lòng nhập lý do!',
+                                },
+                            ]}
+                        >
+                            <Input
+                                placeholder="Nhập lý do"
+                                style={{
+                                    backgroundColor: '#f5f5f5',
+                                    width: '100%',
+                                }}
+                            />
+                        </Form.Item>
+                    )}
                 </div>
 
                 <Form.Item
@@ -373,7 +397,13 @@ const CreateUpdateTask = () => {
                         <Form.Item className="w-full">
                             <Button
                                 onClick={() => {
-                                    navigate(`/project/${id}/tasks/${taskId}`);
+                                    navigate(
+                                        `${
+                                            taskId
+                                                ? `/project/${id}/tasks/${taskId}`
+                                                : `/project/${id}/list-task`
+                                        }   `,
+                                    );
                                 }}
                                 block
                                 type="primary"

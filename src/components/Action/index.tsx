@@ -4,10 +4,11 @@ interface Props {
     handleView?: () => void;
     handleEdit?: () => void;
     handleDelete?: () => void;
+    onlyCanView?: boolean;
 }
 
 const Action = (props: Props) => {
-    const {handleDelete, handleEdit, handleView} = props;
+    const {handleDelete, handleEdit, handleView, onlyCanView} = props;
 
     return (
         <div className="flex items-center justify-center col-span-2 gap-2">
@@ -18,7 +19,12 @@ const Action = (props: Props) => {
                 <EditOutlined />
             </div>
 
-            <div className="cursor-pointer" onClick={handleDelete}>
+            <div
+                className={`cursor-pointer ${
+                    onlyCanView && 'pointer-events-none'
+                }`}
+                onClick={handleDelete}
+            >
                 <DeleteOutlined />
             </div>
         </div>

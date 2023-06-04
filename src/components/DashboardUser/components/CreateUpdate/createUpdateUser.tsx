@@ -213,7 +213,16 @@ const CreateUpdateUserModal = (props: Props) => {
                     <Form.Item name="date_of_birth" label="Ngày sinh">
                         <DatePicker format={dateFormat} />
                     </Form.Item>{' '}
-                    <Form.Item name="address" label="Địa chỉ">
+                    <Form.Item
+                        name="address"
+                        label="Địa chỉ"
+                        rules={[
+                            {
+                                required: initalValues ? true : false,
+                                message: 'Vui lòng nhập địa chỉ',
+                            },
+                        ]}
+                    >
                         <Input type="text" placeholder="Nhập địa chỉ" />
                     </Form.Item>
                 </div>

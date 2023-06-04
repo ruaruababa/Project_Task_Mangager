@@ -372,7 +372,9 @@ const CreateUpdateProject = () => {
                                 className="!text-center !block !min-w-[200px]"
                                 size="large"
                                 onClick={() => {
-                                    navigate(`/project`);
+                                    navigate(
+                                        `${id ? `/project/${id}` : '/project'}`,
+                                    );
                                 }}
                             >
                                 {'Hủy'}

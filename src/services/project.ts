@@ -78,7 +78,13 @@ export const removeProject = (id: any) => {
     return baseAPIRequest.delete(`api/projects/${id}`);
 };
 
-export const filterProject = ({name, status_id, start_at, end_at}: any) => {
+export const filterProject = ({
+    name,
+    status_id,
+    start_at,
+    end_at,
+    page,
+}: any) => {
     const nameParams = `${name ? `name=${name}` : ''}`;
     const statusParams = `${status_id ? `&status_id=${status_id}` : ''}`;
     const startAtParams = `${start_at ? `&start_at=${start_at}` : ''}`;
@@ -87,7 +93,11 @@ export const filterProject = ({name, status_id, start_at, end_at}: any) => {
         startAtParams && startAtParams
     }${endAtParams && endAtParams}`;
 
-    return baseAPIRequest.get(`api/projects?${params}`);
+    return baseAPIRequest.get(
+        `api/projects${params && `?${params}`}${
+            !params ? `?page=${page}&per_page=10` : ''
+        }`,
+    );
 };
 
 export const filterTask = ({
