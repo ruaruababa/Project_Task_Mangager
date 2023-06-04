@@ -113,7 +113,6 @@ const FilterGantt = (props: Props) => {
                             backgroundColor: '#f5f5f5',
                             width: '100%',
                         }}
-                        showTime
                         allowClear
                         onChange={() => {
                             setToggleClearField(true);
@@ -129,7 +128,6 @@ const FilterGantt = (props: Props) => {
                             backgroundColor: '#f5f5f5',
                             width: '100%',
                         }}
-                        showTime
                         allowClear
                         onChange={() => {
                             setToggleClearField(true);
