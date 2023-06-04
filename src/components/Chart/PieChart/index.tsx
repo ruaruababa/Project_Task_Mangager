@@ -4,7 +4,7 @@ interface IChart {
 }
 const PiChart = (props: IChart) => {
     const {dataChart} = props;
-    const COLORS = ['#3f3f3f', '#f3e963', '#2035ac', '#e0390f', '#49d42d'];
+    const COLORS = ['#3f3f3f', ' #d47a12', '#f3e963', '#e0390f', '#49d42d'];
     const RADIAN = Math.PI / 180;
     const renderCustomizedLabel = ({
         cx,
