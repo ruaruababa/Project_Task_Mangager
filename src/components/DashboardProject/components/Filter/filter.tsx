@@ -112,7 +112,6 @@ const FilterProject = (props: Props) => {
                             backgroundColor: '#f5f5f5',
                             width: '100%',
                         }}
-                        showTime
                         allowClear
                         onChange={(value) => {
                             setToggleClearField(true);
@@ -128,7 +127,6 @@ const FilterProject = (props: Props) => {
                             backgroundColor: '#f5f5f5',
                             width: '100%',
                         }}
-                        showTime
                         allowClear
                         onChange={(value) => {
                             setToggleClearField(true);
