@@ -66,3 +66,8 @@ export const filterUser = ({userName, email, page}: any) => {
         `api/users?${params}&${!params && `page=${page}&per_page=10`}`,
     );
 };
+
+
+export const removeUser = (id: any) => {
+    return baseAPIRequest.delete(`api/users/${id}`);
+}

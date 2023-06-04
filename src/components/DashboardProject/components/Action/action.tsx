@@ -1,11 +1,14 @@
 import {DeleteOutlined, EditOutlined, EyeOutlined} from '@ant-design/icons';
 import {useMutation, useQueryClient} from '@tanstack/react-query';
 import {notification} from 'antd';
+import {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {removeProject} from '../../../../services/project';
+import {ModalConfirm} from '../Task/detailTask';
 const Action = (props: any) => {
     const {item} = props;
     const navigate = useNavigate();
+    const [isShow, setIsShow] = useState(false);
 
     const handleViewDetail = () => {
         navigate(`/project/${item.id}`);
@@ -36,28 +39,45 @@ const Action = (props: any) => {
 
     const handleRemoveProject = () => {
         removeProjectMutate();
+        setIsShow(false);
     };
 
     return (
-        <div
-            className="flex items-center justify-center col-span-2 gap-2"
-            style={{
-                borderLeft: `1px solid black`,
-            }}
-        >
-            <div className="cursor-pointer" onClick={handleViewDetail}>
-                <EyeOutlined />
+        <>
+            {' '}
+            <div
+                className="flex items-center justify-center col-span-2 gap-2"
+                style={{
+                    borderLeft: `1px solid black`,
+                }}
+            >
+                <div className="cursor-pointer" onClick={handleViewDetail}>
+                    <EyeOutlined />
+                </div>
+                <div className="cursor-pointer" onClick={handleEditProject}>
+                    <EditOutlined />
+                </div>
+                {/* <div className="cursor-pointer">
+            <CopyOutlined />
+        </div> */}
+                <div
+                    className="cursor-pointer"
+                    onClick={() => {
+                        setIsShow(true);
+                    }}
+                >
+                    <DeleteOutlined />
+                </div>
             </div>
-            <div className="cursor-pointer" onClick={handleEditProject}>
-                <EditOutlined />
-            </div>
-            {/* <div className="cursor-pointer">
-                <CopyOutlined />
-            </div> */}
-            <div className="cursor-pointer" onClick={handleRemoveProject}>
-                <DeleteOutlined />
-            </div>
-        </div>
+            {
+                <ModalConfirm
+                    isShow={isShow}
+                    onCancel={() => setIsShow(false)}
+                    handleRemoveReportFile={handleRemoveProject}
+                    title={'Xóa Project'}
+                />
+            }
+        </>
     );
 };
 

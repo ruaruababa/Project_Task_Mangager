@@ -1,13 +1,10 @@
-// const CreateUpdateTask = () => {
-//     return <div>createUpdateTask</div>;
-// };
+import {FileAddOutlined} from '@ant-design/icons';
 
-// export default CreateUpdateTask;
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
-import {Button, DatePicker, Form, Input, Select, notification} from 'antd';
+import {Button, DatePicker, Form, Input, Select, Tag, notification} from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 import dayjs from 'dayjs';
-import {useEffect, useMemo} from 'react';
+import {useCallback, useEffect, useMemo, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import useStatus from '../../../../hooks/useStatus';
 import useUser from '../../../../hooks/useUser';
@@ -15,7 +12,9 @@ import {
     createTaskInProject,
     getDetailTaskInProject,
     updateTaskInproject,
+    uploadAttachFile,
 } from '../../../../services/tasks';
+import {uploadChunk} from '../../../../utils/upload';
 
 const CreateUpdateTask = () => {
     const [form] = Form.useForm();
@@ -25,8 +24,32 @@ const CreateUpdateTask = () => {
     const startDate = Form.useWatch('starts_at', form);
     const endDate = Form.useWatch('ends_at', form);
     const statusId = Form.useWatch('status_id', form);
+    const navigate = useNavigate();
+    const queryClient = useQueryClient();
+    const [reportFile, setReportFile] = useState<any>([]);
 
-    console.log('startDate', statusId);
+    const handleUpload = useCallback((event: any) => {
+        event.stopPropagation();
+        event.preventDefault();
+        // console.log('event', ...event?.target?.files);
+        const file_: any = event?.target?.files;
+        const files: any = [];
+        for (let i = 0; i < file_.length; i++) {
+            files.push(file_[i]);
+        }
+
+        const file = file_.length === 1 ? file_[0] : files;
+        setReportFile(file);
+        if (!file) return;
+    }, []);
+
+    const {mutateAsync: uploadMutate, isLoading: isUploading} = useMutation({
+        mutationFn: (idRs: any) =>
+            uploadChunk(reportFile, uploadAttachFile(idRs), 'attachments'),
+        onSettled(data, error, variables, context) {
+            navigate(`/project/${id}/tasks/${variables}`);
+        },
+    });
 
     const options: any = users?.map((user: any) => ({
         label: user.name,
@@ -52,9 +75,6 @@ const CreateUpdateTask = () => {
         };
     }, [detailTaskInProject]);
 
-    const navigate = useNavigate();
-    const queryClient = useQueryClient();
-
     useEffect(() => {
         taskId
             ? form.setFieldsValue(detailToUpdate)
@@ -63,16 +83,19 @@ const CreateUpdateTask = () => {
               });
     }, [statusOptions, detailToUpdate, id, taskId, form]);
 
-    const {mutate: createTaskInProjectMutate, isLoading} = useMutation({
-        mutationFn: (data: any) => createTaskInProject(data, id),
+    const {mutateAsync: createTaskInProjectMutate, isLoading} = useMutation({
+        mutationFn: async (data: any) => createTaskInProject(data, id),
         mutationKey: ['createTaskInProject', id],
-        onSuccess: (data) => {
+        onSuccess: async (data) => {
             notification.success({
                 message: 'Success ',
                 description: 'Create successfully',
             });
-            navigate(`/project/${id}/tasks/${data?.data?.data?.id}`);
+            if (reportFile?.length > 1) {
+                uploadMutate(data?.data?.data?.id);
+            }
         },
+
         onError: (error: any) => {
             notification.error({
                 message: 'Error',
@@ -94,6 +117,7 @@ const CreateUpdateTask = () => {
                 id,
                 taskId,
             ]);
+            queryClient.invalidateQueries(['filterTask']);
             navigate(`/project/${id}/tasks/${taskId}`);
         },
         onError: (error: any) => {
@@ -103,6 +127,14 @@ const CreateUpdateTask = () => {
             });
         },
     });
+    const handleCreateTask = async (values: any) => {
+        createTaskInProjectMutate({
+            ...values,
+            starts_at: dayjs(startDate).format('YYYY/MM/DD HH:mm'),
+            ends_at: dayjs(endDate).format('YYYY/MM/DD HH:mm'),
+            status_id: 1,
+        });
+    };
 
     const handleFinish = (values: any) => {
         taskId
@@ -111,13 +143,9 @@ const CreateUpdateTask = () => {
                   starts_at: dayjs(startDate).format('YYYY/MM/DD HH:mm'),
                   ends_at: dayjs(endDate).format('YYYY/MM/DD HH:mm'),
               })
-            : createTaskInProjectMutate({
-                  ...values,
-                  starts_at: dayjs(startDate).format('YYYY/MM/DD HH:mm'),
-                  ends_at: dayjs(endDate).format('YYYY/MM/DD HH:mm'),
-                  status_id: 1,
-              });
+            : handleCreateTask(values);
     };
+
     return (
         <div className="p-10 bg-white rounded-xl">
             <div className="mb-10">
@@ -143,12 +171,7 @@ const CreateUpdateTask = () => {
                     </span>
                 </div>
             </div>
-            <Form
-                form={form}
-                onFinish={handleFinish}
-                layout="vertical"
-                initialValues={detailTaskInProject}
-            >
+            <Form form={form} onFinish={handleFinish} layout="vertical">
                 <Form.Item
                     name="name"
                     label="Tên task"
@@ -301,7 +324,7 @@ const CreateUpdateTask = () => {
                     />
                 </Form.Item>
 
-                <div className="flex gap-10">
+                <div className="flex items-end gap-10">
                     <Form.Item
                         name="status_id"
                         label="Trạng thái"
@@ -356,6 +379,56 @@ const CreateUpdateTask = () => {
                                     width: '100%',
                                 }}
                             />
+                        </Form.Item>
+                    )}
+                    {!taskId && (
+                        <Form.Item className="w-1/2">
+                            {' '}
+                            <div className="relative">
+                                {' '}
+                                <div className="absolute bottom-0 flex gap-3">
+                                    <FileAddOutlined
+                                        style={{
+                                            fontSize: '26px',
+                                            paddingRight: '10px',
+                                            paddingBottom: '2px',
+                                            borderRight: '1px solid #ccc',
+                                        }}
+                                    />
+                                    {reportFile.length > 1 ||
+                                    reportFile.name ? (
+                                        <div className="">
+                                            {reportFile[0]?.name && (
+                                                <Tag color="success">
+                                                    {reportFile[0]?.name}
+                                                </Tag>
+                                            )}
+                                            {reportFile[0]?.name && (
+                                                <Tag color="success">
+                                                    {reportFile[1]?.name}
+                                                </Tag>
+                                            )}
+                                            {reportFile?.name && (
+                                                <Tag color="success">
+                                                    {reportFile?.name}
+                                                </Tag>
+                                            )}
+                                        </div>
+                                    ) : (
+                                        <div>Chọn file của bạn</div>
+                                    )}
+                                </div>
+                                <div className="shadow-[inset_0_-1px_2px_rgba(0,0,0,0.6)] p-1 mt-5 relative">
+                                    {' '}
+                                    <input
+                                        multiple
+                                        className="relative z-30 w-full opacity-0"
+                                        type="file"
+                                        onChange={handleUpload}
+                                        accept="*"
+                                    ></input>
+                                </div>
+                            </div>
                         </Form.Item>
                     )}
                 </div>
