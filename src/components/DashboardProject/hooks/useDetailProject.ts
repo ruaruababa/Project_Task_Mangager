@@ -1,7 +1,7 @@
 import {useQuery} from '@tanstack/react-query';
 import {useEffect, useMemo, useState} from 'react';
 import {useParams} from 'react-router-dom';
-import {getDetailProject} from '../../../services/project';
+import {getDetailProject, getHistoryProject} from '../../../services/project';
 
 const useDetailProject = () => {
     const [idProject, setIdProject] = useState<any>(1);
@@ -16,6 +16,15 @@ const useDetailProject = () => {
         queryKey: ['getDetailProject', idProject],
         queryFn: () => getDetailProject(idProject),
     });
+
+    const {data: historyResponse} = useQuery({
+        queryKey: ['getHistoryProject', idProject],
+        queryFn: () => getHistoryProject(idProject),
+    });
+
+    const historyList = useMemo(() => {
+        return historyResponse?.data?.data || [];
+    }, [historyResponse]);
 
     const detailProject = useMemo(() => {
         return detailProjectResponse?.data?.data || [];
@@ -37,6 +46,7 @@ const useDetailProject = () => {
     return {
         detailProject,
         detailToUpdate,
+        historyList,
     };
 };
 
