@@ -44,7 +44,7 @@ const TaskChart = () => {
                 </span>
                 <span className="text-sm">Gantt chart</span>
             </div>
-            <FilterTask setValues={setValues} />
+            <FilterTask setValues={setValues} needHours={true}/>
             {data?.length > 0 && <Gantt tasks={data} />}
         </div>
     );

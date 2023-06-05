@@ -59,6 +59,11 @@ function TaskInProject() {
         },
     });
 
+    const handleClose = () => {
+        setIsShow(false);
+        queryClient.refetchQueries(['filterTask']);
+    };
+
     if (taskListLoading) {
         return <div>Loading...</div>;
     }
@@ -120,7 +125,7 @@ function TaskInProject() {
             }
             return column;
         });
-        if (destination?.droppableId === '3') {
+        if (destination?.droppableId === '3' && source?.droppableId !== '3') {
             setIsShow(true);
             setData({
                 status_id: destination?.droppableId,
@@ -224,7 +229,7 @@ function TaskInProject() {
                             </Button>
                         </div>
                     </div> */}
-                    <FilterTask setValues={setValues} />
+                    <FilterTask setValues={setValues} needHours={true} />
                 </div>
                 <DragDropContext onDragEnd={onDragEnd}>
                     <div className="grid grid-cols-5 wrapper">
@@ -245,7 +250,7 @@ function TaskInProject() {
             {
                 <ModalPendingReason
                     visible={isShow}
-                    onCancel={() => setIsShow(false)}
+                    onCancel={handleClose}
                     data={data}
                     setVisible={setIsShow}
                 />

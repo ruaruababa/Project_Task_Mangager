@@ -107,7 +107,7 @@ const FilterTask = (props: Props) => {
                             style={{
                                 width: '100%',
                             }}
-                            showTime
+                            showTime={needHours ? true : false}
                             allowClear
                             onChange={() => {
                                 setToggleClearField(true);
@@ -122,7 +122,7 @@ const FilterTask = (props: Props) => {
                             style={{
                                 width: '100%',
                             }}
-                            showTime
+                            showTime={needHours ? true : false}
                             allowClear
                             onChange={() => {
                                 setToggleClearField(true);
