@@ -132,6 +132,16 @@ const DetailProject = () => {
                                 {detailProject?.customer_name}
                             </div>
                         </div>
+                        {detailProject?.status?.id === 3 && (
+                            <div className="grid grid-cols-12">
+                                <div className="col-span-2 text-lg font-semibold text-gray-400">
+                                    Lý do trì hoãn:
+                                </div>
+                                <div className="col-span-10 font-semibold">
+                                    {detailProject?.pending_reason}
+                                </div>
+                            </div>
+                        )}
                         <div className="grid grid-cols-12">
                             <div className="col-span-2 text-lg font-semibold text-gray-400">
                                 Code:

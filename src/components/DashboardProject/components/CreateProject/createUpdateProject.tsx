@@ -14,13 +14,12 @@ const CreateUpdateProject = () => {
     const {users} = useUser();
     const {id} = useParams();
     const parmas = useParams();
-    console.log('parmas>>>', parmas);
     const {statusOptions} = useStatus();
     const {detailToUpdate, detailProject} = useDetailProject();
     const startDate = Form.useWatch('starts_at', form);
     const endDate = Form.useWatch('ends_at', form);
-
-    console.log('id>>>', !!id);
+    const statusSelected = Form.useWatch('status_id', form);
+    console.log('statusSelected>>>', statusSelected);
 
     const options: any = users?.map((user: any) => ({
         label: user.name,
@@ -80,7 +79,6 @@ const CreateUpdateProject = () => {
                   ...values,
                   starts_at: dayjs(startDate).format('YYYY/MM/DD'),
                   ends_at: dayjs(endDate).format('YYYY/MM/DD'),
-                  status_id: values?.value,
               })
             : createProjectMutate({
                   ...values,
@@ -335,7 +333,28 @@ const CreateUpdateProject = () => {
                             />
                         )}
                     </Form.Item>
-                    <div className="w-1/2"></div>
+                    {id && statusSelected === 3 && (
+                        <Form.Item
+                            className="w-1/2"
+                            name="pending_reason"
+                            label="Lý do trì hoãn"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Vui lòng nhập lý do!',
+                                },
+                            ]}
+                        >
+                            <Input
+                                type="text"
+                                placeholder="Nhập lý do"
+                                style={{
+                                    backgroundColor: '#f5f5f5',
+                                    width: '100%',
+                                }}
+                            />
+                        </Form.Item>
+                    )}
                 </div>
 
                 <Form.Item name="summary" label="Tóm tắt">

@@ -10,6 +10,7 @@ const useTaskInProject = () => {
     const {data: taskFilterResponse} = useQuery({
         queryKey: ['getListTaskInProject', id, values],
         queryFn: () => getListTaskInProject({id, ...values}),
+        keepPreviousData: true,
     });
 
     const total = useMemo(() => {
@@ -24,7 +25,7 @@ const useTaskInProject = () => {
         setValues,
         taskInProjects,
         total,
-        id
+        id,
     };
 };
 

@@ -118,6 +118,7 @@ const CreateUpdateTask = () => {
                 taskId,
             ]);
             queryClient.invalidateQueries(['filterTask']);
+            queryClient.invalidateQueries(['getListTaskInProject']);
             navigate(`/project/${id}/tasks/${taskId}`);
         },
         onError: (error: any) => {
