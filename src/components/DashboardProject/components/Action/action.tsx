@@ -27,7 +27,7 @@ const Action = (props: any) => {
                 message: 'Success ',
                 description: 'Xóa Project thành công',
             });
-            queryClient.invalidateQueries(['getListProject']);
+            queryClient.invalidateQueries(['filterProject']);
         },
         onError: (error: any) => {
             notification.error({
