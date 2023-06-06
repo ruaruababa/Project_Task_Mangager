@@ -130,7 +130,7 @@ const DetailTask = () => {
     }, [detailTaskInProject]);
 
     const getDetailSubTask = (subTaskId: any) => {
-        navigate(`/project/${id}/subtask/${subTaskId}`);
+        navigate(`/project/${id}/tasks/${subTaskId}`);
     };
 
     const [isShow, setIsShow] = useState(false);
