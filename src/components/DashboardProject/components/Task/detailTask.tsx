@@ -244,7 +244,7 @@ const DetailTask = () => {
                         className="text-white bg-green-600 hover:bg-green-700"
                         onClick={() => {
                             navigate(
-                                `/project${id}/task/${taskId}/create-subTask`,
+                                `/project/${id}/task/${taskId}/create-subTask`,
                             );
                         }}
                     >
@@ -332,103 +332,46 @@ const DetailTask = () => {
                                     />
                                 </div>
                             </div>
-                            <div className="grid grid-cols-12">
-                                <div className="col-span-2 text-lg font-semibold text-gray-400">
-                                    Project name:
-                                </div>
-                                <div className="col-span-10 font-semibold">
-                                    {detailTaskInProject?.project?.name}
-                                </div>
-                            </div>
-                            <div className="grid grid-cols-12">
-                                <div className="col-span-2 text-lg font-semibold text-gray-400">
-                                    Đầu việc cha:
-                                </div>
-                                <div
-                                    className="col-span-10 font-semibold cursor-pointer hover:text-blue-500"
-                                    onClick={() =>
-                                        navigate(
-                                            `/project/${detailTaskInProject?.project_id}/tasks/${detailTaskInProject?.parent?.id}`,
-                                        )
-                                    }
-                                >
-                                    {detailTaskInProject?.parent?.name}
-                                    <span
-                                        style={{
-                                            color: detailTaskInProject?.parent
-                                                ?.status?.color,
-                                        }}
-                                    >
-                                        {' - '}{' '}
-                                        {
-                                            detailTaskInProject?.parent?.status
-                                                ?.name
+
+                            {detailTaskInProject?.parent?.name && (
+                                <div className="grid grid-cols-12">
+                                    <div className="col-span-2 text-lg font-semibold text-gray-400">
+                                        Đầu việc cha:
+                                    </div>
+                                    <div
+                                        className="col-span-10 font-semibold cursor-pointer hover:text-blue-500"
+                                        onClick={() =>
+                                            navigate(
+                                                `/project/${detailTaskInProject?.project_id}/tasks/${detailTaskInProject?.parent?.id}`,
+                                            )
                                         }
-                                    </span>
+                                    >
+                                        {detailTaskInProject?.parent?.name}
+                                        <span
+                                            style={{
+                                                color: detailTaskInProject
+                                                    ?.parent?.status?.color,
+                                            }}
+                                        >
+                                            {' - '}{' '}
+                                            {
+                                                detailTaskInProject?.parent
+                                                    ?.status?.name
+                                            }
+                                        </span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="grid grid-cols-12">
-                                <div className="col-span-2 text-lg font-semibold text-gray-400">
-                                    Pending reason:
+                            )}
+                            {detailTaskInProject?.pending_reason && (
+                                <div className="grid grid-cols-12">
+                                    <div className="col-span-2 text-lg font-semibold text-gray-400">
+                                        Pending reason:
+                                    </div>
+                                    <div className="col-span-10 font-semibold">
+                                        {detailTaskInProject?.pending_reason}
+                                    </div>
                                 </div>
-                                <div className="col-span-10 font-semibold">
-                                    {detailTaskInProject?.pending_reason}
-                                </div>
-                            </div>
-                            <div className="grid grid-cols-12">
-                                <div className="col-span-2 text-lg font-semibold text-gray-400">
-                                    File name:{' '}
-                                </div>
-                                <div className="flex flex-col col-span-10 font-semibold">
-                                    {detailTaskInProject?.files?.map(
-                                        (file: any) => (
-                                            <a
-                                                href={file.url}
-                                                target="_blank"
-                                                rel="noreferrer"
-                                                className="text-blue-500"
-                                                style={{
-                                                    textDecoration: 'underline',
-                                                }}
-                                                key={file.id}
-                                            >
-                                                {file.name}
-                                            </a>
-                                        ),
-                                    )}
-                                </div>
-                            </div>
-                            <div className="grid grid-cols-12">
-                                <div className="col-span-2 text-lg font-semibold text-gray-400">
-                                    Report files:{' '}
-                                </div>
-                                <div className="flex flex-col col-span-10 font-semibold">
-                                    {detailTaskInProject?.reports?.map(
-                                        (item: any) => (
-                                            <a
-                                                href={item?.file?.url}
-                                                target="_blank"
-                                                rel="noreferrer"
-                                                className="text-blue-500"
-                                                style={{
-                                                    textDecoration: 'underline',
-                                                }}
-                                                key={item?.name}
-                                            >
-                                                {item?.file?.name}
-                                            </a>
-                                        ),
-                                    )}
-                                </div>
-                            </div>
-                            <div className="grid grid-cols-12">
-                                <div className="col-span-2 text-lg font-semibold text-gray-400">
-                                    Report users:
-                                </div>
-                                <div className="col-span-10 font-semibold">
-                                    {userReportList}
-                                </div>
-                            </div>
+                            )}
                             <div className="grid grid-cols-12">
                                 <div className="col-span-2 text-lg font-semibold text-gray-400">
                                     Description:
