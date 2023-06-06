@@ -94,6 +94,7 @@ const CreateUpdateSubTask = () => {
             if (reportFile?.length > 1) {
                 uploadMutate(data?.data?.data?.id);
             }
+            navigate(`/project/${id}/tasks/${data?.data?.data?.id}`);
         },
 
         onError: (error: any) => {
@@ -466,7 +467,7 @@ const CreateUpdateSubTask = () => {
                                 className="!text-center !block !min-w-[200px]"
                                 size="large"
                             >
-                                {subTaskId ? 'Cập nhật' : 'Tạo'}
+                                {taskId ? 'Tạo' : 'Cập nhật'}
                             </Button>
                         </Form.Item>
                         <Form.Item className="w-full">
@@ -474,7 +475,7 @@ const CreateUpdateSubTask = () => {
                                 onClick={() => {
                                     navigate(
                                         `${
-                                            subTaskId
+                                            taskId
                                                 ? `/project/${id}/tasks/${taskId}`
                                                 : `/project/${id}/list-task`
                                         }   `,
