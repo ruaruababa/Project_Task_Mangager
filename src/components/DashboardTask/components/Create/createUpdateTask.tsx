@@ -94,6 +94,7 @@ const CreateUpdateTask = () => {
             if (reportFile?.length > 1) {
                 uploadMutate(data?.data?.data?.id);
             }
+            navigate(`/project/${id}/tasks/${data?.data?.data?.id}`);
         },
 
         onError: (error: any) => {
