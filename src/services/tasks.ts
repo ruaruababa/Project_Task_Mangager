@@ -1,4 +1,3 @@
-import {TaskDto} from '../types/task.dto';
 import {baseAPIRequest, baseURL} from '../utils/service';
 export const getMyTasks = (page: any) => {
     return baseAPIRequest.get(`api/tasks?page=${page}&per_page=10`);
@@ -15,7 +14,7 @@ export const updateTaskInproject = (input: any, id: any, taskId: any) => {
     return baseAPIRequest.patch(`api/projects/${id}/tasks/${taskId}`, input);
 };
 
-export const createTask = (input: TaskDto) => {
+export const createTask = (input: any) => {
     return baseAPIRequest.post('tasks', input);
 };
 
@@ -23,7 +22,7 @@ export const removeTask = (id: string) => {
     return baseAPIRequest.delete('tasks/' + id);
 };
 
-export const updateTask = (id: string, data: TaskDto) => {
+export const updateTask = (id: string, data: any) => {
     return baseAPIRequest.put('tasks/' + id, data);
 };
 
@@ -69,3 +68,6 @@ export const removeTaskInProject = (projectId: any, taskId: any) => {
     return baseAPIRequest.delete(`api/projects/${projectId}/tasks/${taskId}`);
 };
 
+export const getHistotyInTask = (taskId: any) => {
+    return baseAPIRequest.get(`api/tasks/${taskId}/history`);
+};

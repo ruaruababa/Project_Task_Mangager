@@ -4,16 +4,29 @@ import {
     ExclamationCircleOutlined,
 } from '@ant-design/icons';
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
-import {Button, Card, Modal, Tag, notification} from 'antd';
+import {
+    Avatar,
+    Button,
+    Card,
+    Divider,
+    List,
+    Modal,
+    Popover,
+    Tag,
+    Typography,
+    notification,
+} from 'antd';
+import dayjs from 'dayjs';
 import {useMemo, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import {
     getDetailTaskInProject,
+    getHistotyInTask,
     removeAttachFile,
     uploadAttachFile,
     uploadReportFile,
 } from '../../../../services/tasks';
-import {convertDate} from '../../../../utils/format';
+import {convertDate, convertDateTime} from '../../../../utils/format';
 import UploadReportFile from '../../../Uploads/uploadFile';
 import UserAvatar from '../Item/avatar';
 interface Props {
@@ -91,6 +104,15 @@ const DetailTask = () => {
         },
     });
 
+    const {data: historyResponse} = useQuery({
+        queryKey: ['getHistotyInTask', taskId],
+        queryFn: () => getHistotyInTask(taskId),
+    });
+
+    const historyList = useMemo(() => {
+        return historyResponse?.data?.data || [];
+    }, [historyResponse]);
+
     const handleRemoveAttachFile = (filedId: any) => {
         removeAttachMutate(filedId);
         setIsShow(false);
@@ -143,7 +165,24 @@ const DetailTask = () => {
         </div>
     );
     const [isOpenModalAttachment, setIsOpenModalAttachment] = useState(false);
-
+    const [tabActive, setTabActive] = useState('subtask');
+    const tabList = [
+        {
+            id: 'subtask',
+            tab: 'subtask',
+            title: 'SUB TASK',
+        },
+        {
+            id: 'history',
+            tab: 'history',
+            title: 'HISTORY',
+        },
+        {
+            id: 'comment',
+            tab: 'comment',
+            title: 'COMMENT',
+        },
+    ];
     return (
         <>
             {
@@ -252,13 +291,13 @@ const DetailTask = () => {
                                     }}
                                 >
                                     <div className="text-lg font-semibold">
-                                        {convertDate(
+                                        {convertDateTime(
                                             detailTaskInProject?.starts_at,
                                         )}
                                     </div>
 
                                     <div className="text-gray-400">
-                                        Ngày bắt đầu
+                                        Thời gian bắt đầu
                                     </div>
                                 </div>
                                 <div
@@ -268,27 +307,15 @@ const DetailTask = () => {
                                     }}
                                 >
                                     <div className="text-lg font-semibold">
-                                        {convertDate(
+                                        {convertDateTime(
                                             detailTaskInProject?.ends_at,
                                         )}
                                     </div>
                                     <div className="text-gray-400">
-                                        Ngày hoàn thành
+                                        Thời gian kết thúc
                                     </div>
                                 </div>
-                                <div
-                                    className="flex flex-col col-span-2 py-3 text-center"
-                                    style={{
-                                        border: '1px dashed  #cccccc',
-                                    }}
-                                >
-                                    <div className="text-lg font-semibold">
-                                        {detailTaskInProject?.progress || 0} %
-                                    </div>
-                                    <div className="text-gray-400">
-                                        Phần trăm hoàn thành
-                                    </div>
-                                </div>
+
                                 <div className="flex col-span-2 py-3 text-center">
                                     <UserAvatar
                                         users={detailTaskInProject?.users || []}
@@ -301,6 +328,33 @@ const DetailTask = () => {
                                 </div>
                                 <div className="col-span-10 font-semibold">
                                     {detailTaskInProject?.project?.name}
+                                </div>
+                            </div>
+                            <div className="grid grid-cols-12">
+                                <div className="col-span-2 text-lg font-semibold text-gray-400">
+                                    Parent task:
+                                </div>
+                                <div
+                                    className="col-span-10 font-semibold cursor-pointer hover:text-blue-500"
+                                    onClick={() =>
+                                        navigate(
+                                            `/project/${detailTaskInProject?.project_id}/tasks/${detailTaskInProject?.parent?.id}`,
+                                        )
+                                    }
+                                >
+                                    {detailTaskInProject?.parent?.name}
+                                    <span
+                                        style={{
+                                            color: detailTaskInProject?.parent
+                                                ?.status?.color,
+                                        }}
+                                    >
+                                        {' - '}{' '}
+                                        {
+                                            detailTaskInProject?.parent?.status
+                                                ?.name
+                                        }
+                                    </span>
                                 </div>
                             </div>
                             <div className="grid grid-cols-12">
@@ -506,76 +560,189 @@ const DetailTask = () => {
                     </div>
                 </div>
                 {/* ------------------------------------- SubTask ------------------------------- */}
-                {detailTaskInProject?.children?.map((item: any) => (
-                    <div className="text-lg bg-white rounded-xl">
-                        <div className="flex flex-col gap-10 p-10">
-                            <div
-                                className="text-xl font-semibold cursor-pointer hover:underline"
-                                onClick={() => getDetailSubTask(item?.id)}
-                            >
-                                {item?.name} -{' '}
-                                <span
-                                    style={{
-                                        color: item?.status?.color,
-                                    }}
-                                >
-                                    {item?.status?.name}
-                                </span>
-                            </div>
-                            <div className="grid grid-cols-12 gap-3 text-lg">
+                <div className="text-lg bg-white rounded-xl">
+                    <div className="p-10">
+                        {' '}
+                        <div className="flex gap-5 font-semibold uppercase">
+                            {(tabList || []).map(({id, tab, title}) => (
                                 <div
-                                    className="flex flex-col col-span-2 py-3 text-center"
-                                    style={{
-                                        border: '1px dashed  #cccccc',
-                                    }}
+                                    key={id}
+                                    className={`${
+                                        tabActive === tab && 'active_tab'
+                                    } tab cursor-pointer py-1`}
+                                    onClick={() => setTabActive(tab)}
                                 >
-                                    <div className="text-lg font-semibold">
-                                        {convertDate(item?.starts_at)}
-                                    </div>
-
-                                    <div className="text-gray-400">
-                                        Ngày bắt đầu
-                                    </div>
+                                    {title}
                                 </div>
-                                <div
-                                    className="flex flex-col col-span-2 py-3 text-center"
-                                    style={{
-                                        border: '1px dashed  #cccccc',
-                                    }}
-                                >
-                                    <div className="text-lg font-semibold">
-                                        {convertDate(item?.starts_at)}
-                                    </div>
-                                    <div className="text-gray-400">
-                                        Ngày hoàn thành
-                                    </div>
-                                </div>
-
-                                <div className="flex col-span-2 py-3 text-center">
-                                    <UserAvatar users={item?.users || []} />
-                                </div>
-                            </div>
-
-                            {/* <div className="grid grid-cols-12">
-                                <div className="col-span-2 text-lg font-semibold text-gray-400">
-                                    Pending reason:
-                                </div>
-                                <div className="col-span-10 font-semibold">
-                                    {item?.pending_reason}
-                                </div>
-                            </div>
-
-                            <div className="grid grid-cols-12">
-                                <div className="col-span-2 text-lg font-semibold text-gray-400">
-                                    Description:
-                                </div>
-                                <div className="col-span-10 font-semibold">
-                                    {item?.description || 'Không xác định'}
-                                </div>
-                            </div> */}
+                            ))}
                         </div>
+                        {tabActive === 'subtask' && (
+                            <div>
+                                <div className="mt-5 text-lg font-bold">
+                                    DANH SÁCH SUBTASK
+                                </div>
+                                <Divider></Divider>
+                                {detailTaskInProject?.children?.map(
+                                    (item: any) => (
+                                        <div
+                                            className="text-lg"
+                                            style={{
+                                                borderBottom:
+                                                    '1px solid #cccccc',
+                                            }}
+                                        >
+                                            <div className="flex flex-col gap-10 p-10">
+                                                <div
+                                                    className="text-xl font-semibold cursor-pointer hover:underline"
+                                                    onClick={() =>
+                                                        getDetailSubTask(
+                                                            item?.id,
+                                                        )
+                                                    }
+                                                >
+                                                    {item?.name} -{' '}
+                                                    <span
+                                                        style={{
+                                                            color: item?.status
+                                                                ?.color,
+                                                        }}
+                                                    >
+                                                        {item?.status?.name}
+                                                    </span>
+                                                </div>
+                                                <div className="grid grid-cols-12 gap-3 text-lg">
+                                                    <div
+                                                        className="flex flex-col col-span-2 py-3 text-center"
+                                                        style={{
+                                                            border: '1px dashed  #cccccc',
+                                                        }}
+                                                    >
+                                                        <div className="text-lg font-semibold">
+                                                            {convertDate(
+                                                                item?.starts_at,
+                                                            )}
+                                                        </div>
+
+                                                        <div className="text-gray-400">
+                                                            Ngày bắt đầu
+                                                        </div>
+                                                    </div>
+                                                    <div
+                                                        className="flex flex-col col-span-2 py-3 text-center"
+                                                        style={{
+                                                            border: '1px dashed  #cccccc',
+                                                        }}
+                                                    >
+                                                        <div className="text-lg font-semibold">
+                                                            {convertDate(
+                                                                item?.starts_at,
+                                                            )}
+                                                        </div>
+                                                        <div className="text-gray-400">
+                                                            Ngày hoàn thành
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="flex col-span-2 py-3 text-center">
+                                                        <UserAvatar
+                                                            users={
+                                                                item?.users ||
+                                                                []
+                                                            }
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ),
+                                )}
+                            </div>
+                        )}
+                        {tabActive === 'history' && (
+                            <div>
+                                {' '}
+                                <div className="flex flex-col text-lg bg-white rounded-xl">
+                                    <div className="flex flex-col">
+                                        <div className="mt-5 text-lg font-bold">
+                                            LỊCH SỬ
+                                        </div>
+                                        <Divider></Divider>
+
+                                        <List
+                                            pagination={{
+                                                pageSize: 10,
+                                                total: historyList?.length,
+                                                showSizeChanger: false,
+                                            }}
+                                            itemLayout="horizontal"
+                                            dataSource={historyList}
+                                            renderItem={(item: any, index) => (
+                                                <List.Item>
+                                                    <List.Item.Meta
+                                                        avatar={
+                                                            <Popover
+                                                                content={
+                                                                    item?.user
+                                                                        ?.email
+                                                                }
+                                                            >
+                                                                <Avatar
+                                                                    src={
+                                                                        item
+                                                                            ?.user
+                                                                            ?.avatar
+                                                                    }
+                                                                    size={
+                                                                        'large'
+                                                                    }
+                                                                />
+                                                            </Popover>
+                                                        }
+                                                        title={
+                                                            <>
+                                                                {' '}
+                                                                <Typography.Text
+                                                                    mark
+                                                                >
+                                                                    [
+                                                                    {dayjs(
+                                                                        item?.created_at,
+                                                                    ).format(
+                                                                        'DD/MM/YYYY HH:mm',
+                                                                    )}
+                                                                    ]
+                                                                </Typography.Text>
+                                                                {' - '}
+                                                                <b
+                                                                    className="font-bold cursor-pointer hover:text-blue-500"
+                                                                    onClick={() =>
+                                                                        navigate(
+                                                                            `/user/${item?.user?.id}/detail`,
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    {
+                                                                        item
+                                                                            .user
+                                                                            ?.name
+                                                                    }
+                                                                </b>
+                                                            </>
+                                                        }
+                                                        description={
+                                                            item?.description
+                                                        }
+                                                    />
+                                                </List.Item>
+                                            )}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                        {tabActive === 'comment' && <div>comment</div>}
                     </div>
-                ))}
+                </div>
             </div>
             {
                 <ModalConfirm
