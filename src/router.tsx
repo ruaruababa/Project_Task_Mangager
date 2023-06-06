@@ -17,6 +17,7 @@ import Analystic from './components/Mock/analystic';
 import TaskManagerPage from './components/TaskManager';
 import UserProfile from './components/UserProfile';
 import UpdateProfile from './components/UserProfile/updateProfile';
+import CreateUpdateSubTask from './components/DashboardProject/components/Task/createUpdateSubTask';
 const router = createBrowserRouter([
     {
         element: <DefaultLayout />,
@@ -102,6 +103,10 @@ const router = createBrowserRouter([
             {
                 path: '/project/:id/gantt-chart',
                 element: <TaskChart />,
+            },
+            {
+                path: '/project/:id/task/:taskId/create-subtask',
+                element: <CreateUpdateSubTask />,
             },
         ],
     },

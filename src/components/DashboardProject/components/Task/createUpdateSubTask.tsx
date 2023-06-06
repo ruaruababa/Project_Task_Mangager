@@ -16,10 +16,10 @@ import {
 } from '../../../../services/tasks';
 import {uploadChunk} from '../../../../utils/upload';
 
-const CreateUpdateTask = () => {
+const CreateUpdateSubTask = () => {
     const [form] = Form.useForm();
     const {users} = useUser();
-    const {id, taskId} = useParams();
+    const {id, taskId, subTaskId} = useParams();
     const {statusOptions} = useStatus();
     const startDate = Form.useWatch('starts_at', form);
     const endDate = Form.useWatch('ends_at', form);
@@ -76,12 +76,12 @@ const CreateUpdateTask = () => {
     }, [detailTaskInProject]);
 
     useEffect(() => {
-        taskId
+        subTaskId
             ? form.setFieldsValue(detailToUpdate)
             : form.setFieldsValue({
                   status_id: 'Not Started',
               });
-    }, [statusOptions, detailToUpdate, id, taskId, form]);
+    }, [statusOptions, detailToUpdate, id, subTaskId, form]);
 
     const {mutateAsync: createTaskInProjectMutate, isLoading} = useMutation({
         mutationFn: async (data: any) => createTaskInProject(data, id),
@@ -106,8 +106,8 @@ const CreateUpdateTask = () => {
     });
 
     const {mutate: updateTaskMutate} = useMutation({
-        mutationFn: (data: any) => updateTaskInproject(data, id, taskId),
-        mutationKey: ['updateTaskInproject', id, taskId],
+        mutationFn: (data: any) => updateTaskInproject(data, id, subTaskId),
+        mutationKey: ['updateTaskInproject', id, subTaskId],
         onSuccess: (data) => {
             notification.success({
                 message: 'Success ',
@@ -116,11 +116,11 @@ const CreateUpdateTask = () => {
             queryClient.invalidateQueries([
                 'getDetailTaskInProject',
                 id,
-                taskId,
+                subTaskId,
             ]);
             queryClient.invalidateQueries(['filterTask']);
             queryClient.invalidateQueries(['getListTaskInProject']);
-            navigate(`/project/${id}/tasks/${taskId}`);
+            navigate(`/project/${id}/tasks/${subTaskId}`);
         },
         onError: (error: any) => {
             notification.error({
@@ -135,11 +135,12 @@ const CreateUpdateTask = () => {
             starts_at: dayjs(startDate).format('YYYY/MM/DD HH:mm'),
             ends_at: dayjs(endDate).format('YYYY/MM/DD HH:mm'),
             status_id: 1,
+            parent_id: taskId,
         });
     };
 
     const handleFinish = (values: any) => {
-        taskId
+        subTaskId
             ? updateTaskMutate({
                   ...values,
                   starts_at: dayjs(startDate).format('YYYY/MM/DD HH:mm'),
@@ -192,7 +193,7 @@ const CreateUpdateTask = () => {
                     />
                 </Form.Item>
 
-                {taskId ? (
+                {subTaskId ? (
                     <div className="flex gap-10">
                         {' '}
                         <Form.Item
@@ -332,12 +333,12 @@ const CreateUpdateTask = () => {
                         label="Trạng thái"
                         className="w-1/2"
                     >
-                        {taskId ? (
+                        {subTaskId ? (
                             <Select
                                 style={{width: '100%'}}
                                 options={statusOptions}
                                 defaultValue={
-                                    taskId
+                                    subTaskId
                                         ? detailTaskInProject?.status_id
                                         : {
                                               label: 'Not Started',
@@ -352,7 +353,7 @@ const CreateUpdateTask = () => {
                                 style={{width: '100%'}}
                                 options={statusOptions}
                                 defaultValue={
-                                    taskId
+                                    subTaskId
                                         ? detailTaskInProject?.status_id
                                         : {
                                               label: 'Not Started',
@@ -362,7 +363,7 @@ const CreateUpdateTask = () => {
                             />
                         )}
                     </Form.Item>
-                    {taskId && statusId === 3 && (
+                    {subTaskId && statusId === 3 && (
                         <Form.Item
                             className="w-1/2"
                             name="pending_reason"
@@ -383,7 +384,7 @@ const CreateUpdateTask = () => {
                             />
                         </Form.Item>
                     )}
-                    {!taskId && (
+                    {!subTaskId && (
                         <Form.Item className="w-1/2">
                             {' '}
                             <div className="relative">
@@ -466,7 +467,7 @@ const CreateUpdateTask = () => {
                                 className="!text-center !block !min-w-[200px]"
                                 size="large"
                             >
-                                {taskId ? 'Cập nhật' : 'Tạo'}
+                                {taskId ? 'Tạo' : 'Cập nhật'}
                             </Button>
                         </Form.Item>
                         <Form.Item className="w-full">
@@ -495,4 +496,4 @@ const CreateUpdateTask = () => {
     );
 };
 
-export default CreateUpdateTask;
+export default CreateUpdateSubTask;

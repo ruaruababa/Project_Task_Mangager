@@ -15,6 +15,11 @@ body {
     margin: 0;
 }
 
+.active_tab {
+    color: #0012a3 !important;
+    border-bottom: 3px solid #0012a3;
+}
+
 .header-container {
     display: flex;
     align-content: center;
