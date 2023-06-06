@@ -241,6 +241,16 @@ const DetailTask = () => {
                 </div>
                 <div className="flex gap-3">
                     <Button
+                        className="text-white bg-green-600 hover:bg-green-700"
+                        onClick={() => {
+                            navigate(
+                                `/project${id}/task/${taskId}/create-subTask`,
+                            );
+                        }}
+                    >
+                        Thêm đầu việc
+                    </Button>
+                    <Button
                         type="primary"
                         onClick={() => {
                             navigate(`/project/${id}/tasks/${taskId}/edit`);
@@ -332,7 +342,7 @@ const DetailTask = () => {
                             </div>
                             <div className="grid grid-cols-12">
                                 <div className="col-span-2 text-lg font-semibold text-gray-400">
-                                    Parent task:
+                                    Đầu việc cha:
                                 </div>
                                 <div
                                     className="col-span-10 font-semibold cursor-pointer hover:text-blue-500"
