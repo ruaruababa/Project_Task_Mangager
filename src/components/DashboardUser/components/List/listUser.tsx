@@ -5,27 +5,12 @@ import {useNavigate} from 'react-router-dom';
 import {filterUser} from '../../../../services/user';
 import Pagination from '../../../Pagination';
 import CreateUpdateUserModal from '../CreateUpdate/createUpdateUser';
-import UserItem from '../Item/item';
+import UserItem from '../Item/userItem';
 
 const ListUser = () => {
     const [page, setPage] = useState(1);
     const [form] = Form.useForm();
     const [isShowCreateModal, setIsShowCreateModal] = useState(false);
-    // const {data: listUserResponse} = useQuery({
-    //     queryKey: ['getListUserInSystem', page],
-    //     queryFn: () => getListUserInSystem(page),
-    //     keepPreviousData: true,
-    // });
-
-    // const listUser = useMemo(() => {
-    //     return listUserResponse?.data?.data || [];
-    // }, [listUserResponse]);
-
-    // const [userData, setUserData] = useState<any>(listUser);
-
-    // const total = useMemo(() => {
-    //     return listUserResponse?.data?.meta?.total || 0;
-    // }, [listUserResponse]);
 
     const [params, setParams] = useState<any>('');
 

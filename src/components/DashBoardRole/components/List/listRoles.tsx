@@ -3,8 +3,8 @@ import {Card} from 'antd';
 import {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import useRole from '../../../../hooks/useRole';
-import CreateUpdateRoleModal from '../CreateUpdate';
-import Item from '../Item/item';
+import CreateUpdateRoleModal from '../CreateUpdate/createUpdateRole';
+import Item from '../Item/itemCardPermission';
 
 const ListRole = () => {
     const {roles} = useRole();

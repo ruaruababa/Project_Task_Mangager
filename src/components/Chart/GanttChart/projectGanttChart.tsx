@@ -1,10 +1,10 @@
 import {Gantt} from 'gantt-task-react';
 import 'gantt-task-react/dist/index.css';
 import {useNavigate} from 'react-router';
-import FilterGantt from '../../DashboardProject/components/Filter/ganttFilter';
-import useGant from './useGant';
+import FilterGanttProject from '../../Filter/filterGanttProject';
+import useGant from './useGanttProject';
 
-const GanttChart = () => {
+const GanttChartProject = () => {
     const navigate = useNavigate();
     const {data, setValues} = useGant();
     if (!data) {
@@ -27,10 +27,10 @@ const GanttChart = () => {
                 </span>
                 <span className="text-sm">Gantt chart</span>
             </div>
-            <FilterGantt setValues={setValues} />
+            <FilterGanttProject setValues={setValues} />
             {data?.length > 0 && <Gantt tasks={data} />}
         </div>
     );
 };
 
-export default GanttChart;
+export default GanttChartProject;

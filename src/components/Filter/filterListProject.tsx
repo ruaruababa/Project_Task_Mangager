@@ -1,7 +1,7 @@
 import {Button, DatePicker, Form, Input, Select} from 'antd';
 import {useState} from 'react';
 import {styled} from 'styled-components';
-import useStatus from '../../../../hooks/useStatus';
+import useStatus from '../../hooks/useStatus';
 interface Props {
     projectOtpions?: any;
     statusOptions?: any;
@@ -15,29 +15,15 @@ export const Container = styled.div<{toggleClearFiled: boolean}>`
         opacity: ${({toggleClearFiled}) => (toggleClearFiled ? 1 : 0)};
     }
 `;
-const FilterProject = (props: Props) => {
+const FilterListProject = (props: Props) => {
     const [form] = Form.useForm();
-    const {projectOtpions, setValues} = props;
+    const {setValues} = props;
     const {statusOptions} = useStatus();
     const [toggleClearField, setToggleClearField] = useState<any>(false);
     const handleFilterOnChange = (input: any, option: any) => {
         return (option?.label ?? '').includes(input);
     };
 
-    const handleFilterSort = (optionA: any, optionB: any) => {
-        return (optionA?.label ?? '')
-            .toLowerCase()
-            .localeCompare((optionB?.label ?? '').toLowerCase());
-    };
-
-    // const {data: projectFilterResponse} = useQuery({
-    //     queryKey: ['filterProject', values],
-    //     queryFn: () => filterProject(values),
-    //     enabled: !!values,
-    // });
-    function onClickStopProg(e: any) {
-        e.stopPropagation();
-    }
     return (
         <Form
             form={form}
@@ -58,21 +44,6 @@ const FilterProject = (props: Props) => {
                 <div className="col-span-2">
                     {' '}
                     <Form.Item name={'name'} className="!h-[40px]">
-                        {/* <Select
-                            placeholder="Chọn tên dự án"
-                            fieldNames={{label: 'label', value: 'label'}}
-                            className="w-full"
-                            size={'large'}
-                            showSearch
-                            optionFilterProp="children"
-                            filterOption={(input: any, option: any) =>
-                                handleFilterOnChange(input, option)
-                            }
-                            filterSort={(optionA, optionB) =>
-                                handleFilterSort(optionA, optionB)
-                            }
-                            options={projectOtpions}
-                        /> */}
                         <Input
                             type="text"
                             className="!h-[40px]"
@@ -159,4 +130,4 @@ const FilterProject = (props: Props) => {
     );
 };
 
-export default FilterProject;
+export default FilterListProject;
