@@ -3,8 +3,8 @@ import {useMemo, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {filterMyTask} from '../../services/tasks';
 import {convertDate} from '../../utils/format';
-import FilterMyTask from '../DashboardProject/components/Filter/filterMyTask';
 import Pagination from '../Pagination';
+import FilterMyTask from '../Filter/filterMyTask';
 
 const TaskManager = () => {
     const [page, setPage] = useState(1);
@@ -54,19 +54,7 @@ const TaskManager = () => {
                 </div>
             </div>
             <div className="flex flex-col p-10 bg-white rounded-lg">
-                {/* <div className="grid grid-cols-6 gap-3 mb-10">
-                    <SelectProject
-                        options={options}
-                        name={'project'}
-                        holder="Chọn tên dự án"
-                    />
-                    <Input placeholder="Nhập tên task" />
-                    <DatePickerCp name={'startDate'} holder="Ngày bắt đầu" />
-                    <DatePickerCp name={'endDate'} holder="Ngày kết thúc" />
-                    <Button type="primary" size={'large'}>
-                        Tìm kiếm
-                    </Button>
-                </div> */}
+               
                 <FilterMyTask setValues={setFilter} />
                 <div className="flex flex-col">
                     <div className="grid grid-cols-12 pb-4 text-xs font-semibold text-gray-400 border-bottom">

@@ -4,7 +4,7 @@ import {useState} from 'react';
 import {getDetailRole, removeRole} from '../../../../services/role';
 import Action from '../../../Action';
 import {ModalConfirm} from '../../../DashboardProject/components/Task/detailTask';
-import CreateUpdateRoleModal from '../CreateUpdate';
+import CreateUpdateRoleModal from '../CreateUpdate/createUpdateRole';
 
 const Item = ({item}: any) => {
     const [isShow, setIsShow] = useState(false);

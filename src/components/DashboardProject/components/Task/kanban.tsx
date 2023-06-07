@@ -6,11 +6,11 @@ import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import {Button, notification} from 'antd';
 import {useNavigate, useParams} from 'react-router';
 import {filterTask, updateTask} from '../../../../services/project';
-import FilterTask from '../Filter/taskFilter';
-import Column from './col';
+import FilterTask from '../../../Filter/taskFilter';
+import Column from './colKanban';
 import ModalPendingReason from './modalPendingReason';
 
-function TaskInProject() {
+function Kanban() {
     const navigate = useNavigate();
     const {id} = useParams();
     const [isShow, setIsShow] = useState(false);
@@ -190,34 +190,6 @@ function TaskInProject() {
                     </div>
                 </div>
                 <div className="">
-                    {/* <div className="grid grid-cols-9 gap-3 mb-10">
-                        <div className="col-span-2">
-                            <Input
-                                placeholder="Nhập tên task"
-                                className="h-full"
-                            />
-                        </div>
-                        <div className="col-span-2">
-                            <SelectProject
-                                options={[]}
-                                name={'status'}
-                                holder="Người thực hiện"
-                            />
-                        </div>
-                        <div className="col-span-2">
-                            <SelectProject
-                                options={[]}
-                                name={'status'}
-                                holder="Chọn trạng thái"
-                            />
-                        </div>
-
-                        <div className="col-span-1">
-                            <Button type="primary" size={'large'}>
-                                Tìm kiếm
-                            </Button>
-                        </div>
-                    </div> */}
                     <FilterTask setValues={setValues} needHours={true} />
                 </div>
                 <DragDropContext onDragEnd={onDragEnd}>
@@ -248,4 +220,4 @@ function TaskInProject() {
     );
 }
 
-export default TaskInProject;
+export default Kanban;

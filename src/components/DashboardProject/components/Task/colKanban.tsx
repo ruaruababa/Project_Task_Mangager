@@ -1,7 +1,7 @@
 // @ts-ignore
 import {Droppable} from 'react-beautiful-dnd';
 import {useParams} from 'react-router-dom';
-import Task from './item';
+import Task from './kanbanItem';
 
 function Column(props: any) {
     const {droppableId, list, type} = props;

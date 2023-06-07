@@ -4,8 +4,8 @@ import {useMemo, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import useStatus from '../../../../hooks/useStatus';
 import {filterProject} from '../../../../services/project';
+import FilterProject from '../../../Filter/filterListProject';
 import Pagination from '../../../Pagination';
-import FilterProject from '../Filter/filter';
 import Item from '../Item/item';
 const ProjectManager = () => {
     const {statusOptions} = useStatus();
@@ -29,22 +29,6 @@ const ProjectManager = () => {
     }, [projectFilterResponse]);
 
     console.log('listProject', projectFilterResponse?.data?.data);
-
-    // const [params, setParams] = useState<any>('');
-
-    // const {data: userFilterResponse} = useQuery({
-    //     queryKey: ['filterUser', page, params],
-    //     queryFn: () => filterUser({...params, page}),
-    //     keepPreviousData: true,
-    // });
-
-    // const total = useMemo(() => {
-    //     return userFilterResponse?.data?.meta?.total || 0;
-    // }, [userFilterResponse]);
-
-    // const listUser = useMemo(() => {
-    //     return userFilterResponse?.data?.data || [];
-    // }, [userFilterResponse]);
 
     return (
         <>

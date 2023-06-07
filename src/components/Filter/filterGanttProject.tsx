@@ -1,7 +1,7 @@
 import {Button, DatePicker, Form, Input, Select} from 'antd';
 import {useState} from 'react';
 import styled from 'styled-components';
-import useStatus from '../../../../hooks/useStatus';
+import useStatus from '../../hooks/useStatus';
 interface Props {
     projectOtpions?: any;
     setValues?: any;
@@ -13,7 +13,7 @@ export const Container = styled.div<{toggleClearFiled: boolean}>`
     }
 `;
 
-const FilterGantt = (props: Props) => {
+const FilterGanttProject = (props: Props) => {
     const [form] = Form.useForm();
     const {setValues} = props;
     const handleFilterOnChange = (input: any, option: any) => {
@@ -62,23 +62,7 @@ const FilterGantt = (props: Props) => {
                         ></Input>
                     </Form.Item>
                 </div>
-                {/* <Form.Item name={'user_do'} className="!h-[40px]">
-                    <Select
-                        placeholder="Chọn người thực hiện"
-                        fieldNames={{label: 'name', value: 'id'}}
-                        className="w-full"
-                        size={'large'}
-                        showSearch
-                        optionFilterProp="children"
-                        filterOption={(input: any, option: any) =>
-                            handleFilterOnChange(input, option)
-                        }
-                        filterSort={(optionA, optionB) =>
-                            handleFilterSort(optionA, optionB)
-                        }
-                        options={users}
-                    />
-                </Form.Item> */}
+
                 <Container toggleClearFiled={toggleClearField}>
                     <Form.Item name={'status_id'}>
                         <Select
@@ -159,4 +143,4 @@ const FilterGantt = (props: Props) => {
     );
 };
 
-export default FilterGantt;
+export default FilterGanttProject;

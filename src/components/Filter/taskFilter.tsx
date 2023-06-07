@@ -1,8 +1,8 @@
 import {Button, DatePicker, Form, Input, Select} from 'antd';
 import {useState} from 'react';
 import styled from 'styled-components';
-import useStatus from '../../../../hooks/useStatus';
-import useUser from '../../../../hooks/useUser';
+import useStatus from '../../hooks/useStatus';
+import useUser from '../../hooks/useUser';
 
 export const Container = styled.div<{toggleClearFiled: boolean}>`
     .ant-select-clear {
