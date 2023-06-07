@@ -1,25 +1,23 @@
 import {useQuery} from '@tanstack/react-query';
-import {useEffect, useMemo, useState} from 'react';
+import dayjs from 'dayjs';
+import {useMemo} from 'react';
 import {useParams} from 'react-router-dom';
-import {getDetailProject, getHistoryProject} from '../../../services/project';
+import {
+    getDetailProject,
+    getHistoryProject,
+} from '../../../../services/project';
 
 const useDetailProject = () => {
-    const [idProject, setIdProject] = useState<any>(1);
     const {id} = useParams();
-    useEffect(() => {
-        if (id) {
-            setIdProject(id);
-        }
-    }, [id]);
 
     const {data: detailProjectResponse} = useQuery({
-        queryKey: ['getDetailProject', idProject],
-        queryFn: () => getDetailProject(idProject),
+        queryKey: ['getDetailProject', id],
+        queryFn: () => getDetailProject(id),
     });
 
     const {data: historyResponse} = useQuery({
-        queryKey: ['getHistoryProject', idProject],
-        queryFn: () => getHistoryProject(idProject),
+        queryKey: ['getHistoryProject', id],
+        queryFn: () => getHistoryProject(id),
     });
 
     const historyList = useMemo(() => {
@@ -37,6 +35,8 @@ const useDetailProject = () => {
             user_ids: detailProject?.users?.map((item: any) => {
                 return item?.id;
             }),
+            starts_at: dayjs(detailProject?.starts_at),
+            ends_at: dayjs(detailProject?.ends_at),
         };
     }, [detailProject]);
 
@@ -44,6 +44,7 @@ const useDetailProject = () => {
         detailProject,
         detailToUpdate,
         historyList,
+        id,
     };
 };
 

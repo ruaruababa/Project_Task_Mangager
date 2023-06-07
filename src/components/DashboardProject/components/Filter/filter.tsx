@@ -24,20 +24,6 @@ const FilterProject = (props: Props) => {
         return (option?.label ?? '').includes(input);
     };
 
-    const handleFilterSort = (optionA: any, optionB: any) => {
-        return (optionA?.label ?? '')
-            .toLowerCase()
-            .localeCompare((optionB?.label ?? '').toLowerCase());
-    };
-
-    // const {data: projectFilterResponse} = useQuery({
-    //     queryKey: ['filterProject', values],
-    //     queryFn: () => filterProject(values),
-    //     enabled: !!values,
-    // });
-    function onClickStopProg(e: any) {
-        e.stopPropagation();
-    }
     return (
         <Form
             form={form}

@@ -18,11 +18,16 @@ const useUser = () => {
         return userResponse?.data?.data || [];
     }, [userResponse]);
 
+    const optionsUser: any = users?.map((user: any) => ({
+        label: user.name,
+        value: user.id,
+    }));
+
     const listUser = useMemo(() => {
         return listUserResponse?.data?.data || [];
     }, [listUserResponse]);
 
-    return {listUser, users};
+    return {listUser, users, optionsUser};
 };
 
 export default useUser;

@@ -7,6 +7,7 @@ import CreateUpdateProject from './components/DashboardProject/components/Create
 import DetailProject from './components/DashboardProject/components/Detail';
 import ProjectManager from './components/DashboardProject/components/List';
 import TaskInProject from './components/DashboardProject/components/Task';
+import CreateUpdateSubTask from './components/DashboardProject/components/Task/createUpdateSubTask';
 import DetailTask from './components/DashboardProject/components/Task/detailTask';
 import SubTask from './components/DashboardProject/components/Task/subTask';
 import CreateUpdateTask from './components/DashboardTask/components/Create/createUpdateTask';
@@ -17,7 +18,6 @@ import Analystic from './components/Mock/analystic';
 import TaskManagerPage from './components/TaskManager';
 import UserProfile from './components/UserProfile';
 import UpdateProfile from './components/UserProfile/updateProfile';
-import CreateUpdateSubTask from './components/DashboardProject/components/Task/createUpdateSubTask';
 const router = createBrowserRouter([
     {
         element: <DefaultLayout />,

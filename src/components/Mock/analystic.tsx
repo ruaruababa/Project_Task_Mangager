@@ -1,7 +1,7 @@
 import {Button, DatePicker, Select, Tag} from 'antd';
 import {styled} from 'styled-components';
 import PiChart from '../Chart/PieChart';
-import useDetailProject from '../DashboardProject/hooks/useDetailProject';
+import useDetailProject from '../DashboardProject/components/Detail/useDetailProject';
 const {RangePicker} = DatePicker;
 
 const Container = styled.div`
