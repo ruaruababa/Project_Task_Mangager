@@ -1,10 +1,11 @@
 import {Cell, Legend, Pie, PieChart} from 'recharts';
 interface IChart {
     dataChart: any;
+    dataKey: string;
 }
 const PiChart = (props: IChart) => {
-    const {dataChart} = props;
-    const COLORS = ['#3f3f3f', ' #d47a12', '#f3e963', '#e0390f', '#49d42d'];
+    const {dataChart, dataKey} = props;
+    const COLORS = dataChart.map((item: any) => item?.color);
     const RADIAN = Math.PI / 180;
     const renderCustomizedLabel = ({
         cx,
@@ -40,7 +41,7 @@ const PiChart = (props: IChart) => {
                     label={renderCustomizedLabel}
                     labelLine={false}
                     color="#000000"
-                    dataKey="tasks_count"
+                    dataKey={dataKey}
                     nameKey="name"
                     cx="50%"
                     cy="50%"

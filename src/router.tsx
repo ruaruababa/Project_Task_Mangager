@@ -1,23 +1,22 @@
 import {createBrowserRouter} from 'react-router-dom';
 import DefaultLayout from './Layout/DefaultLayout';
-import GanttChart from './components/Chart/GanttChart';
-import TaskChart from './components/Chart/GanttChart/task';
-import ListRole from './components/DashBoardRole/components/List';
+import GanttChartProject from './components/Chart/GanttChart/projectGanttChart';
+import GanttChartTask from './components/Chart/GanttChart/taskGanttChart';
+import ListRole from './components/DashBoardRole/components/List/listRoles';
 import CreateUpdateProject from './components/DashboardProject/components/CreateProject/createUpdateProject';
-import DetailProject from './components/DashboardProject/components/Detail';
-import ProjectManager from './components/DashboardProject/components/List';
-import TaskInProject from './components/DashboardProject/components/Task';
+import DetailProject from './components/DashboardProject/components/Detail/detailProject';
+import ProjectManager from './components/DashboardProject/components/List/listProject';
+import CreateUpdateSubTask from './components/DashboardProject/components/Task/createUpdateSubTask';
 import DetailTask from './components/DashboardProject/components/Task/detailTask';
-import SubTask from './components/DashboardProject/components/Task/subTask';
+import Kanban from './components/DashboardProject/components/Task/kanban';
 import CreateUpdateTask from './components/DashboardTask/components/Create/createUpdateTask';
 import DetailUser from './components/DashboardUser/components/Detail/detailUser';
-import ListUser from './components/DashboardUser/components/List';
-import AllListTask from './components/ListTask/components';
-import Analystic from './components/Mock/analystic';
+import ListUser from './components/DashboardUser/components/List/listUser';
+import ListTaskInProject from './components/ListTask/components/listTaskProject';
+import Analystic from './components/Analystic/analystic';
 import TaskManagerPage from './components/TaskManager';
 import UserProfile from './components/UserProfile';
 import UpdateProfile from './components/UserProfile/updateProfile';
-import CreateUpdateSubTask from './components/DashboardProject/components/Task/createUpdateSubTask';
 const router = createBrowserRouter([
     {
         element: <DefaultLayout />,
@@ -37,11 +36,11 @@ const router = createBrowserRouter([
             },
             {
                 path: '/project/:id/tasks',
-                element: <TaskInProject />,
+                element: <Kanban />,
             },
             {
                 path: '/project/:id/list-task',
-                element: <AllListTask />,
+                element: <ListTaskInProject />,
             },
             {
                 path: '/project/:id/tasks/:taskId',
@@ -51,10 +50,7 @@ const router = createBrowserRouter([
                 path: '/project/:id/tasks/:taskId/edit',
                 element: <CreateUpdateTask />,
             },
-            {
-                path: '/project/:id/subtask/:subTaskId',
-                element: <SubTask />,
-            },
+
             {
                 path: '/project/create',
                 element: <CreateUpdateProject />,
@@ -98,11 +94,11 @@ const router = createBrowserRouter([
             },
             {
                 path: '/project/gantt-chart',
-                element: <GanttChart />,
+                element: <GanttChartProject />,
             },
             {
                 path: '/project/:id/gantt-chart',
-                element: <TaskChart />,
+                element: <GanttChartTask />,
             },
             {
                 path: '/project/:id/task/:taskId/create-subtask',

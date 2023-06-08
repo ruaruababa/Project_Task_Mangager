@@ -47,16 +47,16 @@ export const getListTaskInProject = ({
     }`;
     const startAtParams = `${
         start_at
-            ? `${nameParams || statusParams ? '&' : ''}start_at=${dayjs(
-                  start_at,
-              ).format('YYYY-MM-DD HH:mm')}`
+            ? `${
+                  nameParams || statusParams || userDoParams ? '&' : ''
+              }start_at=${dayjs(start_at).format('YYYY-MM-DD HH:mm')}`
             : ''
     }`;
     const endAtParams = `${
         end_at
-            ? `${nameParams || statusParams ? '&' : ''}end_at=${dayjs(
-                  end_at,
-              ).format('YYYY-MM-DD HH:mm')}`
+            ? `${
+                  nameParams || statusParams || userDoParams ? '&' : ''
+              }end_at=${dayjs(end_at).format('YYYY-MM-DD HH:mm')}`
             : ''
     }`;
     const params = `${nameParams && nameParams}${statusParams && statusParams}${

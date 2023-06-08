@@ -198,6 +198,7 @@ const DetailProject = () => {
                                 dataChart={
                                     detailProject?.tasks_count_by_status || []
                                 }
+                                dataKey="tasks_count"
                             />
                         </div>
                     </div>

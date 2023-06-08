@@ -40,33 +40,6 @@ const Item = (props: Props) => {
                 <div className="h-full col-span-7">
                     <div className="grid h-full grid-cols-12">
                         <div className="h-full col-span-10">
-                            {/* <div className="grid grid-cols-5">
-                                <div className="flex flex-col">
-                                    <div className="">
-                                        {
-                                            data?.tasks_count_by_status
-                                                ?.task_count
-                                        }
-                                    </div>
-                                    <div className="">0%</div>
-                                </div>
-                                <div className="flex flex-col">
-                                    <div className="">1</div>
-                                    <div className="">0%</div>
-                                </div>
-                                <div className="flex flex-col">
-                                    <div className="">1</div>
-                                    <div className="">0%</div>
-                                </div>
-                                <div className="flex flex-col">
-                                    <div className="">1</div>
-                                    <div className="">0%</div>
-                                </div>
-                                <div className="flex flex-col">
-                                    <div className="">1</div>
-                                    <div className="">0%</div>
-                                </div>
-                            </div> */}
                             <TaskCountStatus
                                 data={data?.tasks_count_by_status}
                             />

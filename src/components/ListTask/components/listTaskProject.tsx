@@ -1,10 +1,10 @@
 import {Button} from 'antd';
 import {useNavigate, useParams} from 'react-router-dom';
-import FilterTask from '../../DashboardProject/components/Filter/taskFilter';
 import useTaskInProject from '../../DashboardProject/hooks/useTaskProject';
 import TaskItem from './item';
+import FilterTask from '../../Filter/taskFilter';
 
-const AllListTask = () => {
+const ListTaskInProject = () => {
     const {id} = useParams();
     const navigate = useNavigate();
     const {taskInProjects, setValues, id: projectId} = useTaskInProject();
@@ -63,19 +63,7 @@ const AllListTask = () => {
             </div>
             <FilterTask setValues={setValues} needHours={true} />
             <div className="flex flex-col p-10 bg-white rounded-lg">
-                {/* <div className="grid grid-cols-6 gap-3 mb-10">
-                    <SelectProject
-                        options={options}
-                        name={'project'}
-                        holder="Chọn tên dự án"
-                    />
-                    <Input placeholder="Nhập tên task" />
-                    <DatePickerCp name={'startDate'} holder="Ngày bắt đầu" />
-                    <DatePickerCp name={'endDate'} holder="Ngày kết thúc" />
-                    <Button type="primary" size={'large'}>
-                        Tìm kiếm
-                    </Button>
-                </div> */}
+            
                 <div className="flex flex-col">
                     <div className="grid grid-cols-12 pb-4 text-xs font-semibold text-gray-400 border-bottom">
                         <div className="col-span-2">ID</div>
@@ -99,7 +87,11 @@ const AllListTask = () => {
                     {(taskInProjects || [])?.map((task: any) => {
                         return (
                             <>
-                                <TaskItem task={task} projectId={projectId} />
+                                <TaskItem
+                                    key={task?.id}
+                                    task={task}
+                                    projectId={projectId}
+                                />
                             </>
                         );
                     })}
@@ -109,4 +101,4 @@ const AllListTask = () => {
     );
 };
 
-export default AllListTask;
+export default ListTaskInProject;

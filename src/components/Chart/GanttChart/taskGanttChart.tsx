@@ -2,10 +2,10 @@ import {Button} from 'antd';
 import {Gantt} from 'gantt-task-react';
 import 'gantt-task-react/dist/index.css';
 import {useNavigate} from 'react-router';
-import FilterTask from '../../DashboardProject/components/Filter/taskFilter';
+import FilterTask from '../../Filter/taskFilter';
 import useGanttTask from './useGanttTask';
 
-const TaskChart = () => {
+const GanttChartTask = () => {
     const navigate = useNavigate();
     const {data, setValues, id} = useGanttTask();
     if (!data) {
@@ -44,10 +44,10 @@ const TaskChart = () => {
                 </span>
                 <span className="text-sm">Gantt chart</span>
             </div>
-            <FilterTask setValues={setValues} needHours={true}/>
+            <FilterTask setValues={setValues} needHours={true} />
             {data?.length > 0 && <Gantt tasks={data} />}
         </div>
     );
 };
 
-export default TaskChart;
+export default GanttChartTask;
