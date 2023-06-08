@@ -1,6 +1,10 @@
+import {useQuery} from '@tanstack/react-query';
 import {Button, DatePicker, Select, Tag} from 'antd';
+import {useMemo, useState} from 'react';
 import {styled} from 'styled-components';
+import {getAnalystic} from '../../services/analystic';
 import PiChart from '../Chart/PieChart';
+import FilterAnalystic from '../DashboardProject/components/Filter/filterAnalystic';
 import useDetailProject from '../DashboardProject/hooks/useDetailProject';
 const {RangePicker} = DatePicker;
 
@@ -39,6 +43,23 @@ const Analystic = () => {
         tasks_count: 2,
     });
 
+    const [params, setParams] = useState('');
+
+    const {data: analysticResponse} = useQuery({
+        queryKey: ['getAnalystic', params],
+        queryFn: () => getAnalystic(params),
+    });
+
+    const total = useMemo(() => {
+        return analysticResponse?.data?.meta?.total || 0;
+    }, [analysticResponse]);
+
+    const analystic = useMemo(() => {
+        return analysticResponse?.data?.data || [];
+    }, [analysticResponse]);
+
+    console.log(analystic);
+
     return (
         <>
             {' '}
@@ -56,45 +77,7 @@ const Analystic = () => {
                     <div className="p-3 bg-white rounded-lg shadow-lg ">
                         <div className="flex flex-col gap-3">
                             <div className="text-lg font-bold">Dự án</div>
-                            <div className="grid grid-cols-5 gap-3">
-                                <Select
-                                    className="col-span-2"
-                                    showSearch
-                                    placeholder="Chọn trạng thái"
-                                    optionFilterProp="children"
-                                    filterOption={(input, option) =>
-                                        (option?.label ?? '')
-                                            .toLowerCase()
-                                            .includes(input.toLowerCase())
-                                    }
-                                    options={[
-                                        {
-                                            value: 'notStarted',
-                                            label: 'Not Started',
-                                        },
-                                        {
-                                            value: 'pending',
-                                            label: 'Pending',
-                                        },
-                                        {
-                                            value: 'completed',
-                                            label: 'Completed',
-                                        },
-                                    ]}
-                                />
-                                <div className="col-span-3">
-                                    {' '}
-                                    <RangePicker
-                                        showTime={{format: 'HH:mm'}}
-                                        format="YYYY-MM-DD HH:mm"
-                                    />
-                                </div>
-                            </div>
-                            <div className="">
-                                <Button className="w-full text-white bg-blue-500">
-                                    Tìm kiếm
-                                </Button>
-                            </div>
+                            <FilterAnalystic setParams={setParams} />
                             <Container className="min-h-[500px]">
                                 <PiChart
                                     dataChart={
