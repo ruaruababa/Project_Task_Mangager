@@ -129,7 +129,7 @@ export const filterTask = ({
     }`;
     const endAtParams = `${
         end_at
-            ? `${nameParams || statusParams ? '&' : ''}end_at=${dayjs(
+            ? `${start_at || user_do || status_id ? '&' : ''}end_at=${dayjs(
                   end_at,
               ).format('YYYY-MM-DD HH:mm')}`
             : ''
