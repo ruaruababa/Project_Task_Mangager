@@ -63,7 +63,7 @@ export const getListTaskInProject = ({
         startAtParams && startAtParams
     }${endAtParams && endAtParams}${userDoParams && userDoParams}`;
 
-    return baseAPIRequest.get(`api/projects/1/tasks?${params}`);
+    return baseAPIRequest.get(`api/projects/${id}/tasks?${params}`);
 };
 
 export const getListDragDrop = (id: any) => {
