@@ -168,12 +168,6 @@ const CreateUpdateProject = () => {
                             rules={[{required: true}]}
                         >
                             <DatePicker
-                                disabledDate={(d: any) =>
-                                    !d ||
-                                    d.isBefore(
-                                        dayjs(startDate).format('YYYY/MM/DD'),
-                                    )
-                                }
                                 format={'YYYY/MM/DD'}
                                 style={{
                                     backgroundColor: '#f5f5f5',
@@ -224,10 +218,6 @@ const CreateUpdateProject = () => {
                             rules={[{required: true}]}
                         >
                             <DatePicker
-                                disabledDate={(d) =>
-                                    !d ||
-                                    d.isBefore(dayjs().format('YYYY/MM/DD'))
-                                }
                                 onChange={() => {}}
                                 format={'YYYY/MM/DD'}
                                 style={{

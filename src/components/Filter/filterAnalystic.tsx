@@ -40,7 +40,6 @@ const FilterAnalystic = (props: Props) => {
             onFinish={(values) => {
                 console.log('values', values);
                 setParams(values);
-                form.resetFields();
             }}
             autoComplete="off"
         >

@@ -213,14 +213,6 @@ const CreateUpdateTask = () => {
                         >
                             <DatePicker
                                 showTime={{format: 'HH:mm'}}
-                                disabledDate={(d) =>
-                                    !d ||
-                                    d.isBefore(
-                                        dayjs(
-                                            detailTaskInProject?.starts_at,
-                                        ).format('YYYY/MM/DD HH:mm'),
-                                    )
-                                }
                                 format={'YYYY/MM/DD HH:mm'}
                                 style={{
                                     backgroundColor: '#f5f5f5',
@@ -275,12 +267,6 @@ const CreateUpdateTask = () => {
                         >
                             <DatePicker
                                 showTime={{format: 'HH:mm'}}
-                                disabledDate={(d) =>
-                                    !d ||
-                                    d.isBefore(
-                                        dayjs().format('YYYY/MM/DD HH:mm'),
-                                    )
-                                }
                                 format="YYYY-MM-DD HH:mm"
                                 style={{
                                     backgroundColor: '#f5f5f5',
