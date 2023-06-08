@@ -29,6 +29,7 @@ import {
 import {convertDate, convertDateTime} from '../../../../utils/format';
 import UploadReportFile from '../../../Uploads/uploadFile';
 import UserAvatar from '../Item/avatar';
+import Comment from './comment';
 interface Props {
     isShow: boolean;
     onCancel: () => void;
@@ -406,6 +407,7 @@ const DetailTask = () => {
                                                 title="Tệp đính kèm"
                                             />
                                         }
+                                        key={index}
                                         className="m-3 shadow-lg "
                                     >
                                         <div className="flex flex-col gap-2">
@@ -462,6 +464,7 @@ const DetailTask = () => {
                                                 item={item}
                                             />
                                         }
+                                        key={index}
                                         className="m-3 shadow-lg "
                                     >
                                         <div className="flex flex-col gap-2">
@@ -536,9 +539,10 @@ const DetailTask = () => {
                                 </div>
                                 <Divider></Divider>
                                 {detailTaskInProject?.children?.map(
-                                    (item: any) => (
+                                    (item: any, idx: number) => (
                                         <div
                                             className="text-lg"
+                                            key={idx}
                                             style={{
                                                 borderBottom:
                                                     '1px solid #cccccc',
@@ -693,7 +697,7 @@ const DetailTask = () => {
                                 </div>
                             </div>
                         )}
-                        {tabActive === 'comment' && <div>comment</div>}
+                        {tabActive === 'comment' && <Comment />}
                     </div>
                 </div>
             </div>
