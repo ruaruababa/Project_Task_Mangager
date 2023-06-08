@@ -91,13 +91,11 @@ const CommentEditor = ({data, onCancel, onSuccess, parentId}:
                         editor={ClassicEditor}
                         onReady={(editor) => {
                             setEditor(editor);
-                            // editor.editing.view.change(writer => writer.setStyle('width', '100%', editor.editing.view.document.getRoot()!));
-                            // (window as any).editor = editor;
                         }}
                         onChange={handleChange}
                         config={{
-                            simpleUpload: {
-                                uploadUrl: baseURL + '/api/upload-file'
+                            ckfinder: {
+                                uploadUrl: baseURL + '/api/upload-file',
                             },
                         }}
                         data={data?.content}
