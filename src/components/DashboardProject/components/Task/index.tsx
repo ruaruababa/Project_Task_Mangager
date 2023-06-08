@@ -16,17 +16,6 @@ function TaskInProject() {
     const [isShow, setIsShow] = useState(false);
     const [data, setData] = useState<any>();
 
-    // const {isLoading: listTaskLoading, data: listTaskDragDropResponse} =
-    //     useQuery({
-    //         queryKey: ['getListDragDrop', id],
-    //         queryFn: () => getListDragDrop(id),
-    //         enabled: !!id,
-    //     });
-
-    // const taskList = useMemo(() => {
-    //     return listTaskDragDropResponse?.data?.data;
-    // }, [listTaskDragDropResponse?.data?.data]);
-
     const [values, setValues] = useState<any>();
 
     const {data: taskFilterResponse, isLoading: taskListLoading} = useQuery({
