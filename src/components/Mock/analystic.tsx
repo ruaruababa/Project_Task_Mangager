@@ -1,12 +1,10 @@
 import {useQuery} from '@tanstack/react-query';
-import {Button, DatePicker, Select, Tag} from 'antd';
+import {Tag} from 'antd';
 import {useMemo, useState} from 'react';
 import {styled} from 'styled-components';
-import {getAnalystic} from '../../services/analystic';
+import {getProjectAnalystic, getTaskAnalystic} from '../../services/analystic';
 import PiChart from '../Chart/PieChart';
 import FilterAnalystic from '../DashboardProject/components/Filter/filterAnalystic';
-import useDetailProject from '../DashboardProject/hooks/useDetailProject';
-const {RangePicker} = DatePicker;
 
 const Container = styled.div`
     ul {
@@ -15,50 +13,26 @@ const Container = styled.div`
 `;
 
 const Analystic = () => {
-    const {detailProject} = useDetailProject();
-    const fakeMock = [];
-    fakeMock.push({
-        name: 'In Progress',
-        id: 1,
-        tasks_count: 2,
-    });
-    fakeMock.push({
-        name: 'Completed',
-        id: 5,
-        tasks_count: 5,
-    });
-    fakeMock.push({
-        name: 'Behind Schedule',
-        id: 4,
-        tasks_count: 3,
-    });
-    fakeMock.push({
-        name: 'Not Started',
-        id: 1,
-        tasks_count: 1,
-    });
-    fakeMock.push({
-        name: 'Pending',
-        id: 3,
-        tasks_count: 2,
+    const [paramsTask, setParamsTask] = useState<any>('');
+    const [paramsProject, setParamsProject] = useState<any>('');
+
+    const {data: analysticTaskResponse} = useQuery({
+        queryKey: ['getTaskAnalystic', paramsTask || ''],
+        queryFn: () => getTaskAnalystic({...paramsTask}),
     });
 
-    const [params, setParams] = useState('');
+    const analysticTask = useMemo(() => {
+        return analysticTaskResponse?.data?.data || [];
+    }, [analysticTaskResponse]);
 
-    const {data: analysticResponse} = useQuery({
-        queryKey: ['getAnalystic', params],
-        queryFn: () => getAnalystic(params),
+    const {data: analysticProjectResponse} = useQuery({
+        queryKey: ['getProjectAnalystic', paramsProject || ''],
+        queryFn: () => getProjectAnalystic({...paramsProject}),
     });
 
-    const total = useMemo(() => {
-        return analysticResponse?.data?.meta?.total || 0;
-    }, [analysticResponse]);
-
-    const analystic = useMemo(() => {
-        return analysticResponse?.data?.data || [];
-    }, [analysticResponse]);
-
-    console.log(analystic);
+    const analysticProject = useMemo(() => {
+        return analysticProjectResponse?.data?.data || [];
+    }, [analysticProjectResponse]);
 
     return (
         <>
@@ -77,13 +51,11 @@ const Analystic = () => {
                     <div className="p-3 bg-white rounded-lg shadow-lg ">
                         <div className="flex flex-col gap-3">
                             <div className="text-lg font-bold">Dự án</div>
-                            <FilterAnalystic setParams={setParams} />
+                            <FilterAnalystic setParams={setParamsProject} />
                             <Container className="min-h-[500px]">
                                 <PiChart
-                                    dataChart={
-                                        detailProject?.tasks_count_by_status ||
-                                        []
-                                    }
+                                    dataChart={analysticProject || []}
+                                    dataKey="projects_count"
                                 />
                                 <div className="flex flex-col gap-3">
                                     <div className="flex items-center">
@@ -150,47 +122,16 @@ const Analystic = () => {
                     <div className="p-3 bg-white rounded-lg shadow-lg ">
                         <div className="flex flex-col gap-3">
                             <div className="text-lg font-bold">Đầu việc</div>
-                            <div className="grid grid-cols-5 gap-3">
-                                <Select
-                                    className="col-span-2"
-                                    showSearch
-                                    placeholder="Chọn trạng thái"
-                                    optionFilterProp="children"
-                                    filterOption={(input, option) =>
-                                        (option?.label ?? '')
-                                            .toLowerCase()
-                                            .includes(input.toLowerCase())
-                                    }
-                                    options={[
-                                        {
-                                            value: 'notStarted',
-                                            label: 'Not Started',
-                                        },
-                                        {
-                                            value: 'pending',
-                                            label: 'Pending',
-                                        },
-                                        {
-                                            value: 'completed',
-                                            label: 'Completed',
-                                        },
-                                    ]}
-                                />
-                                <div className="col-span-3">
-                                    {' '}
-                                    <RangePicker
-                                        showTime={{format: 'HH:mm'}}
-                                        format="YYYY-MM-DD HH:mm"
-                                    />
-                                </div>
-                            </div>
-                            <div className="">
-                                <Button className="w-full text-white bg-blue-500">
-                                    Tìm kiếm
-                                </Button>
-                            </div>
+                            <FilterAnalystic
+                                setParams={setParamsTask}
+                                needHours={true}
+                            />
+
                             <Container className="min-h-[500px]">
-                                <PiChart dataChart={fakeMock || []} />
+                                <PiChart
+                                    dataChart={analysticTask || []}
+                                    dataKey="tasks_count"
+                                />
                                 <div className="flex flex-col gap-3">
                                     <div className="flex items-center">
                                         <div className="">
