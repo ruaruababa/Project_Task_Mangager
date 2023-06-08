@@ -19,6 +19,7 @@ import {
 import dayjs from 'dayjs';
 import {useMemo, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
+import useProfile from '../../../../hooks/useProfile';
 import {
     getDetailTaskInProject,
     getHistotyInTask,
@@ -62,6 +63,12 @@ const DetailTask = () => {
     const navigate = useNavigate();
     const [isShowModal, setIsShowModal] = useState(false);
     const queryClient = useQueryClient();
+
+    const {userProfile} = useProfile();
+
+    const canCreateSubTask = userProfile?.permissions?.includes('task:create');
+    const canEditTask = userProfile?.permissions?.includes('task:update');
+    const canDeleteTask = userProfile?.permissions?.includes('task:delete');
 
     const {data: detailTaskResponse} = useQuery({
         queryKey: ['getDetailTaskInProject', id, taskId],
@@ -153,7 +160,7 @@ const DetailTask = () => {
                 {title || 'Báo cáo'} {index + 1}
                 {item?.is_editable}
             </h3>
-            {item?.is_editable && (
+            {item?.is_editable && canEditTask && (
                 <DeleteOutlined
                     className="cursor-pointer"
                     onClick={() => {
@@ -240,32 +247,38 @@ const DetailTask = () => {
                     <span>Chi tiết task</span>
                 </div>
                 <div className="flex gap-3">
-                    <Button
-                        className="text-white bg-green-600 hover:bg-green-700"
-                        onClick={() => {
-                            navigate(
-                                `/project/${id}/task/${taskId}/create-subTask`,
-                            );
-                        }}
-                    >
-                        Thêm đầu việc
-                    </Button>
-                    <Button
-                        type="primary"
-                        onClick={() => {
-                            navigate(`/project/${id}/tasks/${taskId}/edit`);
-                        }}
-                    >
-                        Chỉnh sửa
-                    </Button>
-                    <Button
-                        className="text-white bg-blue-500 hover:bg-blue-600"
-                        onClick={() => {
-                            setIsShowModal(true);
-                        }}
-                    >
-                        Nộp báo cáo
-                    </Button>
+                    {canCreateSubTask && (
+                        <Button
+                            className="text-white bg-green-600 hover:bg-green-700"
+                            onClick={() => {
+                                navigate(
+                                    `/project/${id}/task/${taskId}/create-subTask`,
+                                );
+                            }}
+                        >
+                            Thêm đầu việc
+                        </Button>
+                    )}
+                    {canEditTask && detailTaskInProject?.can_update && (
+                        <Button
+                            type="primary"
+                            onClick={() => {
+                                navigate(`/project/${id}/tasks/${taskId}/edit`);
+                            }}
+                        >
+                            Chỉnh sửa
+                        </Button>
+                    )}
+                    {detailTaskInProject?.can_submit_report && (
+                        <Button
+                            className="text-white bg-blue-500 hover:bg-blue-600"
+                            onClick={() => {
+                                setIsShowModal(true);
+                            }}
+                        >
+                            Nộp báo cáo
+                        </Button>
+                    )}
                     <Button
                         className="text-white bg-gray-500 hover:bg-gray-600"
                         onClick={() => {

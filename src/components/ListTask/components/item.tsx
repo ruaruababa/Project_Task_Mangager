@@ -2,6 +2,7 @@ import {useMutation, useQueryClient} from '@tanstack/react-query';
 import {notification} from 'antd';
 import {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
+import useProfile from '../../../hooks/useProfile';
 import {removeTaskInProject} from '../../../services/tasks';
 import {convertDateTime} from '../../../utils/format';
 import Action from '../../Action';
@@ -11,6 +12,10 @@ const TaskItem = ({task, projectId}: any) => {
     const navigate = useNavigate();
     const [isShow, setIsShow] = useState(false);
     const queryClient = useQueryClient();
+    const {userProfile} = useProfile();
+    const canEditTask = userProfile?.permissions?.includes('task:update');
+    const canDeleteTask = userProfile?.permissions?.includes('task:delete');
+    const canViewTask = userProfile?.permissions?.includes('task:view');
 
     const {mutate: removeTaskMutate} = useMutation({
         mutationFn: () => removeTaskInProject(projectId, task?.id),
@@ -29,6 +34,8 @@ const TaskItem = ({task, projectId}: any) => {
             });
         },
     });
+
+    console.log('task', task);
 
     return (
         <>
@@ -64,17 +71,35 @@ const TaskItem = ({task, projectId}: any) => {
                     <div className="flex justify-center col-span-2">
                         <Action
                             handleView={() =>
-                                navigate(
-                                    `/project/${projectId}/tasks/${task?.id}`,
-                                )
+                                canViewTask
+                                    ? navigate(
+                                          `/project/${projectId}/tasks/${task?.id}`,
+                                      )
+                                    : notification.error({
+                                          message: 'Error',
+                                          description:
+                                              'Bạn không có quyền xem đầu việc',
+                                      })
                             }
                             handleEdit={() =>
-                                navigate(
-                                    `/project/${projectId}/tasks/${task?.id}/edit`,
-                                )
+                                canEditTask && task?.can_update
+                                    ? navigate(
+                                          `/project/${projectId}/tasks/${task?.id}/edit`,
+                                      )
+                                    : notification.error({
+                                          message: 'Error',
+                                          description:
+                                              'Bạn không có quyền chỉnh sửa đầu việc',
+                                      })
                             }
                             handleDelete={() => {
-                                setIsShow(true);
+                                canDeleteTask && task?.can_delete
+                                    ? setIsShow(true)
+                                    : notification.error({
+                                          message: 'Error',
+                                          description:
+                                              'Bạn không có quyền xóa đầu việc',
+                                      });
                             }}
                         />
                     </div>

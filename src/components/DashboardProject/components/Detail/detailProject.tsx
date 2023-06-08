@@ -1,8 +1,9 @@
 import {useQueryClient} from '@tanstack/react-query';
-import {Avatar, Button, List, Popover, Typography} from 'antd';
+import {Avatar, Button, List, Popover, Typography, notification} from 'antd';
 import dayjs from 'dayjs';
 import {useEffect} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
+import useProfile from '../../../../hooks/useProfile';
 import {convertDate} from '../../../../utils/format';
 import PiChart from '../../../Chart/PieChart';
 import useDetailProject from '../../hooks/useDetailProject';
@@ -11,9 +12,14 @@ const DetailProject = () => {
     const {detailProject, historyList} = useDetailProject();
     const {id} = useParams();
     const navigate = useNavigate();
-
+    const {userProfile} = useProfile();
+    const canViewListTask = userProfile?.permissions?.includes('task:view-any');
     const handleViewTask = () => {
-        navigate(`/project/${id}/list-task`);
+        canViewListTask
+            ? navigate(`/project/${id}/list-task`)
+            : notification.error({
+                  message: 'Bạn không có quyền xem danh sách công việc',
+              });
     };
     const queryClient = useQueryClient();
 
