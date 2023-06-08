@@ -99,7 +99,11 @@ const AllListTask = () => {
                     {(taskInProjects || [])?.map((task: any) => {
                         return (
                             <>
-                                <TaskItem task={task} projectId={projectId} />
+                                <TaskItem
+                                    key={task?.id}
+                                    task={task}
+                                    projectId={projectId}
+                                />
                             </>
                         );
                     })}

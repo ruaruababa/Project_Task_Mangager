@@ -236,6 +236,7 @@ const CreateUpdateRoleModal = (props: Props) => {
                                 <Checkbox>{item?.groupName}</Checkbox>
                             </Form.Item> */}
                                 <Form.Item
+                                    key={per?.groupName}
                                     name={`rules${index + 1}`}
                                     valuePropName="checked"
                                     className="col-span-1"

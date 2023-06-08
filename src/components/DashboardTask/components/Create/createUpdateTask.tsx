@@ -31,7 +31,6 @@ const CreateUpdateTask = () => {
     const handleUpload = useCallback((event: any) => {
         event.stopPropagation();
         event.preventDefault();
-        // console.log('event', ...event?.target?.files);
         const file_: any = event?.target?.files;
         const files: any = [];
         for (let i = 0; i < file_.length; i++) {
@@ -45,9 +44,20 @@ const CreateUpdateTask = () => {
 
     const {mutateAsync: uploadMutate, isLoading: isUploading} = useMutation({
         mutationFn: (idRs: any) =>
-            uploadChunk(reportFile, uploadAttachFile(idRs), 'attachments'),
+            uploadChunk(
+                reportFile?.length > 1 ? reportFile : [reportFile],
+                uploadAttachFile(idRs),
+                'attachments',
+            ),
         onSettled(data, error, variables, context) {
             navigate(`/project/${id}/tasks/${variables}`);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries([
+                'getDetailTaskInProject',
+                id,
+                taskId,
+            ]);
         },
     });
 
@@ -91,10 +101,9 @@ const CreateUpdateTask = () => {
                 message: 'Success ',
                 description: 'Create successfully',
             });
-            if (reportFile?.length > 1) {
+            if (reportFile) {
                 uploadMutate(data?.data?.data?.id);
             }
-            navigate(`/project/${id}/tasks/${data?.data?.data?.id}`);
         },
 
         onError: (error: any) => {
@@ -266,12 +275,12 @@ const CreateUpdateTask = () => {
                         >
                             <DatePicker
                                 showTime={{format: 'HH:mm'}}
-                                // disabledDate={(d) =>
-                                //     !d ||
-                                //     d.isBefore(
-                                //         dayjs().format('YYYY/MM/DD HH:mm'),
-                                //     )
-                                // }
+                                disabledDate={(d) =>
+                                    !d ||
+                                    d.isBefore(
+                                        dayjs().format('YYYY/MM/DD HH:mm'),
+                                    )
+                                }
                                 format="YYYY-MM-DD HH:mm"
                                 style={{
                                     backgroundColor: '#f5f5f5',
@@ -288,14 +297,14 @@ const CreateUpdateTask = () => {
                         >
                             <DatePicker
                                 showTime={{format: 'HH:mm'}}
-                                // disabledDate={(d) =>
-                                //     !d ||
-                                //     d.isBefore(
-                                //         dayjs(startDate).format(
-                                //             'YYYY/MM/DD HH:mm',
-                                //         ),
-                                //     )
-                                // }
+                                disabledDate={(d) =>
+                                    !d ||
+                                    d.isBefore(
+                                        dayjs(startDate).format(
+                                            'YYYY/MM/DD HH:mm',
+                                        ),
+                                    )
+                                }
                                 onChange={() => {}}
                                 format="YYYY-MM-DD HH:mm"
                                 style={{
