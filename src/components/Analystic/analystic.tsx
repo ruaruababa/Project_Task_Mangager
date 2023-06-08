@@ -4,7 +4,7 @@ import {useMemo, useState} from 'react';
 import {styled} from 'styled-components';
 import {getProjectAnalystic, getTaskAnalystic} from '../../services/analystic';
 import PiChart from '../Chart/PieChart';
-import FilterAnalystic from '../DashboardProject/components/Filter/filterAnalystic';
+import FilterAnalystic from '../Filter/filterAnalystic';
 
 const Container = styled.div`
     ul {
