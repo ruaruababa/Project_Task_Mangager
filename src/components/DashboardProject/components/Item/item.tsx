@@ -1,4 +1,5 @@
 import {CalendarOutlined} from '@ant-design/icons';
+import {useNavigate} from 'react-router';
 import {convertDate} from '../../../../utils/format';
 import Action from '../Action/action';
 import TaskCountStatus from './taskcount';
@@ -8,6 +9,7 @@ interface Props {
 
 const Item = (props: Props) => {
     const {data} = props;
+    const navigate = useNavigate();
 
     return (
         <div className="bg-white rounded-lg card">
@@ -15,7 +17,12 @@ const Item = (props: Props) => {
                 <div className="col-span-5 pr-5">
                     <div className="flex flex-col gap-3">
                         <div className="flex justify-between ">
-                            <div className="font-semibold">
+                            <div
+                                className="font-semibold cursor-pointer hover:text-blue-500"
+                                onClick={() => {
+                                    navigate(`/project/${data?.id}`);
+                                }}
+                            >
                                 {data?.name || 'Tên dự án'}
                             </div>
                             <div

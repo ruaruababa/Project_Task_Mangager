@@ -1,15 +1,18 @@
 import {Button} from 'antd';
 import {useNavigate, useParams} from 'react-router-dom';
+import useProfile from '../../../hooks/useProfile';
 import useTaskInProject from '../../DashboardProject/hooks/useTaskProject';
-import TaskItem from './item';
 import FilterTask from '../../Filter/taskFilter';
+import TaskItem from './item';
 
 const ListTaskInProject = () => {
     const {id} = useParams();
     const navigate = useNavigate();
     const {taskInProjects, setValues, id: projectId} = useTaskInProject();
     const router = useNavigate();
-
+    const {userProfile} = useProfile();
+    const canCreateTask = userProfile?.permissions?.includes('  task:create');
+   
     return (
         <>
             {' '}
@@ -31,13 +34,17 @@ const ListTaskInProject = () => {
                     >
                         List task
                     </Button>
-                    <Button
-                        size="large"
-                        className="text-white bg-green-600"
-                        onClick={() => navigate(`/project/${id}/create-task`)}
-                    >
-                        Tạo task mới
-                    </Button>
+                    {canCreateTask && (
+                        <Button
+                            size="large"
+                            className="text-white bg-green-600"
+                            onClick={() =>
+                                navigate(`/project/${id}/create-task`)
+                            }
+                        >
+                            Tạo task mới
+                        </Button>
+                    )}
                 </div>
                 <div className="mb-2 text-lg font-semibold">
                     Danh sách task của project {id}
@@ -63,7 +70,6 @@ const ListTaskInProject = () => {
             </div>
             <FilterTask setValues={setValues} needHours={true} />
             <div className="flex flex-col p-10 bg-white rounded-lg">
-            
                 <div className="flex flex-col">
                     <div className="grid grid-cols-12 pb-4 text-xs font-semibold text-gray-400 border-bottom">
                         <div className="col-span-2">ID</div>

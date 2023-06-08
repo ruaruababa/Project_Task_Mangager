@@ -2,6 +2,7 @@ import {useMutation, useQueryClient} from '@tanstack/react-query';
 import {notification} from 'antd';
 import {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
+import useProfile from '../../../../hooks/useProfile';
 import {removeUser} from '../../../../services/user';
 import Action from '../../../Action';
 import {ModalConfirm} from '../../../DashboardProject/components/Task/detailTask';
@@ -10,15 +11,34 @@ import CreateUpdateUserModal from '../CreateUpdate/createUpdateUser';
 const UserItem = ({user}: any) => {
     const [isShow, setIsShow] = useState(false);
     const [showModal, setShowModal] = useState(false);
+    const {userProfile} = useProfile();
+    const canViewUser = userProfile?.permissions?.includes('user:view');
+    const canUpdateUser = userProfile?.permissions?.includes('user:update');
+    const canDeleteUser = userProfile?.permissions?.includes('user:delete');
     const router = useNavigate();
     const handleViewDetail = () => {
-        router(`/user/${user?.id}/detail`);
+        canViewUser
+            ? router(`/user/${user?.id}/detail`)
+            : notification.error({
+                  message: 'Error',
+                  description: 'Bạn không có quyền xem chi tiết người dùng',
+              });
     };
     const handleShowModal = () => {
-        setIsShow(!isShow);
+        canUpdateUser
+            ? setIsShow(!isShow)
+            : notification.error({
+                  message: 'Error',
+                  description: 'Bạn không có quyền chỉnh sửa người dùng',
+              });
     };
     const handleRemove = () => {
-        setShowModal(true);
+        canDeleteUser
+            ? setShowModal(true)
+            : notification.error({
+                  message: 'Error',
+                  description: 'Bạn không có quyền xóa người dùng',
+              });
     };
 
     const queryCLient = useQueryClient();

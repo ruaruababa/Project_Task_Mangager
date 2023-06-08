@@ -3,8 +3,8 @@ import {useMemo, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {filterMyTask} from '../../services/tasks';
 import {convertDate} from '../../utils/format';
-import Pagination from '../Pagination';
 import FilterMyTask from '../Filter/filterMyTask';
+import Pagination from '../Pagination';
 
 const TaskManager = () => {
     const [page, setPage] = useState(1);
@@ -32,6 +32,8 @@ const TaskManager = () => {
 
     const router = useNavigate();
 
+    console.log('tasks', tasks);
+
     return (
         <>
             <div className="mb-10">
@@ -54,7 +56,6 @@ const TaskManager = () => {
                 </div>
             </div>
             <div className="flex flex-col p-10 bg-white rounded-lg">
-               
                 <FilterMyTask setValues={setFilter} />
                 <div className="flex flex-col">
                     <div className="grid grid-cols-12 pb-4 text-xs font-semibold text-gray-400 border-bottom">
@@ -73,13 +74,27 @@ const TaskManager = () => {
                             <>
                                 <div className="grid grid-cols-12 py-4 pb-4 border-bottom">
                                     <div className="col-span-1">{task?.id}</div>
-                                    <div className="col-span-3 text-blue-700 cursor-pointer hover:text-blue-900">
+                                    <div
+                                        onClick={() =>
+                                            router(
+                                                `/project/${task?.project_id}`,
+                                            )
+                                        }
+                                        className="col-span-3 text-blue-700 cursor-pointer hover:text-blue-900"
+                                    >
                                         {task?.project?.name}
                                     </div>
                                     <div className="col-span-2 text-blue-700 cursor-pointer hover:text-blue-900">
                                         {task?.project?.code}
                                     </div>
-                                    <div className="items-center col-span-3 text-blue-700 cursor-pointer hover:text-blue-900">
+                                    <div
+                                        onClick={() =>
+                                            router(
+                                                `/project/${task?.project_id}/tasks/${task?.id}`,
+                                            )
+                                        }
+                                        className="items-center col-span-3 text-blue-700 cursor-pointer hover:text-blue-900"
+                                    >
                                         {task?.name}
                                     </div>
                                     <div className="">

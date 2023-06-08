@@ -1,6 +1,7 @@
 import {useMutation, useQueryClient} from '@tanstack/react-query';
 import {Badge, Card, notification} from 'antd';
 import {useState} from 'react';
+import useProfile from '../../../../hooks/useProfile';
 import {getDetailRole, removeRole} from '../../../../services/role';
 import Action from '../../../Action';
 import {ModalConfirm} from '../../../DashboardProject/components/Task/detailTask';
@@ -11,23 +12,40 @@ const Item = ({item}: any) => {
     const [isEdit, setIsEdit] = useState(false);
     const [onlyCanView, setOnlyCanView] = useState(false);
     const [data, setData] = useState<any>([]);
+    const {userProfile} = useProfile();
+    const canUpdateRole = userProfile?.permissions?.includes('role:update');
+    const canDeleteRole = userProfile?.permissions?.includes('role:delete');
+    const canViewRole = userProfile?.permissions?.includes('role:view');
     const handleCancel = () => {
         setIsShow(false);
         setIsEdit(false);
     };
 
     const handleToggleModal = () => {
-        setIsShow(true);
-        needFetch();
-        setOnlyCanView(true);
-        // setShouldFetch(!shouldFetch);
+        if (canViewRole) {
+            setIsShow(true);
+            needFetch();
+            setOnlyCanView(true);
+        } else {
+            notification.error({
+                message: 'Error',
+                description: 'Bạn không có quyền xem chi tiết vai trò',
+            });
+        }
     };
 
     const handleEdit = () => {
-        setOnlyCanView(false);
-        setIsShow(true);
-        setIsEdit(true);
-        needFetch();
+        if (canUpdateRole) {
+            setOnlyCanView(false);
+            setIsShow(true);
+            setIsEdit(true);
+            needFetch();
+        } else {
+            notification.error({
+                message: 'Error',
+                description: 'Bạn không có quyền chỉnh sửa vai trò',
+            });
+        }
     };
 
     const needFetch = async () => {
@@ -101,7 +119,12 @@ const Item = ({item}: any) => {
         },
     });
     const handleRemove = () => {
-        removeRoleMutate(item?.id);
+        canDeleteRole
+            ? removeRoleMutate(item?.id)
+            : notification.error({
+                  message: 'Error',
+                  description: 'Bạn không có quyền xóa vai trò',
+              });
     };
 
     return (
