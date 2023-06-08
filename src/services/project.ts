@@ -53,11 +53,10 @@ export const getListTaskInProject = ({
             : ''
     }`;
     const endAtParams = `${
-        end_at
-            ? `${
-                  nameParams || statusParams || userDoParams ? '&' : ''
-              }end_at=${dayjs(end_at).format('YYYY-MM-DD HH:mm')}`
-            : ''
+        end_at &&
+        `${startAtParams && '&'}${`end_at=${dayjs(end_at).format(
+            'YYYY-MM-DD HH:mm',
+        )}`}`
     }`;
     const params = `${nameParams && nameParams}${statusParams && statusParams}${
         startAtParams && startAtParams
