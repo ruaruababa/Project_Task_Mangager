@@ -11,6 +11,7 @@ const useProfile = () => {
     const userProfile = useMemo(() => {
         return getMeResponse?.data?.data;
     }, [getMeResponse]);
+
     return {
         userProfile,
     };
