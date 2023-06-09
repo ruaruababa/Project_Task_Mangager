@@ -41,10 +41,11 @@ const ListRole = () => {
                 >
                     Trang chủ /{' '}
                 </span>
-                <span className="font-semibold">Phân quyền</span>
+                <span className="font-semibold">Quản lý vai trò</span>
             </div>
             <div className="grid grid-cols-3 gap-3">
-                <Card
+                {canCreateRole &&
+                (<Card
                     bordered={false}
                     className="flex flex-col items-center justify-center cursor-pointer"
                     onClick={handleOpenModal}
@@ -55,9 +56,9 @@ const ListRole = () => {
                                 fontSize: 50,
                             }}
                         />
-                        <div className="">Thêm nhóm vai trò</div>
+                        <div className="">Thêm vai trò</div>
                     </div>
-                </Card>
+                </Card>)}
                 {roles?.map((item: any, index: any) => (
                     <Item key={index} item={item} />
                 ))}
