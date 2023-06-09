@@ -4,7 +4,6 @@ import {RouterProvider} from 'react-router-dom';
 import LoginPage from './components/LoginPage';
 import router from './router';
 import {getAccessToken} from './utils/auth';
-import Pusher from 'pusher-js';
 
 function App() {
     const [queryClient] = useState(
@@ -18,14 +17,6 @@ function App() {
                 },
             }),
     );
-    
-    const pusher = new Pusher("APP_KEY", {
-      cluster: "APP_CLUSTER"
-     });
-    const channel = pusher.subscribe('votes');
-    // channel.bind('vote-event', function(data) {
-    //   return data
-    //  });
 
     const accessToken = getAccessToken();
     return (

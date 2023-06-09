@@ -9,7 +9,7 @@ const ModalChangePassword = (props: Props) => {
     const handleFinish = (values: any) => {};
     return (
         <Modal
-            visible={visible}
+            open={visible}
             onCancel={onCancel}
             title="Đổi mật khẩu"
             footer={[]}
