@@ -264,17 +264,17 @@ const CreateUpdateProject = () => {
                     <Form.Item
                         className="w-1/2"
                         name="duration"
-                        label="Duration"
+                        label="Khoảng thời gian"
                         rules={[
                             {
                                 required: true,
-                                message: 'Vui lòng nhập Duration!',
+                                message: 'Vui lòng nhập khoảng thời gian!',
                             },
                         ]}
                     >
                         <Input
                             type="number"
-                            placeholder="Nhập Duration"
+                            placeholder="Nhập khoảng thời gian"
                             style={{
                                 backgroundColor: '#f5f5f5',
                             }}
