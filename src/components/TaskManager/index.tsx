@@ -111,25 +111,6 @@ const TaskManager = () => {
                                         {task?.status?.name}
                                     </div>
                                 </div>
-                                <div className="col-span-2 text-blue-700 cursor-pointer hover:text-blue-900">
-                                    {task?.project?.code}
-                                </div>
-                                <div className="items-center col-span-3 text-blue-700 cursor-pointer hover:text-blue-900">
-                                    {task?.name}
-                                </div>
-                                <div className="">
-                                    {convertDate(task?.starts_at)}
-                                </div>
-                                <div className="">
-                                    {convertDate(task?.ends_at)}
-                                </div>
-                                <div
-                                    style={{
-                                        color: task?.status?.color,
-                                    }}
-                                >
-                                    {task?.status?.name}
-                                </div>
                             </>
                         );
                     })}
