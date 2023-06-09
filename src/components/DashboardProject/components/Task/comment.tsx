@@ -1,5 +1,5 @@
 import {CommentOutlined, DeleteOutlined, EditOutlined, EnterOutlined} from '@ant-design/icons';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import Editor from 'ckeditor5-custom-build/build/ckeditor';
 import {CKEditor} from '@ckeditor/ckeditor5-react';
 import {useMutation, useQuery} from '@tanstack/react-query';
 import {Button, Modal, Tooltip, notification} from "antd";
@@ -10,15 +10,80 @@ import {createComment, deleteComment, editComment, getCommentReplies, getComment
 import {convertDateTime} from '../../../../utils/format';
 import {Mention} from '@ckeditor/ckeditor5-mention';
 import {getUsersInProject} from '../../../../services/project';
+import EssentialsPlugin from '@ckeditor/ckeditor5-essentials/src/essentials';
+import BoldPlugin from '@ckeditor/ckeditor5-basic-styles/src/bold';
+import Italic from '@ckeditor/ckeditor5-basic-styles/src/italic';
+import LinkPlugin from '@ckeditor/ckeditor5-link/src/link';
+import ParagraphPlugin from '@ckeditor/ckeditor5-paragraph/src/paragraph';
+import BlockquotePlugin from '@ckeditor/ckeditor5-block-quote/src/blockquote';
+import ImagePlugin from '@ckeditor/ckeditor5-image/src/image';
+import ImageUploadPlugin from '@ckeditor/ckeditor5-image/src/imageupload';
+import CKFinderPlugin from '@ckeditor/ckeditor5-ckfinder/src/ckfinder';
 
 const avatarUrl = 'avatar.jpg';
+
+function MentionCustomization(editor: any) {
+    // The upcast converter will convert view <a class="mention" href="" data-user-id="">
+    // elements to the model 'mention' text attribute.
+    editor.conversion.for('upcast').elementToAttribute({
+        view: {
+            name: 'a',
+            key: 'data-mention',
+            classes: 'mention',
+            attributes: {
+                href: true,
+                'data-user-id': true
+            }
+        },
+        model: {
+            key: 'mention',
+            value: (viewItem: any) => {
+                // The mention feature expects that the mention attribute value
+                // in the model is a plain object with a set of additional attributes.
+                // In order to create a proper object use the toMentionAttribute() helper method:
+                const mentionAttribute = editor.plugins.get('Mention').toMentionAttribute(viewItem, {
+                    // Add any other properties that you need.
+                    link: viewItem.getAttribute('href'),
+                    userId: viewItem.getAttribute('data-user-id')
+                });
+
+                return mentionAttribute;
+            }
+        },
+        converterPriority: 'high'
+    });
+
+    // Downcast the model 'mention' text attribute to a view <a> element.
+    editor.conversion.for('downcast').attributeToElement({
+        model: 'mention',
+        view: (modelAttributeValue: any, {writer}: any) => {
+            // Do not convert empty attributes (lack of value means no mention).
+            if (!modelAttributeValue) {
+                return;
+            }
+
+            return writer.createAttributeElement('a', {
+                class: 'mention',
+                'data-mention': modelAttributeValue.id,
+                'data-user-id': modelAttributeValue.userId,
+                'href': modelAttributeValue.link
+            }, {
+                // Make mention attribute to be wrapped by other attribute elements.
+                priority: 20,
+                // Prevent merging mentions together.
+                id: modelAttributeValue.uid
+            });
+        },
+        converterPriority: 'high'
+    });
+}
 
 const CommentEditor = ({data, onCancel, onSuccess, parentId}:
     {data?: {content: string; id: number;}; onCancel?: Function; onSuccess?: Function; parentId?: number;}) => {
     const {id, taskId} = useParams();
     const [changed, setChanged] = useState(false);
     const [contentIsEmpty, setContentIsEmpty] = useState(true);
-    const [editor, setEditor] = useState<ClassicEditor | null>(null);
+    const [editor, setEditor] = useState<any>(null);
     const {userProfile} = useProfile();
 
     const {data: usersInProjectResponse} = useQuery({
@@ -66,8 +131,8 @@ const CommentEditor = ({data, onCancel, onSuccess, parentId}:
     const {mutate: actionCommentMutate, isLoading} = data ? editMutation : createMutation;
 
     const usersInProjectList = useMemo(() => {
-        console.log(usersInProjectResponse?.data?.data?.map((u: any) =>  `@${u.label}`) ?? [])
-        return usersInProjectResponse?.data?.data?.map((u: any) =>  `@${u.label}`) ?? [];
+        console.log(usersInProjectResponse?.data?.data?.map((u: any) => ({...u, id: `${u.value}`, text: u.label})) ?? []);
+        return usersInProjectResponse?.data?.data?.map((u: any) => ({...u, id: `${u.value}`, text: u.label})) ?? [];
     }, [usersInProjectResponse]);
 
     const handleCancel = () => {
@@ -82,10 +147,11 @@ const CommentEditor = ({data, onCancel, onSuccess, parentId}:
     const handleSave = () => {
         actionCommentMutate({content: editor?.getData() ?? '', comment_id: parentId});
     };
-    const handleChange = (_: any, editor: ClassicEditor) => {
+    const handleChange = (_: any, editor: any) => {
         setChanged(true);
         setContentIsEmpty(!editor.getData());
     };
+    console.log(Array.from((editor?.ui.componentFactory.names ?? [])));
 
     return (
         <div className="flex w-full">
@@ -98,24 +164,38 @@ const CommentEditor = ({data, onCancel, onSuccess, parentId}:
             <div className='flex flex-col items-end ml-4 grow'>
                 <div className='w-full'>
                     <CKEditor
-                        editor={ClassicEditor}
+                        editor={Editor as any}
                         onReady={(editor) => {
                             setEditor(editor);
                         }}
                         onChange={handleChange}
                         config={{
-                            plugins: [Mention],
                             mention: {
                                 feeds: [{
                                     marker: '@',
-                                    feed: [usersInProjectList],
-                                    minimumCharacters: 1
-                                }]
+                                    feed: usersInProjectList,
+                                    itemRenderer: (item: any) => {
+                                        const itemElement = document.createElement('div');
+
+                                        itemElement.classList.add('custom-item');
+                                        // itemElement.id = `mention-list-item-id-${item.value}`;
+                                        itemElement.textContent = `${item.label} `;
+
+                                        const usernameElement = document.createElement('span');
+
+                                        usernameElement.classList.add('custom-item-username');
+                                        usernameElement.textContent = item.email;
+
+                                        itemElement.appendChild(usernameElement);
+
+                                        return itemElement;
+                                    }
+                                }],
                             },
-                            cloudServices: {
-                                // tokenUrl: () => new Promise((resolve) => resolve(localStorage.getItem('access_token') ?? '')),
-                                uploadUrl: 'https://98259.cke-cs.com/token/dev/6fb25ab0a6520f891446a3351f46b392507eacb9525d5bac2b5f3c25f9e8?limit=10',
-                            },
+                            // cloudServices: {
+                            //     // tokenUrl: () => new Promise((resolve) => resolve(localStorage.getItem('access_token') ?? '')),
+                            //     uploadUrl: 'https://98259.cke-cs.com/token/dev/6fb25ab0a6520f891446a3351f46b392507eacb9525d5bac2b5f3c25f9e8?limit=10',
+                            // },
                         }}
                         data={data?.content}
                     />
