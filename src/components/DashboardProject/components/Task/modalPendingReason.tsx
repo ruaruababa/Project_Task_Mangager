@@ -29,7 +29,7 @@ const ModalPendingReason = (props: Props) => {
         onError: (error: any) => {
             const messError = error?.response?.data?.message;
             notification.error({
-                message: 'Error',
+                message: 'Lỗi',
                 description: `${messError}` || 'Lỗi hệ thống, vui lòng thử lại sau',
             });
         },

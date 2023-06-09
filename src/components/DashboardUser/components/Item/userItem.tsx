@@ -20,7 +20,7 @@ const UserItem = ({user}: any) => {
         canViewUser
             ? router(`/user/${user?.id}/detail`)
             : notification.error({
-                  message: 'Error',
+                  message: 'Lỗi',
                   description: 'Bạn không có quyền xem chi tiết người dùng',
               });
     };
@@ -28,7 +28,7 @@ const UserItem = ({user}: any) => {
         canUpdateUser
             ? setIsShow(!isShow)
             : notification.error({
-                  message: 'Error',
+                  message: 'Lỗi',
                   description: 'Bạn không có quyền chỉnh sửa người dùng',
               });
     };
@@ -36,7 +36,7 @@ const UserItem = ({user}: any) => {
         canDeleteUser
             ? setShowModal(true)
             : notification.error({
-                  message: 'Error',
+                  message: 'Lỗi',
                   description: 'Bạn không có quyền xóa người dùng',
               });
     };
@@ -56,7 +56,7 @@ const UserItem = ({user}: any) => {
         },
         onError: (error: any) => {
             notification.error({
-                message: 'Error',
+                message: 'Lỗi',
                 description: error?.response?.data?.message,
             });
         },

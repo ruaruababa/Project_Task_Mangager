@@ -32,7 +32,7 @@ const CommentEditor = ({data, onCancel, onSuccess, parentId}:
         },
         onError: () => {
             notification.error({
-                message: 'Error',
+                message: 'Lỗi',
                 description: 'Đã có lỗi xảy ra',
             });
         },
@@ -50,7 +50,7 @@ const CommentEditor = ({data, onCancel, onSuccess, parentId}:
         },
         onError: () => {
             notification.error({
-                message: 'Error',
+                message: 'Lỗi',
                 description: 'Đã có lỗi xảy ra',
             });
         },
@@ -157,7 +157,7 @@ const CommentItem = (
         },
         onError: (error: any) => {
             notification.error({
-                message: 'Error',
+                message: 'Lỗi',
                 description: error?.response?.data?.message,
             });
         },

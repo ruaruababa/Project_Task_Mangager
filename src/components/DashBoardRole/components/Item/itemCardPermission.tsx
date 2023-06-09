@@ -28,7 +28,7 @@ const Item = ({item}: any) => {
             setOnlyCanView(true);
         } else {
             notification.error({
-                message: 'Error',
+                message: 'Lỗi',
                 description: 'Bạn không có quyền xem chi tiết vai trò',
             });
         }
@@ -42,7 +42,7 @@ const Item = ({item}: any) => {
             needFetch();
         } else {
             notification.error({
-                message: 'Error',
+                message: 'Lỗi',
                 description: 'Bạn không có quyền chỉnh sửa vai trò',
             });
         }
@@ -107,7 +107,7 @@ const Item = ({item}: any) => {
         },
         onError: (error: any) => {
             notification.error({
-                message: 'Error',
+                message: 'Lỗi',
                 description: error?.response?.data?.message,
             });
         },
@@ -116,7 +116,7 @@ const Item = ({item}: any) => {
         canDeleteRole
             ? removeRoleMutate(item?.id)
             : notification.error({
-                  message: 'Error',
+                  message: 'Lỗi',
                   description: 'Bạn không có quyền xóa vai trò',
               });
     };

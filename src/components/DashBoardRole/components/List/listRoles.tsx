@@ -22,7 +22,7 @@ const ListRole = () => {
         canCreateRole
             ? setIsShow(true)
             : notification.error({
-                  message: 'Error',
+                  message: 'Lỗi',
                   description: 'Bạn không có quyền tạo nhóm vai trò',
               });
     };

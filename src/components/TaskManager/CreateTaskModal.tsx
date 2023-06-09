@@ -37,7 +37,7 @@ const CreateTaskModal = (props: Props) => {
         },
         onError: () => {
             notification.error({
-                message: 'Error',
+                message: 'Lỗi',
                 description: 'Create failed',
             });
         },

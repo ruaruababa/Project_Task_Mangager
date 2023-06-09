@@ -21,7 +21,7 @@ const Action = (props: any) => {
         canViewProject
             ? navigate(`/project/${item.id}`)
             : notification.error({
-                  message: 'Error',
+                  message: 'Lỗi',
                   description: 'Bạn không có quyền xem chi tiết Project',
               });
     };
@@ -30,7 +30,7 @@ const Action = (props: any) => {
         canUpdateProject
             ? navigate(`/project/edit/${item.id}`)
             : notification.error({
-                  message: 'Error',
+                  message: 'Lỗi',
                   description: 'Bạn không có quyền chỉnh sửa Project',
               });
     };
@@ -48,7 +48,7 @@ const Action = (props: any) => {
         },
         onError: (error: any) => {
             notification.error({
-                message: 'Error',
+                message: 'Lỗi',
                 description: error?.response?.data?.message,
             });
         },
@@ -60,7 +60,7 @@ const Action = (props: any) => {
             setIsShow(false);
         } else {
             notification.error({
-                message: 'Error',
+                message: 'Lỗi',
                 description: 'Bạn không có quyền xóa Project',
             });
         }

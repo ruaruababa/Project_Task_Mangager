@@ -29,7 +29,7 @@ const TaskItem = ({task, projectId}: any) => {
         },
         onError: (error: any) => {
             notification.error({
-                message: 'Error',
+                message: 'Lỗi',
                 description: error?.response?.data?.message,
             });
         },
@@ -75,7 +75,7 @@ const TaskItem = ({task, projectId}: any) => {
                                           `/project/${projectId}/tasks/${task?.id}`,
                                       )
                                     : notification.error({
-                                          message: 'Error',
+                                          message: 'Lỗi',
                                           description:
                                               'Bạn không có quyền xem đầu việc',
                                       })
@@ -86,7 +86,7 @@ const TaskItem = ({task, projectId}: any) => {
                                           `/project/${projectId}/tasks/${task?.id}/edit`,
                                       )
                                     : notification.error({
-                                          message: 'Error',
+                                          message: 'Lỗi',
                                           description:
                                               'Bạn không có quyền chỉnh sửa đầu việc',
                                       })
@@ -95,7 +95,7 @@ const TaskItem = ({task, projectId}: any) => {
                                 canDeleteTask && task?.can_delete
                                     ? setIsShow(true)
                                     : notification.error({
-                                          message: 'Error',
+                                          message: 'Lỗi',
                                           description:
                                               'Bạn không có quyền xóa đầu việc',
                                       });

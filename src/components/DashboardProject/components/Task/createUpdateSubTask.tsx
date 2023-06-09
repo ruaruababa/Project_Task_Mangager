@@ -110,7 +110,7 @@ const CreateUpdateSubTask = () => {
 
         onError: (error: any) => {
             notification.error({
-                message: 'Error',
+                message: 'Lỗi',
                 description: error?.response?.data?.message,
             });
         },
@@ -135,7 +135,7 @@ const CreateUpdateSubTask = () => {
         },
         onError: (error: any) => {
             notification.error({
-                message: 'Error',
+                message: 'Lỗi',
                 description: error?.response?.data?.message,
             });
         },
