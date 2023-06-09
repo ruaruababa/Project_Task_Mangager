@@ -5,21 +5,27 @@ interface Props {
     handleEdit?: () => void;
     handleDelete?: () => void;
     onlyCanView?: boolean;
+    canView?: boolean,
+    canUpdate?: boolean;
+    canDelete?: boolean;
 }
 
 const Action = (props: Props) => {
-    const {handleDelete, handleEdit, handleView, onlyCanView} = props;
+    const {handleDelete, handleEdit, handleView, onlyCanView, canView, canUpdate, canDelete} = props;
     
     return (
         <div className="flex items-center justify-center col-span-2 gap-2">
-            <div className="cursor-pointer" onClick={handleView}>
+            {canView &&
+            (<div className="cursor-pointer" onClick={handleView}>
                 <EyeOutlined />
-            </div>
-            {!onlyCanView && (<div className="cursor-pointer" onClick={handleEdit}>
+            </div>)}
+            {(!onlyCanView || canUpdate) && 
+            (<div className="cursor-pointer" onClick={handleEdit}>
                 <EditOutlined />
             </div>)}
 
-            {!onlyCanView && (<div
+            {(!onlyCanView || canDelete) && 
+            (<div
                 className={`cursor-pointer ${
                     onlyCanView && 'pointer-events-none'
                 }`}

@@ -30,7 +30,7 @@ const ProjectManager = () => {
         return projectFilterResponse?.data?.meta?.total || 0;
     }, [projectFilterResponse]);
 
-    const canCreateProject = userProfile?.permissions?.includes('user:create');
+    const canCreateProject = userProfile?.permissions?.includes('project:create');
 
     return (
         <>

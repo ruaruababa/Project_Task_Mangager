@@ -35,7 +35,6 @@ const TaskItem = ({task, projectId}: any) => {
         },
     });
 
-    console.log('task', task);
 
     return (
         <>
@@ -101,6 +100,11 @@ const TaskItem = ({task, projectId}: any) => {
                                               'Bạn không có quyền xóa đầu việc',
                                       });
                             }}
+
+                            onlyCanView={true}
+                            canView={canViewTask}
+                            canUpdate={canEditTask && task?.can_update}
+                            canDelete={canDeleteTask && task?.can_delete}
                         />
                     </div>
                 </div>

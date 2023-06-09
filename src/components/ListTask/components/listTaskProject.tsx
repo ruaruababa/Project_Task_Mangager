@@ -11,7 +11,7 @@ const ListTaskInProject = () => {
     const {taskInProjects, setValues, id: projectId} = useTaskInProject();
     const router = useNavigate();
     const {userProfile} = useProfile();
-    const canCreateTask = userProfile?.permissions?.includes('  task:create');
+    const canCreateTask = userProfile?.permissions?.includes('task:create');
    
     return (
         <>
@@ -32,7 +32,7 @@ const ListTaskInProject = () => {
                         className="text-white bg-blue-600"
                         onClick={() => navigate(`/project/${id}/tasks`)}
                     >
-                        List task
+                        Bảng Kanban
                     </Button>
                     {canCreateTask && (
                         <Button
@@ -42,12 +42,12 @@ const ListTaskInProject = () => {
                                 navigate(`/project/${id}/create-task`)
                             }
                         >
-                            Tạo task mới
+                            Thêm đầu việc mới
                         </Button>
                     )}
                 </div>
                 <div className="mb-2 text-lg font-semibold">
-                    Danh sách task của project {id}
+                    Danh sách đầu việc
                 </div>
                 <div className="">
                     <span
@@ -58,14 +58,19 @@ const ListTaskInProject = () => {
                     >
                         Trang chủ /{' '}
                     </span>
-
                     <span
                         className="font-semibold text-gray-400 cursor-pointer"
-                        onClick={() => navigate(`/project/${1}`)}
+                        onClick={() => navigate(`/project`)}
                     >
-                        Project {id} /{' '}
+                        Danh sách dự án /{' '}
                     </span>
-                    <span className="font-semibold">List task</span>
+                    <span
+                        className="font-semibold text-gray-400 cursor-pointer"
+                        onClick={() => navigate(`/project/${id}`)}
+                    >
+                        Chi tiết dự án /{' '}
+                    </span>
+                    <span className="font-semibold">Danh sách đầu việc</span>
                 </div>
             </div>
             <FilterTask setValues={setValues} needHours={true} />
@@ -74,7 +79,7 @@ const ListTaskInProject = () => {
                     <div className="grid grid-cols-12 pb-4 text-xs font-semibold text-gray-400 border-bottom">
                         <div className="col-span-2">ID</div>
                         <div className="items-center col-span-4">
-                            TÊN TASK/SUB-TASK
+                            TÊN ĐẦU VIỆC]
                         </div>
                         <div className="grid grid-cols-8 col-span-6">
                             {' '}
