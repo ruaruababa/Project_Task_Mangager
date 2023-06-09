@@ -50,6 +50,7 @@ const Item = ({item}: any) => {
 
     const needFetch = async () => {
         const {data} = await getDetailRole(item?.id);
+        
         const newData = data?.data?.permissions?.map(
             (item: any, index: any) => {
                 return {
@@ -84,7 +85,8 @@ const Item = ({item}: any) => {
         }	
         setData({	
             ...flattenedData,	
-            "name": data?.data?.name	
+            "name": data?.data?.name,
+            "id": data?.data?.id	
         })
 
         return data;
