@@ -54,6 +54,8 @@ const Item = ({item}: any) => {
             (item: any, index: any) => {
                 return {
                     name: item?.groupName,
+                    [item?.name]: true,  	
+                    id: item?.name,
                     permissions: item?.permissions?.map(
                         (item: any, idx: any) => {
                             return {
@@ -65,35 +67,25 @@ const Item = ({item}: any) => {
             },
         );
 
-        const flattenedData = newData.flatMap(({name, permissions}: any) =>
-            permissions.map((user: any) => ({name, ...user})),
-        );
-
-        const lastData: any = {};
-
-        let count = 1;
-
-        const uniqueNames = Array.from(
-            new Set(flattenedData.map((obj: any) => obj.name)),
-        );
-
-        uniqueNames.forEach((name, index) => {
-            lastData[`rules${index + 1}`] = true;
-        });
-
-        flattenedData.forEach((obj: any) => {
-            Object.entries(obj).forEach(([key, value]) => {
-                if (key !== 'name') {
-                    lastData[key] = value;
-                }
-            });
-        });
-
-        setData({
-            id: data?.data?.id,
-            name: data?.data?.name,
-            ...lastData,
-        });
+        const flattenedData:any = {}	
+        for (const item of newData) {	
+            flattenedData[item?.id] = item[item?.id] || flattenedData[item?.id] || false;	
+            // flattenedData["permissions"] = [...item?.permissions]	
+        	
+            for (const userObj of item.permissions) {	
+                for (const key in userObj) {	
+                    if (key.startsWith('check')) {	
+                        flattenedData[key] = userObj[key];}	
+                }	
+            }	
+        	
+            	
+         	
+        }	
+        setData({	
+            ...flattenedData,	
+            "name": data?.data?.name	
+        })
 
         return data;
     };
@@ -140,6 +132,9 @@ const Item = ({item}: any) => {
                             handleEdit={handleEdit}
                             handleDelete={() => setIsOpen(true)}
                             onlyCanView={!item?.is_editable && true}
+                            canView={canViewRole}
+                            canUpdate={canUpdateRole && item?.is_editable}
+                            canDelete={canDeleteRole && item?.is_editable}
                         />
                     }
                 >
