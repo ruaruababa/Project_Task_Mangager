@@ -36,15 +36,6 @@ const ProjectManager = () => {
         <>
             <div className="mb-10">
                 <div className="flex justify-end gap-3 mb-5">
-                    {canCreateProject && (
-                        <Button
-                            className="text-white bg-blue-600"
-                            onClick={() => router(`/project/create`)}
-                            size="large"
-                        >
-                            Tạo dự án
-                        </Button>
-                    )}
                     <Button
                         type="primary"
                         onClick={() => router(`/project/gantt-chart`)}
@@ -52,6 +43,15 @@ const ProjectManager = () => {
                     >
                         Biểu đồ Gantt
                     </Button>
+                    {canCreateProject && (
+                        <Button
+                            className="text-white bg-blue-600"
+                            onClick={() => router(`/project/create`)}
+                            size="large"
+                        >
+                            Thêm mới dự án
+                        </Button>
+                    )}
                 </div>
 
                 <div className="text-lg">
