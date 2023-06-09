@@ -80,7 +80,7 @@ const DefaultLayout = () => {
     }
 
     if (canManagerRole) {
-        items.push(getItem(' Quanr lý vai trò', '/role', <UserOutlined />));
+        items.push(getItem(' Quản lý vai trò', '/role', <UserOutlined />));
     }
 
     const onClickMenu = (e: any) => {
