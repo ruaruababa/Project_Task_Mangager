@@ -19,7 +19,7 @@ const GanttChartTask = () => {
                     size="large"
                     onClick={() => navigate(`/project/${id}/list-task`)}
                 >
-                    Danh sách task
+                    Danh sách đầu việc
                 </Button>
                 <Button
                     className="text-white bg-blue-500"

@@ -265,7 +265,7 @@ const DetailTask = () => {
                                 );
                             }}
                         >
-                            Thêm mới đầu việc
+                            Thêm mới đầu việc con
                         </Button>
                     )}
                     {canEditTask && detailTaskInProject?.can_update && (

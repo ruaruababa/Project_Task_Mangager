@@ -159,7 +159,7 @@ const CreateUpdateTask = () => {
 
     return (
         <div className="p-10 bg-white rounded-xl">
-            <div className="mb-10">
+            {/* <div className="mb-10">
                 <div className="">
                     <span
                         onClick={() => {
@@ -181,7 +181,7 @@ const CreateUpdateTask = () => {
                         {taskId ? ' Chỉnh sửa ' : 'Tạo '} task
                     </span>
                 </div>
-            </div>
+            </div> */}
             <Form form={form} onFinish={handleFinish} layout="vertical">
                 <Form.Item
                     name="name"
