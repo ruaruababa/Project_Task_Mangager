@@ -50,7 +50,7 @@ const ProjectManager = () => {
                         onClick={() => router(`/project/gantt-chart`)}
                         size="large"
                     >
-                        Gannt chart
+                        Biểu đồ Gantt
                     </Button>
                 </div>
 

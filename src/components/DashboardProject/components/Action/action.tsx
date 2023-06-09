@@ -7,6 +7,8 @@ import useProfile from '../../../../hooks/useProfile';
 import {removeProject} from '../../../../services/project';
 import {ModalConfirm} from '../Task/detailTask';
 const Action = (props: any) => {
+    console.log('fsdaafsdfdsfp', props);
+    
     const {item} = props;
     const navigate = useNavigate();
     const [isShow, setIsShow] = useState(false);
@@ -74,23 +76,35 @@ const Action = (props: any) => {
                     borderLeft: `1px solid black`,
                 }}
             >
-                <div className="cursor-pointer" onClick={handleViewDetail}>
-                    <EyeOutlined />
-                </div>
-                <div className="cursor-pointer" onClick={handleEditProject}>
-                    <EditOutlined />
-                </div>
-                {/* <div className="cursor-pointer">
-            <CopyOutlined />
-        </div> */}
-                <div
-                    className="cursor-pointer"
-                    onClick={() => {
-                        setIsShow(true);
-                    }}
-                >
-                    <DeleteOutlined />
-                </div>
+                {canViewProject && 
+                    (
+                        <div className="cursor-pointer" onClick={handleViewDetail}>
+                            <EyeOutlined />
+                        </div>
+                    )
+                }
+
+                {canUpdateProject && 
+                    (
+                        <div className="cursor-pointer" onClick={handleEditProject}>
+                            <EditOutlined />
+                        </div>
+                    )
+                }
+
+                
+                {item?.can_delete &&
+                    (
+                        <div className="cursor-pointer"
+                            onClick={() => {
+                                setIsShow(true);
+                            }}
+                        >
+                            <DeleteOutlined />
+                        </div>
+                    )
+
+                }
             </div>
             {
                 <ModalConfirm
