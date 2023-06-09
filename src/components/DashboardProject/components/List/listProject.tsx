@@ -2,6 +2,7 @@ import {useQuery} from '@tanstack/react-query';
 import {Button} from 'antd';
 import {useMemo, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
+import useProfile from '../../../../hooks/useProfile';
 import useStatus from '../../../../hooks/useStatus';
 import {filterProject} from '../../../../services/project';
 import FilterProject from '../../../Filter/filterListProject';
@@ -13,6 +14,7 @@ const ProjectManager = () => {
     const [values, setValues] = useState<any>();
 
     const [page, setPage] = useState(1);
+    const {userProfile} = useProfile();
 
     const {data: projectFilterResponse} = useQuery({
         queryKey: ['filterProject', page, values],
@@ -28,25 +30,27 @@ const ProjectManager = () => {
         return projectFilterResponse?.data?.meta?.total || 0;
     }, [projectFilterResponse]);
 
-    console.log('listProject', projectFilterResponse?.data?.data);
+    const canCreateProject = userProfile?.permissions?.includes('project:create');
 
     return (
         <>
             <div className="mb-10">
                 <div className="flex justify-end gap-3 mb-5">
-                    <Button
-                        className="text-white bg-blue-600"
-                        onClick={() => router(`/project/create`)}
-                        size="large"
-                    >
-                        Tạo dự án
-                    </Button>
+                    {canCreateProject && (
+                        <Button
+                            className="text-white bg-blue-600"
+                            onClick={() => router(`/project/create`)}
+                            size="large"
+                        >
+                            Tạo dự án
+                        </Button>
+                    )}
                     <Button
                         type="primary"
                         onClick={() => router(`/project/gantt-chart`)}
                         size="large"
                     >
-                        Gannt chart
+                        Biểu đồ Gantt
                     </Button>
                 </div>
 
@@ -67,6 +71,8 @@ const ProjectManager = () => {
                 <FilterProject
                     statusOptions={statusOptions}
                     setValues={setValues}
+                    setPage={setPage}
+                    page={page}
                 />
                 <div className="flex flex-col gap-4">
                     {listProject?.map((project: any) => {

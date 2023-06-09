@@ -6,12 +6,14 @@ import {filterUser} from '../../../../services/user';
 import Pagination from '../../../Pagination';
 import CreateUpdateUserModal from '../CreateUpdate/createUpdateUser';
 import UserItem from '../Item/userItem';
+import useProfile from '../../../../hooks/useProfile';
 
 const ListUser = () => {
     const [page, setPage] = useState(1);
     const [form] = Form.useForm();
     const [isShowCreateModal, setIsShowCreateModal] = useState(false);
-
+    const {userProfile} = useProfile();
+    const canCreateUser = userProfile?.permissions?.includes('user:create');
     const [params, setParams] = useState<any>('');
 
     const {data: userFilterResponse} = useQuery({
@@ -96,7 +98,8 @@ const ListUser = () => {
                     </Form>
                     <div>
                         {' '}
-                        <Button
+                        {canCreateUser &&
+                        (<Button
                             className="text-white bg-blue-500"
                             size={'large'}
                             onClick={() => {
@@ -104,7 +107,7 @@ const ListUser = () => {
                             }}
                         >
                             Thêm người dùng
-                        </Button>
+                        </Button>)}
                     </div>
                 </div>
                 <div className="flex flex-col text-xl">

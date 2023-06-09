@@ -55,31 +55,32 @@ const CreateUpdateRoleModal = (props: Props) => {
 
     const queryCLient = useQueryClient();
 
+    console.log("value", initalValues)
+
     useEffect(() => {
         if (initalValues) {
             form.setFieldsValue(initalValues);
         }
     }, [form, initalValues]);
 
-    useEffect(() => {
-        if (viewOnly) {
-            const fields = form.getFieldsValue(); // Get the current values of all fields
-            const disabledFields = Object.keys(fields).reduce(
-                (acc: any, key: any) => {
-                    acc[key] = true; // Set the disabled prop to true for each field
-                    return acc;
-                },
-                {},
-            );
-            form.setFieldsValue(disabledFields);
-        }
-    }, [form, viewOnly]);
+    // useEffect(() => {
+    //     if (viewOnly) {
+    //         const fields = form.getFieldsValue(); // Get the current values of all fields
+    //         const disabledFields = Object.keys(fields).reduce(
+    //             (acc: any, key: any) => {
+    //                 acc[key] = true; // Set the disabled prop to true for each field
+    //                 return acc;
+    //             },
+    //             {},
+    //         );
+    //         form.setFieldsValue(disabledFields);
+    //     }
+    // }, [form, viewOnly]);
 
     const data = useMemo(() => {
         return permissions?.map((item: any, index: any) => {
             return {
                 ...item,
-                name: `rules${index + 1}`,
                 permissions: item?.permissions?.map((item: any, idx: any) => {
                     return {
                         ...item,
@@ -94,9 +95,9 @@ const CreateUpdateRoleModal = (props: Props) => {
     const getLableMode = () => {
         switch (mode) {
             case 'create':
-                return 'Tạo';
+                return 'Lưu';
             case 'update':
-                return 'Update';
+                return 'Lưu';
             default:
                 return '';
         }
@@ -140,26 +141,35 @@ const CreateUpdateRoleModal = (props: Props) => {
     });
 
     const handleFinish = (values: any) => {
+        console.log("values", values);
         const values_ = [];
         for (let x in values) {
             if (values[x] === true) {
                 values_.push(x);
             }
         }
+
+        console.log("values", values_)
         const lastResult = values_.map((item: any) => {
             if (item.includes('checked')) {
                 return item.split('checked')[1];
             }
         });
 
+        console.log("lastResult", lastResult)
+
         const input_ = lastResult.filter((item: any) => {
             return item !== undefined;
         });
+
+        console.log("input", input_)
 
         const input = {
             name: values?.name,
             permission_ids: input_,
         };
+
+        console.log("input", input)
         if (initalValues) {
             updateRoleMutate(input);
         } else {
@@ -172,7 +182,7 @@ const CreateUpdateRoleModal = (props: Props) => {
         <Modal
             visible={visible}
             onCancel={onCancel}
-            title="Thêm danh mục phân quyền"
+            title={"Vai trò"}
             footer={[]}
             width={1000}
         >
@@ -182,6 +192,7 @@ const CreateUpdateRoleModal = (props: Props) => {
                 onFinish={handleFinish}
                 layout="vertical"
                 onValuesChange={(changedValues, allValues) => {
+                    console.log("changedValues", changedValues)
                     const dataPer = data.filter((item: any) => {
                         return changedValues[item?.name] === true;
                     });
@@ -210,17 +221,17 @@ const CreateUpdateRoleModal = (props: Props) => {
             >
                 <Form.Item
                     name={'name'}
-                    label="Tên nhóm vai trò"
+                    label="Tên vai trò"
                     rules={[
                         {
                             required: true,
-                            message: 'Vui lòng nhập tên nhóm vai trò',
+                            message: 'Vui lòng nhập tên vai trò',
                         },
                     ]}
                 >
                     <Input
                         type="text"
-                        placeholder="Vui lòng nhập tên nhóm vai trò"
+                        placeholder="Vui lòng nhập tên vai trò"
                     />
                 </Form.Item>
                 <div className="grid grid-cols-6">
@@ -237,7 +248,7 @@ const CreateUpdateRoleModal = (props: Props) => {
                             </Form.Item> */}
                                 <Form.Item
                                     key={per?.groupName}
-                                    name={`rules${index + 1}`}
+                                    name={per?.name}
                                     valuePropName="checked"
                                     className="col-span-1"
                                 >
@@ -264,7 +275,6 @@ const CreateUpdateRoleModal = (props: Props) => {
                         );
                     })}
                 </div>
-
                 {getLableMode() && (
                     <Form.Item className="flex justify-center">
                         <Button

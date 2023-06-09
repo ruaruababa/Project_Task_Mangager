@@ -1,5 +1,4 @@
 import {
-    ApartmentOutlined,
     BellOutlined,
     FundProjectionScreenOutlined,
     OrderedListOutlined,
@@ -31,13 +30,6 @@ function getItem(
     } as MenuItem;
 }
 
-const items: MenuItem[] = [
-    getItem('Quản lý dự án', '/project', <OrderedListOutlined />),
-    getItem('Thống kê', '/statistic', <FundProjectionScreenOutlined />),
-    getItem(' Quản lý người dùng', '/user', <UserOutlined />),
-    getItem(' Phân quyền', '/role', <ApartmentOutlined />),
-];
-
 const avatarUrl = 'avatar.jpg';
 
 const DefaultLayout = () => {
@@ -47,7 +39,43 @@ const DefaultLayout = () => {
     } = theme.useToken();
     const navigate = useNavigate();
 
+    const items: MenuItem[] = [
+        // getItem('Quản lý dự án', '/project', <OrderedListOutlined />),
+        // getItem('Thống kê', '/statistic', <FundProjectionScreenOutlined />),
+        // getItem(' Quản lý người dùng', '/user', <UserOutlined />),
+        // getItem(' Phân quyền', '/role', <ApartmentOutlined />),
+    ];
+
     const {userProfile} = useProfile();
+    console.log('userProfile', userProfile);
+
+    const canViewStatistic = userProfile?.permissions?.includes(
+        'statistical:project',
+        'statistical:task',
+    );
+    console.log('canViewStatistic', canViewStatistic);
+
+    const canManagerUser = userProfile?.permissions?.includes('user:view-any');
+    const canManagerProject =
+        userProfile?.permissions?.includes('project:view-any');
+    const canManagerRole = userProfile?.permissions?.includes('role:view-any');
+    if (canManagerProject) {
+        items.push(
+            getItem('Quản lý dự án', '/project', <OrderedListOutlined />),
+        );
+    }
+    if (canViewStatistic) {
+        items.push(
+            getItem('Thống kê', '/statistic', <FundProjectionScreenOutlined />),
+        );
+    }
+    if (canManagerUser) {
+        items.push(getItem(' Quản lý người dùng', '/user', <UserOutlined />));
+    }
+
+    if (canManagerRole) {
+        items.push(getItem(' Phân quyền', '/role', <UserOutlined />));
+    }
 
     const onClickMenu = (e: any) => {
         navigate(e.key);

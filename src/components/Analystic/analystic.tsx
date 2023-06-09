@@ -19,6 +19,7 @@ const Analystic = () => {
     const {data: analysticTaskResponse} = useQuery({
         queryKey: ['getTaskAnalystic', paramsTask || ''],
         queryFn: () => getTaskAnalystic({...paramsTask}),
+        keepPreviousData: true,
     });
 
     const analysticTask = useMemo(() => {
@@ -28,6 +29,7 @@ const Analystic = () => {
     const {data: analysticProjectResponse} = useQuery({
         queryKey: ['getProjectAnalystic', paramsProject || ''],
         queryFn: () => getProjectAnalystic({...paramsProject}),
+        keepPreviousData: true,
     });
 
     const analysticProject = useMemo(() => {

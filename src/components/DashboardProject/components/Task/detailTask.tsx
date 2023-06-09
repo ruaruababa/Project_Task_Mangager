@@ -19,6 +19,7 @@ import {
 import dayjs from 'dayjs';
 import {useMemo, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
+import useProfile from '../../../../hooks/useProfile';
 import {
     getDetailTaskInProject,
     getHistotyInTask,
@@ -63,6 +64,12 @@ const DetailTask = () => {
     const navigate = useNavigate();
     const [isShowModal, setIsShowModal] = useState(false);
     const queryClient = useQueryClient();
+
+    const {userProfile} = useProfile();
+
+    const canCreateSubTask = userProfile?.permissions?.includes('task:create');
+    const canEditTask = userProfile?.permissions?.includes('task:update');
+    const canDeleteTask = userProfile?.permissions?.includes('task:delete');
 
     const {data: detailTaskResponse} = useQuery({
         queryKey: ['getDetailTaskInProject', id, taskId],
@@ -154,7 +161,7 @@ const DetailTask = () => {
                 {title || 'Báo cáo'} {index + 1}
                 {item?.is_editable}
             </h3>
-            {item?.is_editable && (
+            {item?.is_editable && canEditTask && (
                 <DeleteOutlined
                     className="cursor-pointer"
                     onClick={() => {
@@ -171,17 +178,17 @@ const DetailTask = () => {
         {
             id: 'subtask',
             tab: 'subtask',
-            title: 'SUB TASK',
+            title: 'Đầu việc con',
         },
         {
             id: 'history',
             tab: 'history',
-            title: 'HISTORY',
+            title: 'Lịch sử',
         },
         {
             id: 'comment',
             tab: 'comment',
-            title: 'COMMENT',
+            title: 'Bình luận',
         },
     ];
     return (
@@ -226,55 +233,73 @@ const DetailTask = () => {
                             navigate('/project');
                         }}
                     >
-                        Project
+                        Danh sách dự án
                     </span>
                     {' / '}
                     <span
                         className="font-semibold text-gray-400 cursor-pointer"
                         onClick={() => {
-                            navigate(`/project/${id}/tasks`);
+                            navigate(`/project/${id}`);
                         }}
                     >
-                        Task
+                        Chi tiết dự án
                     </span>
                     {' / '}
-                    <span>Chi tiết task</span>
+                    <span
+                        className="font-semibold text-gray-400 cursor-pointer"
+                        onClick={() => {
+                            navigate(`/project/${id}/list-task`);
+                        }}
+                    >
+                        Danh sách đầu việc
+                    </span>
+                    {' / '}
+                    <span>Chi tiết đầu việc</span>
                 </div>
                 <div className="flex gap-3">
-                    <Button
-                        className="text-white bg-green-600 hover:bg-green-700"
-                        onClick={() => {
-                            navigate(
-                                `/project/${id}/task/${taskId}/create-subTask`,
-                            );
-                        }}
-                    >
-                        Thêm đầu việc
-                    </Button>
-                    <Button
-                        type="primary"
-                        onClick={() => {
-                            navigate(`/project/${id}/tasks/${taskId}/edit`);
-                        }}
-                    >
-                        Chỉnh sửa
-                    </Button>
-                    <Button
-                        className="text-white bg-blue-500 hover:bg-blue-600"
-                        onClick={() => {
-                            setIsShowModal(true);
-                        }}
-                    >
-                        Nộp báo cáo
-                    </Button>
-                    <Button
+                    {canCreateSubTask && (
+                        <Button
+                            className="text-white bg-green-600 hover:bg-green-700"
+                            onClick={() => {
+                                navigate(
+                                    `/project/${id}/task/${taskId}/create-subTask`,
+                                );
+                            }}
+                        >
+                            Thêm mới đầu việc con
+                        </Button>
+                    )}
+                    {canEditTask && detailTaskInProject?.can_update && (
+                        <Button
+                            type="primary"
+                            onClick={() => {
+                                navigate(`/project/${id}/tasks/${taskId}/edit`);
+                            }}
+                        >
+                            Chỉnh sửa
+                        </Button>
+                    )}
+                    {detailTaskInProject?.can_submit_report && (
+                        <Button
+                            className="text-white bg-blue-500 hover:bg-blue-600"
+                            onClick={() => {
+                                setIsShowModal(true);
+                            }}
+                        >
+                            Nộp báo cáo
+                        </Button>
+                    )}
+                    {canEditTask && detailTaskInProject?.can_update && (
+                        <Button
                         className="text-white bg-gray-500 hover:bg-gray-600"
                         onClick={() => {
                             setIsOpenModalAttachment(true);
                         }}
-                    >
-                        Tệp đính kèm
-                    </Button>
+                        >
+                            Đính kèm tệp
+                        </Button>
+                    )}
+                    
                 </div>
             </div>
             <div className="flex flex-col gap-10">
@@ -375,7 +400,7 @@ const DetailTask = () => {
                             )}
                             <div className="grid grid-cols-12">
                                 <div className="col-span-2 text-lg font-semibold text-gray-400">
-                                    Description:
+                                    Mô tả:
                                 </div>
                                 <div className="col-span-10 font-semibold">
                                     {detailTaskInProject?.description ||
@@ -450,7 +475,7 @@ const DetailTask = () => {
                         {detailTaskInProject?.reports && (
                             <div className="flex justify-center mt-5">
                                 <Tag color="warning" className="text-2xl">
-                                    Report files
+                                    Báo cáo
                                 </Tag>
                             </div>
                         )}
@@ -535,7 +560,7 @@ const DetailTask = () => {
                         {tabActive === 'subtask' && (
                             <div>
                                 <div className="mt-5 text-lg font-bold">
-                                    DANH SÁCH SUBTASK
+                                    DANH SÁCH ĐẦU VIỆC CON
                                 </div>
                                 <Divider></Divider>
                                 {detailTaskInProject?.children?.map(
@@ -581,7 +606,7 @@ const DetailTask = () => {
                                                         </div>
 
                                                         <div className="text-gray-400">
-                                                            Ngày bắt đầu
+                                                            Thời gian bắt đầu
                                                         </div>
                                                     </div>
                                                     <div
@@ -596,7 +621,7 @@ const DetailTask = () => {
                                                             )}
                                                         </div>
                                                         <div className="text-gray-400">
-                                                            Ngày hoàn thành
+                                                            Thời gian hoàn thành
                                                         </div>
                                                     </div>
 

@@ -1,6 +1,7 @@
 import {useMutation, useQueryClient} from '@tanstack/react-query';
 import {Badge, Card, notification} from 'antd';
 import {useState} from 'react';
+import useProfile from '../../../../hooks/useProfile';
 import {getDetailRole, removeRole} from '../../../../services/role';
 import Action from '../../../Action';
 import {ModalConfirm} from '../../../DashboardProject/components/Task/detailTask';
@@ -11,23 +12,40 @@ const Item = ({item}: any) => {
     const [isEdit, setIsEdit] = useState(false);
     const [onlyCanView, setOnlyCanView] = useState(false);
     const [data, setData] = useState<any>([]);
+    const {userProfile} = useProfile();
+    const canUpdateRole = userProfile?.permissions?.includes('role:update');
+    const canDeleteRole = userProfile?.permissions?.includes('role:delete');
+    const canViewRole = userProfile?.permissions?.includes('role:view');
     const handleCancel = () => {
         setIsShow(false);
         setIsEdit(false);
     };
 
     const handleToggleModal = () => {
-        setIsShow(true);
-        needFetch();
-        setOnlyCanView(true);
-        // setShouldFetch(!shouldFetch);
+        if (canViewRole) {
+            setIsShow(true);
+            needFetch();
+            setOnlyCanView(true);
+        } else {
+            notification.error({
+                message: 'Error',
+                description: 'Bạn không có quyền xem chi tiết vai trò',
+            });
+        }
     };
 
     const handleEdit = () => {
-        setOnlyCanView(false);
-        setIsShow(true);
-        setIsEdit(true);
-        needFetch();
+        if (canUpdateRole) {
+            setOnlyCanView(false);
+            setIsShow(true);
+            setIsEdit(true);
+            needFetch();
+        } else {
+            notification.error({
+                message: 'Error',
+                description: 'Bạn không có quyền chỉnh sửa vai trò',
+            });
+        }
     };
 
     const needFetch = async () => {
@@ -36,6 +54,8 @@ const Item = ({item}: any) => {
             (item: any, index: any) => {
                 return {
                     name: item?.groupName,
+                    [item?.name]: true,  	
+                    id: item?.name,
                     permissions: item?.permissions?.map(
                         (item: any, idx: any) => {
                             return {
@@ -47,35 +67,25 @@ const Item = ({item}: any) => {
             },
         );
 
-        const flattenedData = newData.flatMap(({name, permissions}: any) =>
-            permissions.map((user: any) => ({name, ...user})),
-        );
-
-        const lastData: any = {};
-
-        let count = 1;
-
-        const uniqueNames = Array.from(
-            new Set(flattenedData.map((obj: any) => obj.name)),
-        );
-
-        uniqueNames.forEach((name, index) => {
-            lastData[`rules${index + 1}`] = true;
-        });
-
-        flattenedData.forEach((obj: any) => {
-            Object.entries(obj).forEach(([key, value]) => {
-                if (key !== 'name') {
-                    lastData[key] = value;
-                }
-            });
-        });
-
-        setData({
-            id: data?.data?.id,
-            name: data?.data?.name,
-            ...lastData,
-        });
+        const flattenedData:any = {}	
+        for (const item of newData) {	
+            flattenedData[item?.id] = item[item?.id] || flattenedData[item?.id] || false;	
+            // flattenedData["permissions"] = [...item?.permissions]	
+        	
+            for (const userObj of item.permissions) {	
+                for (const key in userObj) {	
+                    if (key.startsWith('check')) {	
+                        flattenedData[key] = userObj[key];}	
+                }	
+            }	
+        	
+            	
+         	
+        }	
+        setData({	
+            ...flattenedData,	
+            "name": data?.data?.name	
+        })
 
         return data;
     };
@@ -101,7 +111,12 @@ const Item = ({item}: any) => {
         },
     });
     const handleRemove = () => {
-        removeRoleMutate(item?.id);
+        canDeleteRole
+            ? removeRoleMutate(item?.id)
+            : notification.error({
+                  message: 'Error',
+                  description: 'Bạn không có quyền xóa vai trò',
+              });
     };
 
     return (
@@ -117,6 +132,9 @@ const Item = ({item}: any) => {
                             handleEdit={handleEdit}
                             handleDelete={() => setIsOpen(true)}
                             onlyCanView={!item?.is_editable && true}
+                            canView={canViewRole}
+                            canUpdate={canUpdateRole && item?.is_editable}
+                            canDelete={canDeleteRole && item?.is_editable}
                         />
                     }
                 >

@@ -151,7 +151,7 @@ const CreateUpdateSubTask = () => {
 
     return (
         <div className="p-10 bg-white rounded-xl">
-            <div className="mb-10">
+            {/* <div className="mb-10">
                 <div className="">
                     <span
                         onClick={() => {
@@ -169,11 +169,11 @@ const CreateUpdateSubTask = () => {
                     >
                         List-task /
                     </span>{' '}
-                    <span className="font-semibold">
+                    <span className="fotasaasfsadfsafdsdfsdfnt-semibold">
                         {taskId ? ' Chỉnh sửa ' : 'Tạo '} task
                     </span>
                 </div>
-            </div>
+            </div> */}
             <Form form={form} onFinish={handleFinish} layout="vertical">
                 <Form.Item
                     name="name"

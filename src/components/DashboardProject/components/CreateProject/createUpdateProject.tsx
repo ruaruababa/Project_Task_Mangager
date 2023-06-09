@@ -19,7 +19,6 @@ const CreateUpdateProject = () => {
     const startDate = Form.useWatch('starts_at', form);
     const endDate = Form.useWatch('ends_at', form);
     const statusSelected = Form.useWatch('status_id', form);
-    console.log('statusSelected>>>', statusSelected);
 
     const options: any = users?.map((user: any) => ({
         label: user.name,
@@ -168,12 +167,6 @@ const CreateUpdateProject = () => {
                             rules={[{required: true}]}
                         >
                             <DatePicker
-                                disabledDate={(d: any) =>
-                                    !d ||
-                                    d.isBefore(
-                                        dayjs(startDate).format('YYYY/MM/DD'),
-                                    )
-                                }
                                 format={'YYYY/MM/DD'}
                                 style={{
                                     backgroundColor: '#f5f5f5',
@@ -224,10 +217,6 @@ const CreateUpdateProject = () => {
                             rules={[{required: true}]}
                         >
                             <DatePicker
-                                disabledDate={(d) =>
-                                    !d ||
-                                    d.isBefore(dayjs().format('YYYY/MM/DD'))
-                                }
                                 onChange={() => {}}
                                 format={'YYYY/MM/DD'}
                                 style={{

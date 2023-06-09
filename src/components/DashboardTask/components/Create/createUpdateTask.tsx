@@ -159,7 +159,7 @@ const CreateUpdateTask = () => {
 
     return (
         <div className="p-10 bg-white rounded-xl">
-            <div className="mb-10">
+            {/* <div className="mb-10">
                 <div className="">
                     <span
                         onClick={() => {
@@ -181,7 +181,7 @@ const CreateUpdateTask = () => {
                         {taskId ? ' Chỉnh sửa ' : 'Tạo '} task
                     </span>
                 </div>
-            </div>
+            </div> */}
             <Form form={form} onFinish={handleFinish} layout="vertical">
                 <Form.Item
                     name="name"
@@ -213,14 +213,6 @@ const CreateUpdateTask = () => {
                         >
                             <DatePicker
                                 showTime={{format: 'HH:mm'}}
-                                disabledDate={(d) =>
-                                    !d ||
-                                    d.isBefore(
-                                        dayjs(
-                                            detailTaskInProject?.starts_at,
-                                        ).format('YYYY/MM/DD HH:mm'),
-                                    )
-                                }
                                 format={'YYYY/MM/DD HH:mm'}
                                 style={{
                                     backgroundColor: '#f5f5f5',
@@ -275,12 +267,6 @@ const CreateUpdateTask = () => {
                         >
                             <DatePicker
                                 showTime={{format: 'HH:mm'}}
-                                disabledDate={(d) =>
-                                    !d ||
-                                    d.isBefore(
-                                        dayjs().format('YYYY/MM/DD HH:mm'),
-                                    )
-                                }
                                 format="YYYY-MM-DD HH:mm"
                                 style={{
                                     backgroundColor: '#f5f5f5',

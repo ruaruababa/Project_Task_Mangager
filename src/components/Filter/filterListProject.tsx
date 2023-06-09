@@ -2,10 +2,14 @@ import {Button, DatePicker, Form, Input, Select} from 'antd';
 import {useState} from 'react';
 import {styled} from 'styled-components';
 import useStatus from '../../hooks/useStatus';
+import dayjs from 'dayjs';
+
 interface Props {
     projectOtpions?: any;
     statusOptions?: any;
     setValues?: any;
+    setPage?: any
+    page?: any;
 }
 export const Container = styled.div<{toggleClearFiled: boolean}>`
     .ant-select-clear {
@@ -17,9 +21,11 @@ export const Container = styled.div<{toggleClearFiled: boolean}>`
 `;
 const FilterListProject = (props: Props) => {
     const [form] = Form.useForm();
-    const {setValues} = props;
+    const {setValues, page, setPage} = props;
     const {statusOptions} = useStatus();
     const [toggleClearField, setToggleClearField] = useState<any>(false);
+    const startDate = Form.useWatch('start_at', form);
+
     const handleFilterOnChange = (input: any, option: any) => {
         return (option?.label ?? '').includes(input);
     };
@@ -29,6 +35,10 @@ const FilterListProject = (props: Props) => {
             form={form}
             name="basic"
             onFinish={(values: any) => {
+                if (page > 1) {
+                    setPage(1)  
+                }
+
                 setValues({
                     ...values,
                     start_at: values?.start_at?.format('YYYY-MM-DD'),
@@ -91,6 +101,14 @@ const FilterListProject = (props: Props) => {
                 </Form.Item>
                 <Form.Item name="end_at" valuePropName="endDate">
                     <DatePicker
+                        disabledDate={(d) =>
+                            !d ||
+                            d.isBefore(
+                                dayjs(startDate).format(
+                                    'YYYY/MM/DD',
+                                ),
+                            )
+                        }
                         className="!h-[40px]"
                         placeholder="Ngày kết thúc"
                         format={'YYYY/MM/DD'}
@@ -102,6 +120,7 @@ const FilterListProject = (props: Props) => {
                         onChange={(value) => {
                             setToggleClearField(true);
                         }}
+
                     />
                 </Form.Item>
                 <Form.Item>

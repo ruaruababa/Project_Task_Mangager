@@ -9,6 +9,7 @@ import {filterTask, updateTask} from '../../../../services/project';
 import FilterTask from '../../../Filter/taskFilter';
 import Column from './colKanban';
 import ModalPendingReason from './modalPendingReason';
+import useProfile from '../../../../hooks/useProfile';
 
 function Kanban() {
     const navigate = useNavigate();
@@ -17,7 +18,8 @@ function Kanban() {
     const [data, setData] = useState<any>();
 
     const [values, setValues] = useState<any>();
-
+    const {userProfile} = useProfile();
+    const canCreateTask = userProfile?.permissions?.includes('task:create');
     const {data: taskFilterResponse, isLoading: taskListLoading} = useQuery({
         queryKey: ['filterTask', id, values],
         queryFn: () => filterTask({id, ...values}),
@@ -152,15 +154,24 @@ function Kanban() {
                                 navigate('/project');
                             }}
                         >
-                            Project /{' '}
+                            Danh sách dự án /{' '}
+                        </span>
+                        <span
+                            className="font-semibold text-gray-400 cursor-pointer"
+                            onClick={() => {
+                                navigate(`/project/${id}`);
+                            }}
+                        >
+                            Chi tiết dự án /{' '}
                         </span>
                         <span className="" onClick={() => {}}>
-                            Danh sách task
+                            Bảng Kanban
                         </span>
                     </div>
                     <div className="flex gap-2">
                         {' '}
-                        <Button
+                        {canCreateTask &&
+                        (<Button
                             className="text-white"
                             onClick={() =>
                                 navigate(`/project/${id}/create-task`)
@@ -168,8 +179,8 @@ function Kanban() {
                             type="primary"
                             size="large"
                         >
-                            Tạo tạo task mới
-                        </Button>
+                            Thêm đầu việc mới
+                        </Button>)}
                         <Button
                             size="large"
                             type="primary"
@@ -185,7 +196,7 @@ function Kanban() {
                             onClick={() => navigate(`/project/${id}/list-task`)}
                             type="primary"
                         >
-                            List task
+                            Danh sách đầu việc
                         </Button>
                     </div>
                 </div>

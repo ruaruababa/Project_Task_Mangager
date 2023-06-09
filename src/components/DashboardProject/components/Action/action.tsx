@@ -3,19 +3,36 @@ import {useMutation, useQueryClient} from '@tanstack/react-query';
 import {notification} from 'antd';
 import {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
+import useProfile from '../../../../hooks/useProfile';
 import {removeProject} from '../../../../services/project';
 import {ModalConfirm} from '../Task/detailTask';
 const Action = (props: any) => {
+    
     const {item} = props;
     const navigate = useNavigate();
     const [isShow, setIsShow] = useState(false);
-
+    const {userProfile} = useProfile();
+    const canViewProject = userProfile?.permissions?.includes('project:view');
+    const canUpdateProject =
+        userProfile?.permissions?.includes('project:update');
+    const canDeleteProject =
+        userProfile?.permissions?.includes('project:delete');
     const handleViewDetail = () => {
-        navigate(`/project/${item.id}`);
+        canViewProject
+            ? navigate(`/project/${item.id}`)
+            : notification.error({
+                  message: 'Error',
+                  description: 'Bạn không có quyền xem chi tiết Project',
+              });
     };
 
     const handleEditProject = () => {
-        navigate(`/project/edit/${item.id}`);
+        canUpdateProject
+            ? navigate(`/project/edit/${item.id}`)
+            : notification.error({
+                  message: 'Error',
+                  description: 'Bạn không có quyền chỉnh sửa Project',
+              });
     };
     const queryClient = useQueryClient();
 
@@ -38,8 +55,15 @@ const Action = (props: any) => {
     });
 
     const handleRemoveProject = () => {
-        removeProjectMutate();
-        setIsShow(false);
+        if (canDeleteProject) {
+            removeProjectMutate();
+            setIsShow(false);
+        } else {
+            notification.error({
+                message: 'Error',
+                description: 'Bạn không có quyền xóa Project',
+            });
+        }
     };
 
     return (
@@ -51,23 +75,35 @@ const Action = (props: any) => {
                     borderLeft: `1px solid black`,
                 }}
             >
-                <div className="cursor-pointer" onClick={handleViewDetail}>
-                    <EyeOutlined />
-                </div>
-                <div className="cursor-pointer" onClick={handleEditProject}>
-                    <EditOutlined />
-                </div>
-                {/* <div className="cursor-pointer">
-            <CopyOutlined />
-        </div> */}
-                <div
-                    className="cursor-pointer"
-                    onClick={() => {
-                        setIsShow(true);
-                    }}
-                >
-                    <DeleteOutlined />
-                </div>
+                {canViewProject && 
+                    (
+                        <div className="cursor-pointer" onClick={handleViewDetail}>
+                            <EyeOutlined />
+                        </div>
+                    )
+                }
+
+                {canUpdateProject && 
+                    (
+                        <div className="cursor-pointer" onClick={handleEditProject}>
+                            <EditOutlined />
+                        </div>
+                    )
+                }
+
+                
+                {item?.can_delete &&
+                    (
+                        <div className="cursor-pointer"
+                            onClick={() => {
+                                setIsShow(true);
+                            }}
+                        >
+                            <DeleteOutlined />
+                        </div>
+                    )
+
+                }
             </div>
             {
                 <ModalConfirm

@@ -1,20 +1,30 @@
 import {PlusOutlined} from '@ant-design/icons';
-import {Card} from 'antd';
+import {Card, notification} from 'antd';
 import {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
+import useProfile from '../../../../hooks/useProfile';
 import useRole from '../../../../hooks/useRole';
 import CreateUpdateRoleModal from '../CreateUpdate/createUpdateRole';
 import Item from '../Item/itemCardPermission';
 
 const ListRole = () => {
     const {roles} = useRole();
+    const {userProfile} = useProfile();
     const [isShow, setIsShow] = useState(false);
     const handleCancel = () => {
         setIsShow(false);
     };
 
+    const canCreateRole = userProfile?.permissions?.includes('role:create');
+
+
     const handleOpenModal = () => {
-        setIsShow(true);
+        canCreateRole
+            ? setIsShow(true)
+            : notification.error({
+                  message: 'Error',
+                  description: 'Bạn không có quyền tạo nhóm vai trò',
+              });
     };
 
     const navigate = useNavigate();
@@ -31,10 +41,11 @@ const ListRole = () => {
                 >
                     Trang chủ /{' '}
                 </span>
-                <span className="font-semibold">Phân quyền</span>
+                <span className="font-semibold">Quản lý vai trò</span>
             </div>
             <div className="grid grid-cols-3 gap-3">
-                <Card
+                {canCreateRole &&
+                (<Card
                     bordered={false}
                     className="flex flex-col items-center justify-center cursor-pointer"
                     onClick={handleOpenModal}
@@ -45,9 +56,9 @@ const ListRole = () => {
                                 fontSize: 50,
                             }}
                         />
-                        <div className="">Thêm nhóm vai trò</div>
+                        <div className="">Thêm vai trò</div>
                     </div>
-                </Card>
+                </Card>)}
                 {roles?.map((item: any, index: any) => (
                     <Item key={index} item={item} />
                 ))}
