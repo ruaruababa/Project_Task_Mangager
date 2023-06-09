@@ -52,7 +52,7 @@ const CreateTaskModal = (props: Props) => {
 
     return (
         <Modal
-            visible={visible}
+            open={visible}
             onCancel={onCancel}
             title="Create new task"
             footer={[]}

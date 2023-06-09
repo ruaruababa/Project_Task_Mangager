@@ -155,7 +155,7 @@ const CreateUpdateUserModal = (props: Props) => {
 
     return (
         <Modal
-            visible={visible}
+            open={visible}
             onCancel={onCancel}
             title={initalValues ? 'Cập nhật người dùng' : 'Thêm mới người dùng'}
             footer={[]}

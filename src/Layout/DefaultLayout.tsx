@@ -4,13 +4,14 @@ import {
     OrderedListOutlined,
     UserOutlined,
 } from '@ant-design/icons';
-import type {MenuProps} from 'antd';
+import {Badge, MenuProps, Popover} from 'antd';
 import {Button, Layout, Menu, theme} from 'antd';
 import React, {useState} from 'react';
 import {Outlet, useNavigate} from 'react-router-dom';
 import Notification from '../components/Notification';
 import useProfile from '../hooks/useProfile';
 import {removeAccessToken} from '../utils/auth';
+import useSocket from '../hooks/useSocket';
 
 const {Header, Content, Footer, Sider} = Layout;
 
@@ -34,6 +35,7 @@ const avatarUrl = 'avatar.jpg';
 
 const DefaultLayout = () => {
     const [collapsed, setCollapsed] = useState(false);
+    const [unreadNotifications, setUnreadNotifications] = useState(0);
     const {
         token: {colorBgContainer},
     } = theme.useToken();
@@ -47,13 +49,17 @@ const DefaultLayout = () => {
     ];
 
     const {userProfile} = useProfile();
-    console.log('userProfile', userProfile);
+
+    useSocket({
+        callBack: () => {
+            setUnreadNotifications(unreadNotifications + 1);
+        }
+    });
 
     const canViewStatistic = userProfile?.permissions?.includes(
         'statistical:project',
         'statistical:task',
     );
-    console.log('canViewStatistic', canViewStatistic);
 
     const canManagerUser = userProfile?.permissions?.includes('user:view-any');
     const canManagerProject =
@@ -87,9 +93,11 @@ const DefaultLayout = () => {
         // @ts-ignore
         navigate(item?.key);
     };
-    const [isShow, setIsShow] = useState(false);
-    const handleShowNotification = () => {
-        setIsShow(!isShow);
+
+    const handleNotificationDialogOpen = (open: boolean) => {
+        if (open) {
+            setUnreadNotifications(0);
+        }
     };
 
     return (
@@ -132,17 +140,17 @@ const DefaultLayout = () => {
                     </div>
                     <div className="flex items-center gap-5 align-middle profile">
                         <div className="relative">
-                            <BellOutlined
-                                style={{
-                                    fontSize: 20,
-                                }}
-                                onClick={handleShowNotification}
-                            />
-                            {isShow && (
-                                <div className="absolute z-30 bg-white shadow-lg rounded-md left-[-200px]">
-                                    <Notification />
-                                </div>
-                            )}
+                            <Popover content={<Notification shouldRefetch={unreadNotifications > 0} />} trigger='click' afterOpenChange={handleNotificationDialogOpen}>
+                                <a href='#'>
+                                    <Badge count={unreadNotifications}>
+                                        <BellOutlined
+                                            style={{
+                                                fontSize: 20,
+                                            }}
+                                        />
+                                    </Badge>
+                                </a>
+                            </Popover>
                         </div>
                         <img
                             onClick={() => {

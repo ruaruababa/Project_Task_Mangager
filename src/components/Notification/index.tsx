@@ -4,7 +4,7 @@ import {
     useMutation,
     useQueryClient,
 } from '@tanstack/react-query';
-import {useMemo, useRef, useState} from 'react';
+import {useEffect, useMemo, useRef, useState} from 'react';
 import {getListNoti, markReadAllNoti} from '../../services/user';
 import HorizontalThreeDotsIcon from '../icons/hozizontaldot';
 import Item from './item';
@@ -34,7 +34,7 @@ const MarkAllAsRead = () => {
         </>
     );
 };
-const Notification = () => {
+const Notification = ({shouldRefetch}: {shouldRefetch: boolean;}) => {
     const [isShow, setIsShow] = useState(false);
     const handleOpenMarkAllAsRead = () => {
         setIsShow((prev) => !prev);
@@ -42,7 +42,7 @@ const Notification = () => {
 
     const {
         data,
-
+        refetch,
         fetchNextPage,
         hasNextPage,
     } = useInfiniteQuery({
@@ -50,13 +50,21 @@ const Notification = () => {
         queryFn: ({pageParam = 0}) => getListNoti(pageParam),
 
         getNextPageParam: (lastPage: any, pages) => {
-           
+
             console.log('pages', pages);
             if (lastPage?.data?.meta?.next_cursor)
                 return lastPage?.data?.meta?.next_cursor;
             return undefined;
         },
     });
+
+    useEffect(() => {
+        if (shouldRefetch) {
+            console.log('refetch');
+            refetch();
+        }
+    }, [shouldRefetch]);
+
 
     const listPage = useMemo(() => {
         return (data?.pages || [])?.reduce((result, response) => {
@@ -79,7 +87,7 @@ const Notification = () => {
     };
 
     return (
-        <div className="flex flex-col justify-center min-w-[350px] px-4  ">
+        <div className="flex flex-col justify-center w-[310px]">
             <div className="flex justify-between">
                 <div className="font-semibold text-[18px]">Thông báo</div>
                 <div className="relative cursor-pointer">
@@ -96,8 +104,8 @@ const Notification = () => {
                 ref={listInnerRef}
                 onScroll={onScroll}
             >
-                {listPage?.map((item: any, index: any) => (
-                    <Item data={item} />
+                {listPage?.map((item: any, idx: any) => (
+                    <Item data={item} key={idx} />
                 ))}
             </div>
             {/* {hasNextPage && (

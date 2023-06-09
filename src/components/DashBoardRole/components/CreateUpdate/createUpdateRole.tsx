@@ -180,7 +180,7 @@ const CreateUpdateRoleModal = (props: Props) => {
 
     return (
         <Modal
-            visible={visible}
+            open={visible}
             onCancel={onCancel}
             title={"Vai trò"}
             footer={[]}

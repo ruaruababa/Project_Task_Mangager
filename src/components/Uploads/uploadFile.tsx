@@ -52,7 +52,7 @@ const UploadReportFile = (props: IProps) => {
     return (
         <>
             <Modal
-                visible={isShowModal}
+                open={isShowModal}
                 onCancel={oncancel}
                 onOk={handleSubmit}
             >

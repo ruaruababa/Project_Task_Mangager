@@ -4,7 +4,7 @@ const ModalConfirm = ({isOpen, hideModal, handleConfirm}: any) => {
     return (
         <>
             <Modal
-                visible={isOpen}
+                open={isOpen}
                 onCancel={hideModal} 
                 title="Thêm danh mục phân quyền"
                 footer={[]}
