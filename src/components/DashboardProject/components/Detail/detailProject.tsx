@@ -13,6 +13,7 @@ const DetailProject = () => {
     const {id} = useParams();
     const navigate = useNavigate();
     const {userProfile} = useProfile();
+    const canUpdateProject = userProfile?.permissions?.includes('project:update');
     const canViewListTask = userProfile?.permissions?.includes('task:view-any');
     const handleViewTask = () => {
         canViewListTask
@@ -34,14 +35,15 @@ const DetailProject = () => {
                 <div className="flex flex-row-reverse justify-between gap-3 mb-10">
                     <div className="flex gap-2">
                         {' '}
-                        <Button
+                        {canUpdateProject && 
+                        (<Button
                             type="primary"
                             className="text-white"
                             onClick={() => navigate(`/project/edit/${id}`)}
                             size="large"
                         >
                             Chỉnh sửa dự án
-                        </Button>
+                        </Button>)}
                     </div>
 
                     <div className="">
@@ -150,7 +152,7 @@ const DetailProject = () => {
                         )}
                         <div className="grid grid-cols-12">
                             <div className="col-span-2 text-lg font-semibold text-gray-400">
-                                Code:
+                                Mã code:
                             </div>
                             <div className="col-span-10 font-semibold">
                                 {detailProject?.code}
@@ -158,7 +160,7 @@ const DetailProject = () => {
                         </div>
                         <div className="grid grid-cols-12">
                             <div className="col-span-2 text-lg font-semibold text-gray-400">
-                                Duration:
+                                Khoảng thời gian:
                             </div>
                             <div className="col-span-10 font-semibold">
                                 {detailProject?.duration}
@@ -166,7 +168,7 @@ const DetailProject = () => {
                         </div>
                         <div className="grid grid-cols-12">
                             <div className="col-span-2 text-lg font-semibold text-gray-400">
-                                Summary:
+                                Tóm tắt:
                             </div>
                             <div className="col-span-10 font-semibold">
                                 {detailProject?.summary || 'Không xác định'}
@@ -185,18 +187,19 @@ const DetailProject = () => {
                             }}
                         >
                             <div className="font-semibold">
-                                Tổng task:{' '}
+                                Tổng số đầu việc:{' '}
                                 <span>{detailProject?.tasks_count}</span>
                             </div>
                             <div className="">
                                 {' '}
-                                <Button
+                                {canViewListTask &&
+                                (<Button
                                     size={'large'}
                                     type="primary"
                                     onClick={() => handleViewTask()}
                                 >
-                                    Danh sách task
-                                </Button>
+                                    Danh sách đầu việc
+                                </Button>)}
                             </div>
                         </div>
                         <div className="py-10">
