@@ -36,33 +36,12 @@ export const getListTaskInProject = ({
     start_at,
     end_at,
 }: any) => {
-    const nameParams = `${task_name ? `name=${task_name}` : ''}`;
-    const statusParams = `${
-        status_id ? `${nameParams ? '&' : ''}status_id=${status_id}` : ''
-    }`;
-    const userDoParams = `${
-        user_do
-            ? `${nameParams || statusParams ? '&' : ''}assignee=${user_do}`
-            : ''
-    }`;
-    const startAtParams = `${
-        start_at
-            ? `${
-                  nameParams || statusParams || userDoParams ? '&' : ''
-              }start_at=${dayjs(start_at).format('YYYY-MM-DD HH:mm')}`
-            : ''
-    }`;
-    const endAtParams = `${
-        end_at &&
-        `${startAtParams && '&'}${`end_at=${dayjs(end_at).format(
-            'YYYY-MM-DD HH:mm',
-        )}`}`
-    }`;
-    const params = `${nameParams && nameParams}${statusParams && statusParams}${
-        startAtParams && startAtParams
-    }${endAtParams && endAtParams}${userDoParams && userDoParams}`;
-
-    return baseAPIRequest.get(`api/projects/${id}/tasks?${params}`);
+    let queryParams = 'name=' + task_name;
+    queryParams += '&status_id=' + status_id;
+    queryParams += '&assignee=' + user_do;
+    queryParams += '&start_at=' + (start_at ? dayjs(start_at).format('YYYY-MM-DD HH:mm',) : start_at);
+    queryParams += '&end_at=' + (end_at ? dayjs(end_at).format('YYYY-MM-DD HH:mm',) : end_at);
+    return baseAPIRequest.get(`api/projects/${id}/tasks?${queryParams}`);
 };
 
 export const getListDragDrop = (id: any) => {
