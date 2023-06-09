@@ -49,7 +49,7 @@ const UserItem = ({user}: any) => {
         onSuccess: () => {
             queryCLient?.refetchQueries(['filterUser']);
             notification.success({
-                message: 'Success ',
+                message: 'Thành công ',
                 description: 'Remove successfully',
             });
             setShowModal(false);

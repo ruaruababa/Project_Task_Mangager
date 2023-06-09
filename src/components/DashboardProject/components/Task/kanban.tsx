@@ -36,17 +36,23 @@ function Kanban() {
         mutationKey: ['updateTask'],
         onSuccess: () => {
             notification.success({
-                message: 'Success ',
-                description: 'Update successfully',
+                message: 'Thành công ',
+                description: 'Cập nhật thành công',
             });
             queryClient.refetchQueries(['filterTask']);
         },
         onError: (error: any) => {
             const messError = error?.response?.data?.message;
-            notification.error({
-                message: 'Error',
-                description: `${messError}` || 'Update failed',
-            });
+            if (error.request.status === 422 || error.request.status === 403){
+                notification.error({
+                    message: messError,
+                });
+            }
+            else {
+                notification.error({
+                    message: 'Lỗi hệ thống, hãy thử lại sau',
+                });
+            }
         },
     });
 

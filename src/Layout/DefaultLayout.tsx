@@ -80,7 +80,7 @@ const DefaultLayout = () => {
     }
 
     if (canManagerRole) {
-        items.push(getItem(' Phân quyền', '/role', <UserOutlined />));
+        items.push(getItem(' Quanr lý vai trò', '/role', <UserOutlined />));
     }
 
     const onClickMenu = (e: any) => {
@@ -164,10 +164,10 @@ const DefaultLayout = () => {
                             size="small"
                             onClick={() => {
                                 removeAccessToken();
-                                window.location.reload();
+                                window.location.href = '/';
                             }}
                         >
-                            Logout
+                            Đăng xuất
                         </Button>
                     </div>
                 </Header>

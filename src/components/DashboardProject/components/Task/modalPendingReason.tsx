@@ -20,8 +20,8 @@ const ModalPendingReason = (props: Props) => {
         mutationKey: ['updateTask'],
         onSuccess: () => {
             notification.success({
-                message: 'Success ',
-                description: 'Update successfully',
+                message: 'Thành công ',
+                description: 'Cập nhật thành công',
             });
             setVisible(false);
             queryClient.refetchQueries(['filterTask']);
@@ -30,7 +30,7 @@ const ModalPendingReason = (props: Props) => {
             const messError = error?.response?.data?.message;
             notification.error({
                 message: 'Error',
-                description: `${messError}` || 'Update failed',
+                description: `${messError}` || 'Lỗi hệ thống, vui lòng thử lại sau',
             });
         },
     });

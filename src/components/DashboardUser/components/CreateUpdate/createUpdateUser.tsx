@@ -92,7 +92,7 @@ const CreateUpdateUserModal = (props: Props) => {
         mutationKey: ['createUser'],
         onSuccess: () => {
             notification.success({
-                message: 'Success ',
+                message: 'Thành công ',
                 description: 'Create successfully',
             });
             form.resetFields();
@@ -110,8 +110,8 @@ const CreateUpdateUserModal = (props: Props) => {
         mutationKey: ['updateUser', initalValues?.id],
         onSuccess: () => {
             notification.success({
-                message: 'Success ',
-                description: 'Update successfully',
+                message: 'Thành công ',
+                description: 'Cập nhật thành công',
             });
             queryCLient.refetchQueries(['filterUser']);
         },

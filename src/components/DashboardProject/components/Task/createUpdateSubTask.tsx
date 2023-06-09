@@ -99,7 +99,7 @@ const CreateUpdateSubTask = () => {
         mutationKey: ['createTaskInProject', id],
         onSuccess: async (data) => {
             notification.success({
-                message: 'Success ',
+                message: 'Thành công ',
                 description: 'Create successfully',
             });
             if (reportFile) {	
@@ -121,8 +121,8 @@ const CreateUpdateSubTask = () => {
         mutationKey: ['updateTaskInproject', id, subTaskId],
         onSuccess: (data) => {
             notification.success({
-                message: 'Success ',
-                description: 'Update successfully',
+                message: 'Thành công ',
+                description: 'Cập nhật thành công',
             });
             queryClient.invalidateQueries([
                 'getDetailTaskInProject',

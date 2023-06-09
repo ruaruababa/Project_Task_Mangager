@@ -29,7 +29,7 @@ const CreateTaskModal = (props: Props) => {
         onSuccess: () => {
             onCancel();
             notification.success({
-                message: 'Success ',
+                message: 'Thành công ',
                 description: 'Create successfully',
             });
             form.resetFields();

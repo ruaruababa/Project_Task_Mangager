@@ -28,7 +28,7 @@ const MarkAllAsRead = () => {
                 <div className="flex gap-2 px-2" onClick={handleMarkNoti}>
                     {' '}
                     <CheckOutlined />
-                    <span className="font-semibold"> Mark all as read</span>
+                    <span className="font-semibold">Đánh dấu tất cả đã đọc</span>
                 </div>
             </div>
         </>

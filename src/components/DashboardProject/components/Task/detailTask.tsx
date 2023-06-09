@@ -83,7 +83,7 @@ const DetailTask = () => {
         mutationKey: ['removeAttachFile', taskId],
         onSuccess: () => {
             notification.success({
-                message: 'Success ',
+                message: 'Thành công ',
                 description: 'Xóa file thành công',
             });
             queryClient.invalidateQueries(['getDetailTaskInProject']);
@@ -101,7 +101,7 @@ const DetailTask = () => {
         mutationFn: (filedId: any) => removeAttachFile(taskId, filedId),
         onSuccess: () => {
             notification.success({
-                message: 'Success ',
+                message: 'Thành công ',
                 description: 'Xóa file thành công',
             });
             queryClient.invalidateQueries(['getDetailTaskInProject']);

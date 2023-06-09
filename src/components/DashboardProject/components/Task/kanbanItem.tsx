@@ -20,7 +20,7 @@ function Task(props: any) {
         mutationKey: ['removeTaskInProject', idProject, data?.id],
         onSuccess: () => {
             notification.success({
-                message: 'Success ',
+                message: 'Thành công ',
                 description: 'Xóa đầu việc thành công',
             });
             queryClient.invalidateQueries(['filterTask']);

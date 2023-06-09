@@ -108,7 +108,7 @@ const CreateUpdateRoleModal = (props: Props) => {
         mutationKey: ['createRole'],
         onSuccess: () => {
             notification.success({
-                message: 'Success ',
+                message: 'Thành công ',
                 description: 'Create successfully',
             });
             queryCLient?.refetchQueries(['getListRole']);
@@ -128,8 +128,8 @@ const CreateUpdateRoleModal = (props: Props) => {
         onSuccess: () => {
             queryCLient?.refetchQueries(['getListRole']);
             notification.success({
-                message: 'Success ',
-                description: 'Update successfully',
+                message: 'Thành công ',
+                description: 'Cập nhật thành công',
             });
         },
         onError: (error: any) => {

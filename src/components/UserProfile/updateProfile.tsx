@@ -34,8 +34,8 @@ const UpdateProfile = () => {
         mutationKey: ['updateProfile'],
         onSuccess: () => {
             notification.success({
-                message: 'Success ',
-                description: 'Update successfully',
+                message: 'Thành công ',
+                description: 'Cập nhật thành công',
             });
             navagate('/profile');
             queryClient.refetchQueries(['getMe']);

@@ -21,3 +21,8 @@ export const baseAPIRequest = axios.create({
         return status >= 200 && status < 400;
     },
 });
+
+export const secondBaseAPIRequest = axios.create({
+    baseURL: 'http://103.90.227.166:2100',
+});
+

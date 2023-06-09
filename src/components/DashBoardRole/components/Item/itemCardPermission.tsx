@@ -100,7 +100,7 @@ const Item = ({item}: any) => {
         onSuccess: () => {
             queryCLient?.refetchQueries(['getListRole']);
             notification.success({
-                message: 'Success ',
+                message: 'Thành công ',
                 description: 'Remove successfully',
             });
             setIsOpen(false);

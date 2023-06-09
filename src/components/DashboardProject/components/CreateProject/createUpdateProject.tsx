@@ -41,7 +41,7 @@ const CreateUpdateProject = () => {
         mutationKey: ['createProject'],
         onSuccess: (data) => {
             notification.success({
-                message: 'Success ',
+                message: 'Thành công ',
                 description: 'Create successfully',
             });
             navigate(`/project/${data?.data?.data?.id}`);
@@ -59,8 +59,8 @@ const CreateUpdateProject = () => {
         mutationKey: ['updateProject', id],
         onSuccess: () => {
             notification.success({
-                message: 'Success ',
-                description: 'Update successfully',
+                message: 'Thành công ',
+                description: 'Cập nhật thành công',
             });
             navigate(`/project/${id}`);
         },

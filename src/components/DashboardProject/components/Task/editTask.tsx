@@ -31,7 +31,7 @@ const EditTask = (props: Props) => {
         mutationKey: ['createTask'],
         onSuccess: () => {
             notification.success({
-                message: 'Success ',
+                message: 'Thành công ',
                 description: 'Create successfully',
             });
             form.resetFields();

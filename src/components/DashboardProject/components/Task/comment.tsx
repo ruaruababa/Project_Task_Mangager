@@ -24,7 +24,7 @@ const CommentEditor = ({data, onCancel, onSuccess, parentId}:
         mutationKey: ['createComment', taskId],
         onSuccess: () => {
             notification.success({
-                message: 'Success ',
+                message: 'Thành công ',
                 description: 'Tạo bình luận thành công',
             });
             editor?.setData('');
@@ -42,7 +42,7 @@ const CommentEditor = ({data, onCancel, onSuccess, parentId}:
         mutationKey: ['editComment', data?.id],
         onSuccess: () => {
             notification.success({
-                message: 'Success ',
+                message: 'Thành công ',
                 description: 'Chỉnh sửa bình luận thành công',
             });
             editor?.setData('');
@@ -146,7 +146,7 @@ const CommentItem = (
         mutationFn: (commentId: any) => deleteComment(commentId),
         onSuccess: () => {
             notification.success({
-                message: 'Success ',
+                message: 'Thành công ',
                 description: 'Xóa bình luận thành công',
             });
             if (shouldFetchInRoot) {

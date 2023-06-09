@@ -12,17 +12,27 @@ const LoginPage = () => {
             const token = response?.data?.data?.access_token?.token || '';
             setAccessToken(token);
             notification.success({
-                message: 'Login successful',
+                message: 'Đăng nhập thành công',
             });
             setTimeout(() => {
-                window.location.reload();
+                window.location.href = '/';
             }, 1000);
         },
-        onError: () => {
-            notification.error({
-                message: 'Wrong username or password',
-            });
+        onError: (error: any) => {
+            console.log(error.request);
+
+            if (error.request.status === 401){
+                notification.error({
+                    message: 'Thông tin đăng nhập không chính xác',
+                });
+            }
+            else {
+                notification.error({
+                    message: 'Lỗi hệ thống, hãy thử lại sau',
+                });
+            }
         },
+
     });
     const onFinish = (values: any) => {
         loginMutate(values);
@@ -30,7 +40,7 @@ const LoginPage = () => {
 
     return (
         <div className="loginPageContainer">
-            <Card title="👻 Login">
+            <Card title="Đăng nhập">
                 <Form
                     name="login"
                     initialValues={{remember: true}}
@@ -42,7 +52,7 @@ const LoginPage = () => {
                         rules={[
                             {
                                 required: true,
-                                message: 'Please input your Username!',
+                                message: 'Hãy nhập email',
                             },
                         ]}
                     >
@@ -50,7 +60,7 @@ const LoginPage = () => {
                             prefix={
                                 <UserOutlined className="site-form-item-icon" />
                             }
-                            placeholder="email"
+                            placeholder="Email"
                         />
                     </Form.Item>
                     <Form.Item
@@ -58,7 +68,7 @@ const LoginPage = () => {
                         rules={[
                             {
                                 required: true,
-                                message: 'Please input your Password!',
+                                message: 'Hãy nhập mật khẩu!',
                             },
                         ]}
                     >
@@ -66,7 +76,7 @@ const LoginPage = () => {
                             prefix={
                                 <LockOutlined className="site-form-item-icon" />
                             }
-                            placeholder="Password"
+                            placeholder="Mật khẩu"
                         />
                     </Form.Item>
                     <Form.Item>
@@ -75,7 +85,7 @@ const LoginPage = () => {
                             valuePropName="checked"
                             noStyle
                         >
-                            <Checkbox>Remember me</Checkbox>
+                            <Checkbox>Ghi nhớ đăng nhập</Checkbox>
                         </Form.Item>
                     </Form.Item>
                     <Form.Item>
@@ -86,7 +96,7 @@ const LoginPage = () => {
                             block
                             loading={isLoading}
                         >
-                            Log in
+                            Đăng nhập
                         </Button>
                     </Form.Item>
                 </Form>

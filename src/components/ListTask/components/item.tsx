@@ -22,7 +22,7 @@ const TaskItem = ({task, projectId}: any) => {
         mutationKey: ['removeTaskInProject', projectId, task?.id],
         onSuccess: () => {
             notification.success({
-                message: 'Success ',
+                message: 'Thành công ',
                 description: 'Xóa đầu việc thành công',
             });
             queryClient.invalidateQueries(['getListTaskInProject']);

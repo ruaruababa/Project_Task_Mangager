@@ -41,7 +41,7 @@ const Action = (props: any) => {
         mutationFn: () => removeProject(item?.id),
         onSuccess: () => {
             notification.success({
-                message: 'Success ',
+                message: 'Thành công ',
                 description: 'Xóa Project thành công',
             });
             queryClient.invalidateQueries(['filterProject']);
