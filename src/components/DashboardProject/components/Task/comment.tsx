@@ -19,6 +19,9 @@ import BlockquotePlugin from '@ckeditor/ckeditor5-block-quote/src/blockquote';
 import ImagePlugin from '@ckeditor/ckeditor5-image/src/image';
 import ImageUploadPlugin from '@ckeditor/ckeditor5-image/src/imageupload';
 import CKFinderPlugin from '@ckeditor/ckeditor5-ckfinder/src/ckfinder';
+import {baseURL} from '../../../../utils/service';
+import {getAccessToken} from '../../../../utils/auth';
+import {MyUploadAdapter} from '../../../../utils/upload-adapter';
 
 const avatarUrl = 'avatar.jpg';
 
@@ -131,7 +134,6 @@ const CommentEditor = ({data, onCancel, onSuccess, parentId}:
     const {mutate: actionCommentMutate, isLoading} = data ? editMutation : createMutation;
 
     const usersInProjectList = useMemo(() => {
-        console.log(usersInProjectResponse?.data?.data?.map((u: any) => ({...u, id: `${u.value}`, text: u.label})) ?? []);
         return usersInProjectResponse?.data?.data?.map((u: any) => ({...u, id: `${u.value}`, text: u.label})) ?? [];
     }, [usersInProjectResponse]);
 
@@ -151,7 +153,6 @@ const CommentEditor = ({data, onCancel, onSuccess, parentId}:
         setChanged(true);
         setContentIsEmpty(!editor.getData());
     };
-    console.log(Array.from((editor?.ui.componentFactory.names ?? [])));
 
     return (
         <div className="flex w-full">
@@ -167,6 +168,7 @@ const CommentEditor = ({data, onCancel, onSuccess, parentId}:
                         editor={Editor as any}
                         onReady={(editor) => {
                             setEditor(editor);
+                            editor.plugins.get('FileRepository').createUploadAdapter = (loader: any) => new MyUploadAdapter(loader);
                         }}
                         onChange={handleChange}
                         config={{
@@ -192,10 +194,6 @@ const CommentEditor = ({data, onCancel, onSuccess, parentId}:
                                     }
                                 }],
                             },
-                            // cloudServices: {
-                            //     // tokenUrl: () => new Promise((resolve) => resolve(localStorage.getItem('access_token') ?? '')),
-                            //     uploadUrl: 'https://98259.cke-cs.com/token/dev/6fb25ab0a6520f891446a3351f46b392507eacb9525d5bac2b5f3c25f9e8?limit=10',
-                            // },
                         }}
                         data={data?.content}
                     />
