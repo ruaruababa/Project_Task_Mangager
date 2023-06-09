@@ -7,7 +7,6 @@ import useProfile from '../../../../hooks/useProfile';
 import {removeProject} from '../../../../services/project';
 import {ModalConfirm} from '../Task/detailTask';
 const Action = (props: any) => {
-    console.log('fsdaafsdfdsfp', props);
     
     const {item} = props;
     const navigate = useNavigate();
@@ -18,7 +17,7 @@ const Action = (props: any) => {
         userProfile?.permissions?.includes('project:update');
     const canDeleteProject =
         userProfile?.permissions?.includes('project:delete');
-    const handleViewDetail = () => {cr
+    const handleViewDetail = () => {
         canViewProject
             ? navigate(`/project/${item.id}`)
             : notification.error({

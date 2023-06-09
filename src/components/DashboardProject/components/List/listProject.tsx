@@ -71,6 +71,8 @@ const ProjectManager = () => {
                 <FilterProject
                     statusOptions={statusOptions}
                     setValues={setValues}
+                    setPage={setPage}
+                    page={page}
                 />
                 <div className="flex flex-col gap-4">
                     {listProject?.map((project: any) => {

@@ -67,18 +67,36 @@ export const filterProject = ({
     end_at,
     page,
 }: any) => {
-    const nameParams = `${name ? `name=${name}` : ''}`;
-    const statusParams = `${status_id ? `&status_id=${status_id}` : ''}`;
-    const startAtParams = `${start_at ? `&start_at=${start_at}` : ''}`;
-    const endAtParams = `${end_at ? `&end_at=${end_at}` : ''}`;
-    const params = `${nameParams && nameParams}${statusParams && statusParams}${
-        startAtParams && startAtParams
-    }${endAtParams && endAtParams}`;
+    let queryParams = '&name=' + name;
+    queryParams += '&status_id=' + status_id;
+    queryParams += '&start_at=' + start_at;
+    queryParams += '&end_at=' + end_at;
+
+    // const nameParams = `${name ? `name=${name}` : ''}`;
+    // const statusParams = `${status_id ? `&status_id=${status_id}` : ''}`;
+    // const startAtParams = `${start_at ? `&start_at=${start_at}` : ''}`;
+    // const endAtParams = `${end_at ? `&end_at=${end_at}` : ''}`;
+    // const params = `${nameParams && nameParams}${statusParams && statusParams}${
+    //     startAtParams && startAtParams
+    // }${endAtParams && endAtParams}`;
+
+    // console.log(params);
+    
+
+    // return baseAPIRequest.get(
+    //     `api/projects${params && `?${params}`}${
+    //         !params ? `?page=${page}&per_page=10` : ''
+    //     }`,
+    // );
+
+    // return baseAPIRequest.get(
+    //     `api/projects${params && `?${params}`}${
+    //         params ? `&page=${page}&per_page=10` : `?page=${page}&per_page=10`
+    //     }`,
+    // );
 
     return baseAPIRequest.get(
-        `api/projects${params && `?${params}`}${
-            !params ? `?page=${page}&per_page=10` : ''
-        }`,
+        `api/projects?page=${page}&per_page=10${queryParams}`,
     );
 };
 
