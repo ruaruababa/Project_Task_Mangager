@@ -18,7 +18,7 @@ const Action = (props: any) => {
         userProfile?.permissions?.includes('project:update');
     const canDeleteProject =
         userProfile?.permissions?.includes('project:delete');
-    const handleViewDetail = () => {
+    const handleViewDetail = () => {cr
         canViewProject
             ? navigate(`/project/${item.id}`)
             : notification.error({

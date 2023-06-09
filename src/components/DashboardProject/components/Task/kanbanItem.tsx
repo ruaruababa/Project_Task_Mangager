@@ -38,6 +38,7 @@ function Task(props: any) {
                 draggableId={data?.id?.toString()}
                 index={index}
                 type="TASK"
+                isDragDisabled={!data?.can_update}
             >
                 {(provided: any) => (
                     <div
