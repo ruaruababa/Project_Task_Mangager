@@ -45,9 +45,20 @@ const CreateUpdateSubTask = () => {
 
     const {mutateAsync: uploadMutate, isLoading: isUploading} = useMutation({
         mutationFn: (idRs: any) =>
-            uploadChunk(reportFile, uploadAttachFile(idRs), 'attachments'),
+            uploadChunk(	
+                reportFile?.length > 1 ? reportFile : [reportFile],	
+                uploadAttachFile(idRs),	
+                'attachments',	
+            ),
         onSettled(data, error, variables, context) {
             navigate(`/project/${id}/tasks/${variables}`);
+        },
+        onSuccess: () => {	
+            queryClient.invalidateQueries([	
+                'getDetailTaskInProject',	
+                id,	
+                taskId,	
+            ]);	
         },
     });
 
@@ -91,10 +102,10 @@ const CreateUpdateSubTask = () => {
                 message: 'Success ',
                 description: 'Create successfully',
             });
-            if (reportFile?.length > 1) {
-                uploadMutate(data?.data?.data?.id);
+            if (reportFile) {	
+                uploadMutate(data?.data?.data?.id);	
             }
-            navigate(`/project/${id}/tasks/${data?.data?.data?.id}`);
+            // navigate(`/project/${id}/tasks/${data?.data?.data?.id}`);
         },
 
         onError: (error: any) => {
@@ -289,14 +300,14 @@ const CreateUpdateSubTask = () => {
                         >
                             <DatePicker
                                 showTime={{format: 'HH:mm'}}
-                                // disabledDate={(d) =>
-                                //     !d ||
-                                //     d.isBefore(
-                                //         dayjs(startDate).format(
-                                //             'YYYY/MM/DD HH:mm',
-                                //         ),
-                                //     )
-                                // }
+                                disabledDate={(d) =>
+                                    !d ||
+                                    d.isBefore(
+                                        dayjs(startDate).format(
+                                            'YYYY/MM/DD HH:mm',
+                                        ),
+                                    )
+                                }
                                 onChange={() => {}}
                                 format="YYYY-MM-DD HH:mm"
                                 style={{
