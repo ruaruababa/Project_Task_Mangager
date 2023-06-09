@@ -9,24 +9,24 @@ interface Props {
 
 const Action = (props: Props) => {
     const {handleDelete, handleEdit, handleView, onlyCanView} = props;
-
+    
     return (
         <div className="flex items-center justify-center col-span-2 gap-2">
             <div className="cursor-pointer" onClick={handleView}>
                 <EyeOutlined />
             </div>
-            <div className="cursor-pointer" onClick={handleEdit}>
+            {!onlyCanView && (<div className="cursor-pointer" onClick={handleEdit}>
                 <EditOutlined />
-            </div>
+            </div>)}
 
-            <div
+            {!onlyCanView && (<div
                 className={`cursor-pointer ${
                     onlyCanView && 'pointer-events-none'
                 }`}
                 onClick={handleDelete}
             >
                 <DeleteOutlined />
-            </div>
+            </div>)}
         </div>
     );
 };

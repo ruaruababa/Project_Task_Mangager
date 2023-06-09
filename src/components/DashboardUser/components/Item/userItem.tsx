@@ -76,6 +76,7 @@ const UserItem = ({user}: any) => {
                     handleView={handleViewDetail}
                     handleEdit={handleShowModal}
                     handleDelete={handleRemove}
+                    onlyCanView={!user?.is_editable}
                 />
             </div>
             {

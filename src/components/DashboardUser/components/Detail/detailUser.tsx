@@ -25,6 +25,7 @@ const DetailUser = () => {
     }, [detailUserResponse]);
 
     const canViewUser = userProfile?.permissions?.includes('user:view');
+    const canUpdateUser = userProfile?.permissions?.includes('user:update');
 
     return (
         <>
@@ -49,14 +50,15 @@ const DetailUser = () => {
                     </div>{' '}
                     <div className="p-10 bg-white rounded-lg">
                         <div className="flex justify-end">
-                            <Button
+                            {(canUpdateUser && detailUser?.is_editable) &&
+                            (<Button
                                 type="primary"
                                 size="large"
                                 onClick={handleShowModal}
                             >
                                 {' '}
                                 Chỉnh sửa thông tin
-                            </Button>
+                            </Button>)}
                         </div>
                         <div className="pb-8 text-3xl font-semibold text-center">
                             Thông tin
