@@ -6,9 +6,8 @@ import {Button, Modal, Tooltip, notification} from "antd";
 import {useMemo, useState} from "react";
 import {useParams} from "react-router-dom";
 import useProfile from "../../../../hooks/useProfile";
-import {createComment, editComment, getComments, getCommentReplies} from '../../../../services/tasks';
+import {createComment, deleteComment, editComment, getCommentReplies, getComments} from '../../../../services/tasks';
 import {convertDateTime} from '../../../../utils/format';
-import {baseURL} from '../../../../utils/service';
 
 const avatarUrl = 'avatar.jpg';
 
@@ -124,14 +123,16 @@ const CommentEditor = ({data, onCancel, onSuccess, parentId}:
 
 const CommentItem = (
     {
-        onReply, onEdit, onCancelEdit, onEditSuccess,
+        onReply, onEdit, onCancelEdit, onEditSuccess, onDelete,
         item, isReplying, isEditing
     }:
         {
-            item: any, onReply: (_: number) => void, onEdit: (_: boolean) => void; onCancelEdit: () => void; onEditSuccess: (_: boolean) => void;
+            item: any, onReply: (_: number) => void, onEdit: (_: boolean) => void; onCancelEdit: () => void; onEditSuccess: (_: boolean) => void; onDelete: () => void;
             isReplying: boolean; isEditing: boolean;
         }) => {
 
+    const [shouldFetchInRoot, setShouldFetchInRoot] = useState(false);
+    const [confirmDeleteCommentId, setConfirmDeleteCommentId] = useState(-1);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isShowReplies, setIsShowReplies] = useState(false);
 
@@ -140,11 +141,37 @@ const CommentItem = (
         queryFn: () => getCommentReplies(item.id),
         enabled: isShowReplies
     });
+    const {mutate: deleteCommentMutate} = useMutation({
+        mutationKey: ['deleteComment', item?.id],
+        mutationFn: (commentId: any) => deleteComment(commentId),
+        onSuccess: () => {
+            notification.success({
+                message: 'Success ',
+                description: 'Xóa bình luận thành công',
+            });
+            if (shouldFetchInRoot) {
+                onDelete?.();
+            } else {
+                refetch();
+            }
+        },
+        onError: (error: any) => {
+            notification.error({
+                message: 'Error',
+                description: error?.response?.data?.message,
+            });
+        },
+    });
+
     const commentRepliesList = useMemo(() => {
         return commentRepliesResponse?.data?.data ?? [];
     }, [commentRepliesResponse]);
 
-    const handleClickDelete = (id: any) => setIsModalOpen(true);
+    const handleClickDelete = (commentId: number, isRootComment: boolean) => {
+        setConfirmDeleteCommentId(commentId);
+        setIsModalOpen(true);
+        setShouldFetchInRoot(isRootComment);
+    };
     const handleEditSuccess = (shouldRefetch = false) => {
         onEditSuccess(!shouldRefetch);
         if (shouldRefetch) {
@@ -152,9 +179,11 @@ const CommentItem = (
         }
     };
     const handleOk = () => {
+        deleteCommentMutate(confirmDeleteCommentId);
         setIsModalOpen(false);
     };
     const handleCancel = () => {
+        setConfirmDeleteCommentId(-1);
         setIsModalOpen(false);
     };
 
@@ -197,7 +226,7 @@ const CommentItem = (
                                             <Button onClick={() => onEdit(item.id)} icon={<EditOutlined />} type='text' size='small' />
                                         </Tooltip>
                                         <Tooltip title="Xóa" color='red' className='ml-1'>
-                                            <Button onClick={() => handleClickDelete(item.id)} icon={<DeleteOutlined />} type='text' size='small' danger />
+                                            <Button onClick={() => handleClickDelete(item.id, true)} icon={<DeleteOutlined />} type='text' size='small' danger />
                                             <Modal title="Xóa bình luận" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
                                                 <p>Bạn có chắc chắn muốn xóa bình luận này chứ?</p>
                                             </Modal>
@@ -237,7 +266,7 @@ const CommentItem = (
                                                                     <Button onClick={() => onEdit(reply.id)} icon={<EditOutlined />} type='text' size='small' />
                                                                 </Tooltip>
                                                                 <Tooltip title="Xóa" color='red' className='ml-1'>
-                                                                    <Button onClick={() => handleClickDelete(reply.id)} icon={<DeleteOutlined />} type='text' size='small' danger />
+                                                                    <Button onClick={() => handleClickDelete(reply.id, false)} icon={<DeleteOutlined />} type='text' size='small' danger />
                                                                     <Modal title="Xóa bình luận" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
                                                                         <p>Bạn có chắc chắn muốn xóa bình luận này chứ?</p>
                                                                     </Modal>
@@ -266,7 +295,7 @@ const CommentItem = (
     );
 };
 
-const CommentsList = ({data, onSuccess}: {data: any[]; onSuccess: (_: boolean) => void;}) => {
+const CommentsList = ({data, onSuccess, onDelete}: {data: any[]; onSuccess: (_: boolean) => void, onDelete: () => void;}) => {
     const [editCommentId, setEditCommentId] = useState(-1);
     const [replyCommentId, setReplyCommentId] = useState(-1);
 
@@ -293,7 +322,7 @@ const CommentsList = ({data, onSuccess}: {data: any[]; onSuccess: (_: boolean) =
             {
                 data.map((item: any, idx: number) =>
                     <div key={idx} className='mt-4'>
-                        <CommentItem item={item} onReply={handleClickReply} onEdit={handleClickEdit} onCancelEdit={handleCancelEdit} onEditSuccess={handleSuccess}
+                        <CommentItem item={item} onReply={handleClickReply} onEdit={handleClickEdit} onCancelEdit={handleCancelEdit} onEditSuccess={handleSuccess} onDelete={onDelete}
                             isReplying={replyCommentId === item.id} isEditing={editCommentId === item.id} />
                     </div>
                 )
@@ -324,7 +353,7 @@ const Comment = () => {
 
             <div className='h-px my-2 bg-gray-200'></div>
 
-            <CommentsList data={commentsList ?? []} onSuccess={handleSuccess} />
+            <CommentsList data={commentsList ?? []} onSuccess={handleSuccess} onDelete={refetch} />
         </div>
     );
 };

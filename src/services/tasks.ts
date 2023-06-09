@@ -88,3 +88,7 @@ export const getComments = (taskId: any) => {
 export const getCommentReplies = (taskId: any) => {
   return baseAPIRequest.get(`api/comments/${taskId}/replies`);
 };
+
+export const deleteComment = (id: any) => {
+  return baseAPIRequest.delete(`api/comments/${id}`);
+};
