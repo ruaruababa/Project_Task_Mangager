@@ -19,7 +19,6 @@ const CreateUpdateProject = () => {
     const startDate = Form.useWatch('starts_at', form);
     const endDate = Form.useWatch('ends_at', form);
     const statusSelected = Form.useWatch('status_id', form);
-    console.log('statusSelected>>>', statusSelected);
 
     const options: any = users?.map((user: any) => ({
         label: user.name,

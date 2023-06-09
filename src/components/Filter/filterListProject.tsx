@@ -2,6 +2,8 @@ import {Button, DatePicker, Form, Input, Select} from 'antd';
 import {useState} from 'react';
 import {styled} from 'styled-components';
 import useStatus from '../../hooks/useStatus';
+import dayjs from 'dayjs';
+
 interface Props {
     projectOtpions?: any;
     statusOptions?: any;
@@ -22,7 +24,8 @@ const FilterListProject = (props: Props) => {
     const {setValues, page, setPage} = props;
     const {statusOptions} = useStatus();
     const [toggleClearField, setToggleClearField] = useState<any>(false);
-    
+    const startDate = Form.useWatch('start_at', form);
+
     const handleFilterOnChange = (input: any, option: any) => {
         return (option?.label ?? '').includes(input);
     };
@@ -98,6 +101,14 @@ const FilterListProject = (props: Props) => {
                 </Form.Item>
                 <Form.Item name="end_at" valuePropName="endDate">
                     <DatePicker
+                        disabledDate={(d) =>
+                            !d ||
+                            d.isBefore(
+                                dayjs(startDate).format(
+                                    'YYYY/MM/DD',
+                                ),
+                            )
+                        }
                         className="!h-[40px]"
                         placeholder="Ngày kết thúc"
                         format={'YYYY/MM/DD'}
@@ -109,6 +120,7 @@ const FilterListProject = (props: Props) => {
                         onChange={(value) => {
                             setToggleClearField(true);
                         }}
+
                     />
                 </Form.Item>
                 <Form.Item>
