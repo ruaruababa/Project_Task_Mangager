@@ -69,7 +69,7 @@ const TaskManager = () => {
                         <div className="">NGÀY KẾT THÚC</div>
                         <div className="">TRẠNG THÁI</div>
                     </div>
-                    {tasks.map((task: any) => {
+                    {tasks.map((task: any, idx: number) => {
                         return (
                             <>
                                 <div className="grid grid-cols-12 py-4 pb-4 border-bottom">
@@ -110,6 +110,25 @@ const TaskManager = () => {
                                     >
                                         {task?.status?.name}
                                     </div>
+                                </div>
+                                <div className="col-span-2 text-blue-700 cursor-pointer hover:text-blue-900">
+                                    {task?.project?.code}
+                                </div>
+                                <div className="items-center col-span-3 text-blue-700 cursor-pointer hover:text-blue-900">
+                                    {task?.name}
+                                </div>
+                                <div className="">
+                                    {convertDate(task?.starts_at)}
+                                </div>
+                                <div className="">
+                                    {convertDate(task?.ends_at)}
+                                </div>
+                                <div
+                                    style={{
+                                        color: task?.status?.color,
+                                    }}
+                                >
+                                    {task?.status?.name}
                                 </div>
                             </>
                         );

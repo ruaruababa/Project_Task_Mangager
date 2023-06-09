@@ -2,13 +2,14 @@ import {notification} from 'antd';
 import axios from 'axios';
 import {getAccessToken} from './auth';
 
-export const uploadChunk = (file: any, url: string, fieldName: string) => {
+export const uploadChunk = (file: any, url: string, fieldName: string, formData = {}) => {
     return new Promise((resolve) => {
         axios
             .post(
                 url,
                 {
                     [fieldName]: file,
+                    ...formData
                 },
                 {
                     headers: {
