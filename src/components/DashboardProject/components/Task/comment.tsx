@@ -8,17 +8,23 @@ import {useParams} from "react-router-dom";
 import useProfile from "../../../../hooks/useProfile";
 import {createComment, deleteComment, editComment, getCommentReplies, getComments} from '../../../../services/tasks';
 import {convertDateTime} from '../../../../utils/format';
+import {Mention} from '@ckeditor/ckeditor5-mention';
+import {getUsersInProject} from '../../../../services/project';
 
 const avatarUrl = 'avatar.jpg';
 
 const CommentEditor = ({data, onCancel, onSuccess, parentId}:
     {data?: {content: string; id: number;}; onCancel?: Function; onSuccess?: Function; parentId?: number;}) => {
-    const {taskId} = useParams();
+    const {id, taskId} = useParams();
     const [changed, setChanged] = useState(false);
     const [contentIsEmpty, setContentIsEmpty] = useState(true);
     const [editor, setEditor] = useState<ClassicEditor | null>(null);
     const {userProfile} = useProfile();
 
+    const {data: usersInProjectResponse} = useQuery({
+        queryKey: ['getUsersInProject', id],
+        queryFn: () => getUsersInProject(id),
+    });
     const createMutation = useMutation({
         mutationFn: async (data: {content: string; comment_id?: number;}) => createComment(taskId, data),
         mutationKey: ['createComment', taskId],
@@ -59,6 +65,11 @@ const CommentEditor = ({data, onCancel, onSuccess, parentId}:
 
     const {mutate: actionCommentMutate, isLoading} = data ? editMutation : createMutation;
 
+    const usersInProjectList = useMemo(() => {
+        console.log(usersInProjectResponse?.data?.data?.map((u: any) =>  `@${u.label}`) ?? [])
+        return usersInProjectResponse?.data?.data?.map((u: any) =>  `@${u.label}`) ?? [];
+    }, [usersInProjectResponse]);
+
     const handleCancel = () => {
         if (onCancel) {
             onCancel();
@@ -93,6 +104,14 @@ const CommentEditor = ({data, onCancel, onSuccess, parentId}:
                         }}
                         onChange={handleChange}
                         config={{
+                            plugins: [Mention],
+                            mention: {
+                                feeds: [{
+                                    marker: '@',
+                                    feed: [usersInProjectList],
+                                    minimumCharacters: 1
+                                }]
+                            },
                             cloudServices: {
                                 // tokenUrl: () => new Promise((resolve) => resolve(localStorage.getItem('access_token') ?? '')),
                                 uploadUrl: 'https://98259.cke-cs.com/token/dev/6fb25ab0a6520f891446a3351f46b392507eacb9525d5bac2b5f3c25f9e8?limit=10',

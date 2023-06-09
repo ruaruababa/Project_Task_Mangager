@@ -137,3 +137,7 @@ export const filterTask = ({
 
     return baseAPIRequest.get(`api/projects/${id}/tasks/kanban?${params}`);
 };
+
+export const getUsersInProject = (id: any) => {
+    return baseAPIRequest.get(`api/projects/${id}/users`);
+};

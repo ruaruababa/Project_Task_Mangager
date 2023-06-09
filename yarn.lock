@@ -1753,6 +1753,14 @@
     "@ckeditor/ckeditor5-ui" "^38.0.1"
     ckeditor5 "^38.0.1"
 
+"@ckeditor/ckeditor5-mention@^38.0.1":
+  version "38.0.1"
+  resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-mention/-/ckeditor5-mention-38.0.1.tgz#23416e6468066432456a62ef4e430308fb664d87"
+  integrity sha512-EcmDsSZU+r1iPtJYi7wwasvbSvObeIcxmcBrU4wcJyVD4Ig1FpTKUs73CALbNK77CLLfZ+ZhkbJDT53WnJ/Hrw==
+  dependencies:
+    ckeditor5 "^38.0.1"
+    lodash-es "^4.17.15"
+
 "@ckeditor/ckeditor5-paragraph@^38.0.1":
   version "38.0.1"
   resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-paragraph/-/ckeditor5-paragraph-38.0.1.tgz#553a9129df5ecaec677a1069b67159b2354d5df9"

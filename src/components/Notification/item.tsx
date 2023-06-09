@@ -26,7 +26,7 @@ const Item = ({data}: any) => {
                     !data?.read_at && 'bg-slate-300'
                 } cursor-pointer !shadow-2xl`}
             >
-                <p className="text-sm font-bold line-clamp-2">
+                <p className="text-sm line-clamp-2">
                     {data?.content}
                 </p>
                 <p className="text-xs">{data?.created_at_for_human}</p>
