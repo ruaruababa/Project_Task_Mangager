@@ -53,6 +53,8 @@ export const ModalConfirm = (props: Props) => {
             open={isShow}
             onOk={handleRemoveReportFile}
             onCancel={onCancel}
+            okText="Có"
+            cancelText="Hủy"
         >
             <span>Bạn sẽ không thể khôi phục lại</span>
         </Modal>

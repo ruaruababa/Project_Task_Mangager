@@ -19,12 +19,12 @@ const Action = (props: Props) => {
             (<div className="cursor-pointer" onClick={handleView}>
                 <EyeOutlined />
             </div>)}
-            {(!onlyCanView || canUpdate) && 
+            {canUpdate && 
             (<div className="cursor-pointer" onClick={handleEdit}>
                 <EditOutlined />
             </div>)}
 
-            {(!onlyCanView || canDelete) && 
+            {canDelete && 
             (<div
                 className={`cursor-pointer ${
                     onlyCanView && 'pointer-events-none'

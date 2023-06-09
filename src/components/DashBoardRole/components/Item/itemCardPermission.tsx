@@ -161,7 +161,7 @@ const Item = ({item}: any) => {
                 isShow={isOpen}
                 onCancel={() => setIsOpen(false)}
                 handleRemoveReportFile={handleRemove}
-                title="Xóa danh mục phân quyền"
+                title="Xóa vai trò"
             />
             <>
                 <CreateUpdateRoleModal
