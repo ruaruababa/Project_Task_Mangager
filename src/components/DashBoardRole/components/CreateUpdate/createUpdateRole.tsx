@@ -94,9 +94,9 @@ const CreateUpdateRoleModal = (props: Props) => {
     const getLableMode = () => {
         switch (mode) {
             case 'create':
-                return 'Tạo';
+                return 'Lưu';
             case 'update':
-                return 'Update';
+                return 'Lưu';
             default:
                 return '';
         }
@@ -172,7 +172,7 @@ const CreateUpdateRoleModal = (props: Props) => {
         <Modal
             visible={visible}
             onCancel={onCancel}
-            title="Thêm danh mục phân quyền"
+            title={"Vai trò"}
             footer={[]}
             width={1000}
         >
@@ -210,17 +210,17 @@ const CreateUpdateRoleModal = (props: Props) => {
             >
                 <Form.Item
                     name={'name'}
-                    label="Tên nhóm vai trò"
+                    label="Tên vai trò"
                     rules={[
                         {
                             required: true,
-                            message: 'Vui lòng nhập tên nhóm vai trò',
+                            message: 'Vui lòng nhập tên vai trò',
                         },
                     ]}
                 >
                     <Input
                         type="text"
-                        placeholder="Vui lòng nhập tên nhóm vai trò"
+                        placeholder="Vui lòng nhập tên vai trò"
                     />
                 </Form.Item>
                 <div className="grid grid-cols-6">
