@@ -177,17 +177,17 @@ const DetailTask = () => {
         {
             id: 'subtask',
             tab: 'subtask',
-            title: 'SUB TASK',
+            title: 'Đầu việc con',
         },
         {
             id: 'history',
             tab: 'history',
-            title: 'HISTORY',
+            title: 'Lịch sử',
         },
         {
             id: 'comment',
             tab: 'comment',
-            title: 'COMMENT',
+            title: 'Bình luận',
         },
     ];
     return (
@@ -232,19 +232,28 @@ const DetailTask = () => {
                             navigate('/project');
                         }}
                     >
-                        Project
+                        Danh sách dự án
                     </span>
                     {' / '}
                     <span
                         className="font-semibold text-gray-400 cursor-pointer"
                         onClick={() => {
-                            navigate(`/project/${id}/tasks`);
+                            navigate(`/project/${id}`);
                         }}
                     >
-                        Task
+                        Chi tiết dự án
                     </span>
                     {' / '}
-                    <span>Chi tiết task</span>
+                    <span
+                        className="font-semibold text-gray-400 cursor-pointer"
+                        onClick={() => {
+                            navigate(`/project/${id}/list-task`);
+                        }}
+                    >
+                        Danh sách đầu việc
+                    </span>
+                    {' / '}
+                    <span>Chi tiết đầu việc</span>
                 </div>
                 <div className="flex gap-3">
                     {canCreateSubTask && (
@@ -256,7 +265,7 @@ const DetailTask = () => {
                                 );
                             }}
                         >
-                            Thêm đầu việc
+                            Thêm mới đầu việc
                         </Button>
                     )}
                     {canEditTask && detailTaskInProject?.can_update && (
@@ -279,14 +288,17 @@ const DetailTask = () => {
                             Nộp báo cáo
                         </Button>
                     )}
-                    <Button
+                    {canEditTask && detailTaskInProject?.can_update && (
+                        <Button
                         className="text-white bg-gray-500 hover:bg-gray-600"
                         onClick={() => {
                             setIsOpenModalAttachment(true);
                         }}
-                    >
-                        Tệp đính kèm
-                    </Button>
+                        >
+                            Đính kèm tệp
+                        </Button>
+                    )}
+                    
                 </div>
             </div>
             <div className="flex flex-col gap-10">
@@ -387,7 +399,7 @@ const DetailTask = () => {
                             )}
                             <div className="grid grid-cols-12">
                                 <div className="col-span-2 text-lg font-semibold text-gray-400">
-                                    Description:
+                                    Mô tả:
                                 </div>
                                 <div className="col-span-10 font-semibold">
                                     {detailTaskInProject?.description ||
@@ -461,7 +473,7 @@ const DetailTask = () => {
                         {detailTaskInProject?.reports && (
                             <div className="flex justify-center mt-5">
                                 <Tag color="warning" className="text-2xl">
-                                    Report files
+                                    Báo cáo
                                 </Tag>
                             </div>
                         )}
@@ -545,7 +557,7 @@ const DetailTask = () => {
                         {tabActive === 'subtask' && (
                             <div>
                                 <div className="mt-5 text-lg font-bold">
-                                    DANH SÁCH SUBTASK
+                                    DANH SÁCH ĐẦU VIỆC CON
                                 </div>
                                 <Divider></Divider>
                                 {detailTaskInProject?.children?.map(
@@ -590,7 +602,7 @@ const DetailTask = () => {
                                                         </div>
 
                                                         <div className="text-gray-400">
-                                                            Ngày bắt đầu
+                                                            Thời gian bắt đầu
                                                         </div>
                                                     </div>
                                                     <div
@@ -605,7 +617,7 @@ const DetailTask = () => {
                                                             )}
                                                         </div>
                                                         <div className="text-gray-400">
-                                                            Ngày hoàn thành
+                                                            Thời gian hoàn thành
                                                         </div>
                                                     </div>
 
