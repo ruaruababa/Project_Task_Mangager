@@ -43,9 +43,9 @@ export const removeAttachFile = (taskId: any, fileId: any) => {
 };
 
 export const filterMyTask = ({name, taskName, start_at, end_at, page}: any) => {
-  const nameParams = `${name ? `name=${name}` : ""}`;
+  const nameParams = `${name ? `project_name=${name}` : ""}`;
   const taskNameParams = `${
-    taskName ? `${nameParams ? "&" : ""}task_name=${taskName}` : ""
+    taskName ? `${nameParams ? "&" : ""}name=${taskName}` : ""
   }`;
   const startAtParams = `${
     start_at

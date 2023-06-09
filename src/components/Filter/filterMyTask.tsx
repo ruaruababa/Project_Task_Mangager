@@ -1,10 +1,14 @@
 import {Button, DatePicker, Form, Input} from 'antd';
 import {useState} from 'react';
 import {styled} from 'styled-components';
+import dayjs from 'dayjs';
+
 interface Props {
     projectOtpions?: any;
     statusOptions?: any;
     setValues?: any;
+    page?: any;
+    setPage?: any
 }
 export const Container = styled.div<{toggleClearFiled: boolean}>`
     .ant-select-clear {
@@ -16,20 +20,25 @@ export const Container = styled.div<{toggleClearFiled: boolean}>`
 `;
 const FilterMyTask = (props: Props) => {
     const [form] = Form.useForm();
-    const {projectOtpions, statusOptions, setValues} = props;
+    const {projectOtpions, statusOptions, setValues, page, setPage} = props;
     const [toggleClearFiled, setToggleClearFiled] = useState(false);
+    const startDate = Form.useWatch('start_at', form);
 
     return (
         <Form
             form={form}
             name="basic"
             onFinish={(values) => {
+                if (page > 1) {
+                    setPage(1)  
+                }
+
                 setValues({
                     ...values,
                     start_at: values?.start_at?.format('YYYY-MM-DD HH:mm'),
                     end_at: values?.end_at?.format('YYYY-MM-DD HH:mm'),
                 });
-                form.resetFields();
+                // form.resetFields();
             }}
             autoComplete="off"
         >
@@ -63,7 +72,7 @@ const FilterMyTask = (props: Props) => {
                     </Form.Item>
                 </div>
                 <Form.Item name={'taskName'}>
-                    <Input placeholder="Nhập tên task" className="!h-[40px]" />
+                    <Input placeholder="Nhập tên đầu việc" className="!h-[40px]" />
                 </Form.Item>
 
                 <Form.Item
@@ -73,7 +82,7 @@ const FilterMyTask = (props: Props) => {
                 >
                     <DatePicker
                         className="!h-[40px]"
-                        placeholder="Ngày bắt đầu"
+                        placeholder="Thời gian bắt đầu"
                         format={'YYYY/MM/DD HH:mm'}
                         style={{
                             backgroundColor: '#f5f5f5',
@@ -88,8 +97,16 @@ const FilterMyTask = (props: Props) => {
                 </Form.Item>
                 <Form.Item name="end_at" valuePropName="endDate">
                     <DatePicker
+                        disabledDate={(d) =>
+                            !d ||
+                            d.isBefore(
+                                dayjs(startDate).format(
+                                    'YYYY/MM/DD HH:mm',
+                                ),
+                            )
+                        }                    
                         className="!h-[40px]"
-                        placeholder="Ngày kết thúc"
+                        placeholder="Thời gian kết thúc"
                         allowClear
                         onChange={() => {
                             setToggleClearFiled(true);

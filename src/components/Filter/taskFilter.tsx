@@ -3,6 +3,7 @@ import {useState} from 'react';
 import styled from 'styled-components';
 import useStatus from '../../hooks/useStatus';
 import useUser from '../../hooks/useUser';
+import dayjs from 'dayjs';
 
 export const Container = styled.div<{toggleClearFiled: boolean}>`
     .ant-select-clear {
@@ -31,6 +32,7 @@ const FilterTask = (props: Props) => {
             .toLowerCase()
             .localeCompare((optionB?.name ?? '').toLowerCase());
     };
+    const startDate = Form.useWatch('start_at', form);
 
     const {users} = useUser();
     const [toggleClearField, setToggleClearField] = useState<any>(false);
@@ -116,6 +118,14 @@ const FilterTask = (props: Props) => {
                     </Form.Item>
                     <Form.Item name="end_at" valuePropName="endDate">
                         <DatePicker
+                            disabledDate={(d) =>
+                                !d ||
+                                d.isBefore(
+                                    dayjs(startDate).format(
+                                        'YYYY/MM/DD HH:mm',
+                                    ),
+                                )
+                            }
                             className="!h-[40px]"
                             placeholder="Ngày kết thúc"
                             format={`YYYY/MM/DD ${needHours && 'HH:mm'}`}

@@ -2,7 +2,7 @@ import {useQuery} from '@tanstack/react-query';
 import {useMemo, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {filterMyTask} from '../../services/tasks';
-import {convertDate} from '../../utils/format';
+import {convertDateTime} from '../../utils/format';
 import FilterMyTask from '../Filter/filterMyTask';
 import Pagination from '../Pagination';
 
@@ -38,7 +38,7 @@ const TaskManager = () => {
         <>
             <div className="mb-10">
                 <div className="mb-2 text-lg font-semibold">
-                    Danh sách task/Subtask của tôi
+                    Danh sách đầu việc của tôi
                 </div>
                 <div className="">
                     <span
@@ -51,22 +51,22 @@ const TaskManager = () => {
                     </span>
                     {' / '}
                     <span className="font-semibold">
-                        Danh sách task/Subtask của tôi
+                        Danh sách đầu việc của tôi
                     </span>
                 </div>
             </div>
             <div className="flex flex-col p-10 bg-white rounded-lg">
-                <FilterMyTask setValues={setFilter} />
+                <FilterMyTask setValues={setFilter} page={page} setPage={setPage}/>
                 <div className="flex flex-col">
                     <div className="grid grid-cols-12 pb-4 text-xs font-semibold text-gray-400 border-bottom">
                         <div className="col-span-1">ID</div>
-                        <div className="col-span-3">TÊN DỰ ÁN</div>
+                        <div className="col-span-2">TÊN DỰ ÁN</div>
                         <div className="col-span-2">MÃ CODE DỰ ÁN</div>
                         <div className="items-center col-span-3">
-                            TÊN TASK/SUB-TASK
+                            TÊN ĐẦU VIỆC
                         </div>
-                        <div className="">NGÀY BẮT ĐẦU</div>
-                        <div className="">NGÀY KẾT THÚC</div>
+                        <div className="">THỜI GIAN BẮT ĐẦU</div>
+                        <div className="">tHỜI GIAN KẾT THÚC</div>
                         <div className="">TRẠNG THÁI</div>
                     </div>
                     {tasks.map((task: any, idx: number) => {
@@ -80,11 +80,11 @@ const TaskManager = () => {
                                                 `/project/${task?.project_id}`,
                                             )
                                         }
-                                        className="col-span-3 text-blue-700 cursor-pointer hover:text-blue-900"
+                                        className="col-span-2 text-blue-700 cursor-pointer hover:text-blue-900"
                                     >
                                         {task?.project?.name}
                                     </div>
-                                    <div className="col-span-2 text-blue-700 cursor-pointer hover:text-blue-900">
+                                    <div className="col-span-2 hover:text-blue-900">
                                         {task?.project?.code}
                                     </div>
                                     <div
@@ -98,10 +98,10 @@ const TaskManager = () => {
                                         {task?.name}
                                     </div>
                                     <div className="">
-                                        {convertDate(task?.starts_at)}
+                                        {convertDateTime(task?.starts_at)}
                                     </div>
                                     <div className="">
-                                        {convertDate(task?.ends_at)}
+                                        {convertDateTime(task?.ends_at)}
                                     </div>
                                     <div
                                         style={{
