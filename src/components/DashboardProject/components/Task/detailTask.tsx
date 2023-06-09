@@ -411,12 +411,8 @@ const DetailTask = () => {
                     <div className="col-span-4 text-lg bg-white rounded-xl">
                         {detailTaskInProject?.files && (
                             <div className="flex justify-center mt-5">
-                                <Tag
-                                    icon={<CheckCircleOutlined />}
-                                    color="success"
-                                    className="text-2xl"
-                                >
-                                    Tệp đính kèm:
+                                <Tag color="warning" className="text-2xl">
+                                    Tệp đính kèm
                                 </Tag>
                             </div>
                         )}
