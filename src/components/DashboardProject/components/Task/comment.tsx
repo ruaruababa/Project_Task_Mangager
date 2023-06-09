@@ -94,8 +94,9 @@ const CommentEditor = ({data, onCancel, onSuccess, parentId}:
                         }}
                         onChange={handleChange}
                         config={{
-                            ckfinder: {
-                                uploadUrl: baseURL + '/api/upload-file',
+                            cloudServices: {
+                                // tokenUrl: () => new Promise((resolve) => resolve(localStorage.getItem('access_token') ?? '')),
+                                uploadUrl: 'https://98259.cke-cs.com/token/dev/6fb25ab0a6520f891446a3351f46b392507eacb9525d5bac2b5f3c25f9e8?limit=10',
                             },
                         }}
                         data={data?.content}

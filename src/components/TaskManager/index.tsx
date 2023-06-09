@@ -130,7 +130,7 @@ const TaskManager = () => {
                                 >
                                     {task?.status?.name}
                                 </div>
-                            </div>
+                            </>
                         );
                     })}
                 </div>
