@@ -109,7 +109,7 @@ const CreateUpdateRoleModal = (props: Props) => {
         onSuccess: () => {
             notification.success({
                 message: 'Thành công ',
-                description: 'Create successfully',
+                description: 'Thêm mới thành công',
             });
             queryCLient?.refetchQueries(['getListRole']);
             form.resetFields();

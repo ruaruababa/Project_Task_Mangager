@@ -42,7 +42,7 @@ const CreateUpdateProject = () => {
         onSuccess: (data) => {
             notification.success({
                 message: 'Thành công ',
-                description: 'Create successfully',
+                description: 'Thêm mới thành công',
             });
             navigate(`/project/${data?.data?.data?.id}`);
         },

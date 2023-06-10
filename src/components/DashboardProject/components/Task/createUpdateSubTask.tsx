@@ -101,12 +101,18 @@ const CreateUpdateSubTask = () => {
         onSuccess: async (data) => {
             notification.success({
                 message: 'Thành công ',
-                description: 'Create successfully',
+                description: 'Thêm mới thành công',
             });
-            if (reportFile) {	
-                uploadMutate(data?.data?.data?.id);	
+            if (reportFile !== undefined && reportFile.length !== 0)
+            {
+                if (reportFile) {
+                    uploadMutate(data?.data?.data?.id);
+                }else {
+                    navigate(`/project/${id}/tasks/${data?.data?.data?.id}`);
+                }
+            } else {
+                navigate(`/project/${id}/tasks/${data?.data?.data?.id}`);
             }
-            // navigate(`/project/${id}/tasks/${data?.data?.data?.id}`);
         },
 
         onError: (error: any) => {

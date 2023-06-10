@@ -30,7 +30,7 @@ const CreateTaskModal = (props: Props) => {
             onCancel();
             notification.success({
                 message: 'Thành công ',
-                description: 'Create successfully',
+                description: 'Thêm mới thành công',
             });
             form.resetFields();
             queryClient.refetchQueries(['getTasks']);

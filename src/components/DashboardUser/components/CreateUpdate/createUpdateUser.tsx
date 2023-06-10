@@ -93,7 +93,7 @@ const CreateUpdateUserModal = (props: Props) => {
         onSuccess: () => {
             notification.success({
                 message: 'Thành công ',
-                description: 'Create successfully',
+                description: 'Thêm mới thành công',
             });
             form.resetFields();
         },
