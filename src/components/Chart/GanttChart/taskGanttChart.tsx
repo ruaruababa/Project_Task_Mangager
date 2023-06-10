@@ -37,12 +37,18 @@ const GanttChartTask = () => {
                     Trang chủ /{' '}
                 </span>
                 <span
-                    onClick={() => navigate(`/project/${id}`)}
+                    onClick={() => navigate(`/project`)}
                     className="font-semibold text-gray-400 cursor-pointer"
                 >
                     Danh sách dự án /{' '}
                 </span>
-                <span className="text-sm">Gantt chart</span>
+                <span
+                    onClick={() => navigate(`/project/${id}`)}
+                    className="font-semibold text-gray-400 cursor-pointer"
+                >
+                    Chi tiết dự án /{' '}
+                </span>
+                <span className="text-sm">Biểu đồ Gantt</span>
             </div>
             <FilterTask setValues={setValues} needHours={true} />
             {data?.length > 0 && <Gantt tasks={data} />}
