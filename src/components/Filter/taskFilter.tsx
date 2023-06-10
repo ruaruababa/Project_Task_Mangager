@@ -34,7 +34,7 @@ const FilterTask = (props: Props) => {
     };
     const startDate = Form.useWatch('start_at', form);
 
-    const {users} = useUser();
+    const {listUser} = useUser();
     const [toggleClearField, setToggleClearField] = useState<any>(false);
     return (
         <Container toggleClearFiled={toggleClearField}>
@@ -61,7 +61,6 @@ const FilterTask = (props: Props) => {
                     <Form.Item name={'user_do'} className="!h-[40px]">
                         <Select
                             placeholder="Chọn người thực hiện"
-                            fieldNames={{label: 'name', value: 'id'}}
                             className="w-full"
                             size={'large'}
                             showSearch
@@ -72,7 +71,7 @@ const FilterTask = (props: Props) => {
                             filterSort={(optionA, optionB) =>
                                 handleFilterSort(optionA, optionB)
                             }
-                            options={users}
+                            options={listUser}
                             allowClear
                             onChange={() => {
                                 setToggleClearField(true);
