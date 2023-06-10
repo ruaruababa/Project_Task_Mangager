@@ -18,7 +18,7 @@ import {uploadChunk} from '../../../../utils/upload';
 
 const CreateUpdateSubTask = () => {
     const [form] = Form.useForm();
-    const {users} = useUser();
+    const {listUser} = useUser();
     const {id, taskId, subTaskId} = useParams();
     const {statusOptions} = useStatus();
     const startDate = Form.useWatch('starts_at', form);
@@ -62,10 +62,11 @@ const CreateUpdateSubTask = () => {
         },
     });
 
-    const options: any = users?.map((user: any) => ({
-        label: user.name,
-        value: user.id,
-    }));
+    const handleFilterOnChange = (input: any, option: any) => {
+        return (option?.label ?? '').includes(input);
+    };
+
+    const options: any = listUser;
 
     const {data: detailTaskResponse} = useQuery({
         queryKey: ['getDetailTaskInProject', id, taskId],
@@ -335,6 +336,10 @@ const CreateUpdateSubTask = () => {
                         placeholder="Chọn người thực hiện"
                         onChange={() => {}}
                         options={options || []}
+                        showSearch
+                        filterOption={(input: any, option: any) =>
+                            handleFilterOnChange(input, option)
+                        }
                     />
                 </Form.Item>
 

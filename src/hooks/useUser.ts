@@ -4,23 +4,23 @@ import {useParams} from 'react-router-dom';
 import {getListUserInProject, getUsers} from '../services/user';
 const useUser = () => {
     const {id} = useParams();
-    const {data: listUserResponse} = useQuery({
+    const {data: usersInProjectResponse} = useQuery({
         queryKey: ['getListUserInProject', id],
         queryFn: () => getListUserInProject(id),
     });
 
-    const {data: userResponse} = useQuery({
+    const {data: usersResponse} = useQuery({
         queryKey: ['getUsers'],
         queryFn: () => getUsers(),
     });
 
     const users = useMemo(() => {
-        return userResponse?.data?.data || [];
-    }, [userResponse]);
+        return usersResponse?.data?.data || [];
+    }, [usersResponse]);
 
     const listUser = useMemo(() => {
-        return listUserResponse?.data?.data || [];
-    }, [listUserResponse]);
+        return usersInProjectResponse?.data?.data || [];
+    }, [usersInProjectResponse]);
 
     return {listUser, users};
 };

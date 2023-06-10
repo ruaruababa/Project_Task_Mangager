@@ -18,7 +18,7 @@ import {uploadChunk} from '../../../../utils/upload';
 
 const CreateUpdateTask = () => {
     const [form] = Form.useForm();
-    const {users} = useUser();
+    const {listUser} = useUser();
     const {id, taskId} = useParams();
     const {statusOptions} = useStatus();
     const startDate = Form.useWatch('starts_at', form);
@@ -27,6 +27,7 @@ const CreateUpdateTask = () => {
     const navigate = useNavigate();
     const queryClient = useQueryClient();
     const [reportFile, setReportFile] = useState<any>([]);
+    
 
     const handleUpload = useCallback((event: any) => {
         event.stopPropagation();
@@ -65,10 +66,7 @@ const CreateUpdateTask = () => {
         return (option?.label ?? '').includes(input);
     };
 
-    const options: any = users?.map((user: any) => ({
-        label: user.name,
-        value: user.id,
-    }));
+    const options: any = listUser;
 
     const {data: detailTaskResponse} = useQuery({
         queryKey: ['getDetailTaskInProject', id, taskId],
