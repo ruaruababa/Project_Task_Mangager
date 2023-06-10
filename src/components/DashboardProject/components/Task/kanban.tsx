@@ -53,6 +53,7 @@ function Kanban() {
                     message: 'Lỗi hệ thống, hãy thử lại sau',
                 });
             }
+            queryClient.refetchQueries(['filterTask']);
         },
     });
 

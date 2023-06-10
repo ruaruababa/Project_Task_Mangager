@@ -61,6 +61,10 @@ const CreateUpdateTask = () => {
         },
     });
 
+    const handleFilterOnChange = (input: any, option: any) => {
+        return (option?.label ?? '').includes(input);
+    };
+
     const options: any = users?.map((user: any) => ({
         label: user.name,
         value: user.id,
@@ -318,6 +322,10 @@ const CreateUpdateTask = () => {
                         placeholder="Chọn người thực hiện"
                         onChange={() => {}}
                         options={options || []}
+                        showSearch
+                        filterOption={(input: any, option: any) =>
+                            handleFilterOnChange(input, option)
+                        }
                     />
                 </Form.Item>
 

@@ -54,6 +54,10 @@ const CreateUpdateProject = () => {
         },
     });
 
+    const handleFilterOnChange = (input: any, option: any) => {
+        return (option?.label ?? '').includes(input);
+    };
+
     const {mutate: updateProjectMutate} = useMutation({
         mutationFn: (data: any) => updateProject(data, id),
         mutationKey: ['updateProject', id],
@@ -241,6 +245,10 @@ const CreateUpdateProject = () => {
                         style={{width: '100%'}}
                         placeholder="Chọn người thực hiện"
                         options={options || []}
+                        showSearch
+                        filterOption={(input: any, option: any) =>
+                            handleFilterOnChange(input, option)
+                        }
                     />
                 </Form.Item>
                 <div className="flex gap-10">
