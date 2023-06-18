@@ -24,6 +24,7 @@ import {
     getDetailTaskInProject,
     getHistotyInTask,
     removeAttachFile,
+    removeReportFile,
     uploadAttachFile,
     uploadReportFile,
 } from '../../../../services/tasks';
@@ -79,7 +80,7 @@ const DetailTask = () => {
     });
 
     const {mutate: removeReportFileMutate} = useMutation({
-        mutationFn: (fileId) => removeAttachFile(taskId, fileId),
+        mutationFn: () => removeReportFile(taskId),
         mutationKey: ['removeAttachFile', taskId],
         onSuccess: () => {
             notification.success({
@@ -123,6 +124,15 @@ const DetailTask = () => {
         return historyResponse?.data?.data || [];
     }, [historyResponse]);
 
+    const [isShow, setIsShow] = useState(false);
+
+    const handleShowModal = () => {
+        setIsShow(true);
+    };
+    const handleCancel = () => {
+        setIsShow(false);
+    };
+
     const handleRemoveAttachFile = (filedId: any) => {
         removeAttachMutate(filedId);
         setIsShow(false);
@@ -143,21 +153,25 @@ const DetailTask = () => {
         navigate(`/project/${id}/tasks/${subTaskId}`);
     };
 
-    const [isShow, setIsShow] = useState(false);
-    const handleShowModal = () => {
-        setIsShow(true);
+    const [isShowReportDelete, setIsShowReportDelete] = useState(false);
+
+
+    const handleShowModalRemoveReport = () => {
+        setIsShowReportDelete(true);
     };
-    const handleCancel = () => {
-        setIsShow(false);
+    const handleCancelRemoveReport = () => {
+        setIsShowReportDelete(false);
     };
 
-    const handleRemoveReportFile = (filedId: any) => {
-        removeReportFileMutate(filedId);
-        setIsShow(false);
+    const handleRemoveReportFile = () => {
+        removeReportFileMutate();
+        setIsShowReportDelete(false);
     };
+
+
     const [attachId, setAttachId] = useState('');
 
-    const CardTitle = ({item, index, title}: any) => (
+    const CardTitle = ({item, index, title, modalShowMethod}: any) => (
         <div className="flex justify-between">
             <h3>
                 {title || 'Báo cáo'} {index + 1}
@@ -168,7 +182,7 @@ const DetailTask = () => {
                     className="cursor-pointer"
                     onClick={() => {
                         setAttachId(item?.id);
-                        handleShowModal();
+                        modalShowMethod();
                     }}
                 />
             )}
@@ -428,6 +442,7 @@ const DetailTask = () => {
                                                 index={index}
                                                 item={item}
                                                 title="Tệp đính kèm"
+                                                modalShowMethod={() => handleShowModal()}
                                             />
                                         }
                                         key={index}
@@ -485,6 +500,7 @@ const DetailTask = () => {
                                             <CardTitle
                                                 index={index}
                                                 item={item}
+                                                modalShowMethod={() => handleShowModalRemoveReport()}
                                             />
                                         }
                                         key={index}
@@ -726,11 +742,11 @@ const DetailTask = () => {
             </div>
             {
                 <ModalConfirm
-                    isShow={isShow}
+                    isShow={isShowReportDelete}
                     handleRemoveReportFile={() =>
-                        handleRemoveReportFile(attachId)
+                        handleRemoveReportFile()
                     }
-                    onCancel={handleCancel}
+                    onCancel={handleCancelRemoveReport}
                 />
             }
             {
