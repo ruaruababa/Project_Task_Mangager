@@ -211,7 +211,7 @@ function Kanban() {
                     <FilterTask setValues={setValues} needHours={true} />
                 </div>
                 <DragDropContext onDragEnd={onDragEnd}>
-                    <div className="grid grid-cols-5 wrapper">
+                    <div className="grid grid-cols-6 wrapper">
                         {taskFilter?.map((item: any, index: number) => {
                             return (
                                 <Column

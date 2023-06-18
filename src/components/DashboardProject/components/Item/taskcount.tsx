@@ -1,7 +1,7 @@
 const TaskCountStatus = (props: any) => {
     const {data} = props;
     return (
-        <div className="grid grid-cols-5 text-center h-[100%]">
+        <div className="grid grid-cols-6 text-center h-[100%]">
             {data?.map((item: any) => {
                 return (
                     <div

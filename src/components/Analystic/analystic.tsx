@@ -52,7 +52,7 @@ const Analystic = () => {
         return analysticTask?.map((item: any) => {
             return {
                 ...item,
-                percent: (Number(item?.tasks_count) / Number(totalTask)) * 100,
+                percent: Number((Number(item?.tasks_count) / Number(totalTask)) * 100,).toFixed(2)
             };
         });
     }, [analysticTask]);
@@ -63,7 +63,7 @@ const Analystic = () => {
                 ...item,
                 percent: Number(
                     (Number(item?.projects_count) / Number(totalProject)) * 100,
-                ),
+                ).toFixed(2),
             };
         });
     }, [analysticProject]);

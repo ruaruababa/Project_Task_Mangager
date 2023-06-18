@@ -43,13 +43,18 @@ function Column(props: any) {
                 };
             case '5':
                 return {
+                    label: 'Review',
+                    color: '#3866D1',
+                };
+            case '6':
+                return {
                     label: 'Completed',
                     color: '#12b51d',
                 };
             default:
                 return {
-                    label: 'Not Started',
-                    color: '#8f8f8f',
+                    label: 'Completed',
+                    color: '#12b51d',
                 };
         }
     };
