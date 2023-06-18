@@ -8,7 +8,7 @@ const Item = ({data}: any) => {
         mutationFn: markReadNoti,
         mutationKey: ['markReadNoti'],
         onSuccess: () => {
-            queryClient.invalidateQueries(['getListNoti']);
+            window.location.href = data.action
         },
     });
 
